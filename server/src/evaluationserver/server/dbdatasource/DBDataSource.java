@@ -2,8 +2,8 @@ package evaluationserver.server.dbdatasource;
 
 import evaluationserver.server.entities.Solution;
 import evaluationserver.server.entities.SystemReply;
-import evaluationserver.server.sandbox.ExecutionResult;
 import evaluationserver.server.datasource.DataSource;
+import evaluationserver.server.datasource.Result;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -23,7 +23,7 @@ public class DBDataSource implements DataSource {
 	}
 
 	@Override
-	public void setResult(Solution solution, ExecutionResult result) {
+	public void setResult(Solution solution, Result result) {
 		logger.log(Level.FINER, ("Update result of solution " + solution.getId()));
 		synchronized(em) {
 			// TODO - check for noresultexception
@@ -38,7 +38,7 @@ public class DBDataSource implements DataSource {
 			em.getTransaction().begin();
 			solution.setDateEvaluated(result.getStart());
 			solution.setMemory(result.getMemory());
-			solution.setTime((int)(result.getStop().getTime() - result.getStart().getTime()));
+			solution.setTime(result.getTime());
 			solution.setSystemReply(reply);
 			em.flush();
 			em.getTransaction().commit();

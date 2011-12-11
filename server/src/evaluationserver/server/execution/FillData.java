@@ -55,7 +55,7 @@ public class FillData {
 		
 		File fileResultResolver = new File(null, "diff", 10000).setData("diff program".getBytes());
 
-		Task task = new Task(null, "Task", "...", 3000, 50000, 5000000, new Date()).setCategory(category1).setCreator(userAdmin).setResultResolver(fileResultResolver);
+		Task task = new Task(null, "Task", "...", 3000, 50000, 5000000, 5000000, new Date()).setCategory(category1).setCreator(userAdmin).setResultResolver(fileResultResolver);
 		
 		Competition competition = new Competition(null, "Competition", 0, true, new Date()).addTask(task).setCreator(userAdmin).addUserGroup(group);
 		

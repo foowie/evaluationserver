@@ -12,6 +12,10 @@ import evaluationserver.server.sandbox.Sandbox;
 import evaluationserver.server.sandbox.SandboxResolver;
 import evaluationserver.server.datasource.DataSource;
 import evaluationserver.server.compile.Compiler;
+import evaluationserver.server.datasource.Result;
+import evaluationserver.server.inspection.Inspector;
+import evaluationserver.server.inspection.InspectionException;
+import evaluationserver.server.inspection.InspectionResult;
 import evaluationserver.server.sandbox.NoSandboxException;
 import java.io.File;
 import java.io.IOException;
@@ -28,13 +32,15 @@ public class SolutionWorker extends Thread {
 	protected final CompilerResolver compilerResolver;
 	protected final FileManager fileManager;
 	protected final BlockingQueue<Solution> solutions;
+	protected final Inspector inspector;
 
-	public SolutionWorker(DataSource dataSource, SandboxResolver sandboxResolver, CompilerResolver compilerResolver, FileManager fileManager, BlockingQueue<Solution> solutions) {
+	public SolutionWorker(DataSource dataSource, SandboxResolver sandboxResolver, CompilerResolver compilerResolver, FileManager fileManager, BlockingQueue<Solution> solutions, Inspector inspector) {
 		this.dataSource = dataSource;
 		this.sandboxResolver = sandboxResolver;
 		this.compilerResolver = compilerResolver;
 		this.fileManager = fileManager;
 		this.solutions = solutions;
+		this.inspector = inspector;
 	}
 
 	@Override
@@ -57,7 +63,7 @@ public class SolutionWorker extends Thread {
 					program = compile(solution);
 				} catch(CompilationException e) {
 					// error during compilation
-					dataSource.setResult(solution, new ExecutionResult(SystemReply.COMPILATION_ERROR, new Date(), new Date(), 0));
+					dataSource.setResult(solution, new Result(SystemReply.COMPILATION_ERROR, new Date(), 0, 0));
 					continue;
 				}
 
@@ -66,24 +72,35 @@ public class SolutionWorker extends Thread {
 					solution.getLanguage().getKey(),
 					program,
 					solution.getTask().getInputData() == null ? null : fileManager.createFile(solution.getTask().getInputData()),
-//					solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
-//					fileManager.createFile(solution.getTask().getResultResolver()),
 					solution.getTask().getTimeLimit(),
 					solution.getTask().getMemoryLimit(),
 					solution.getTask().getOutputLimit()
 				);
 
 				// get sandbox
-				final ExecutionResult result = execute(sandboxSolution);
-				dataSource.setResult(solution, result);
-
+				final ExecutionResult executionResult = execute(sandboxSolution);
+				if(executionResult.getResultKey() != null) {
+					// error during execution sandbox
+					dataSource.setResult(solution, new Result(executionResult.getResultKey(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+				} else {
+					// sandbox successfully executed
+					evaluationserver.server.inspection.Solution inspectionSolution = new evaluationserver.server.inspection.Solution(
+						program, 
+						sandboxSolution.getInputData(), 
+						solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
+						fileManager.createFile(solution.getTask().getResultResolver())
+					);
+					fileManager.releaseFile(inspectionSolution.getEvaluationProgram());
+					fileManager.releaseFile(inspectionSolution.getOutputData());
+					
+					final InspectionResult inspectionResult = inspect(inspectionSolution);
+					dataSource.setResult(solution, new Result(inspectionResult.getResultKey(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+				}
 
 				// remove temp files
 				logger.log(Level.FINER, ("Cleanup files"));
 				fileManager.releaseFile(program);
-//				fileManager.releaseFile(sandboxSolution.getEvaluationProgram());
 				fileManager.releaseFile(sandboxSolution.getInputData());
-//				fileManager.releaseFile(sandboxSolution.getOutputData());
 				//todo:
 			}
 
@@ -118,7 +135,7 @@ public class SolutionWorker extends Thread {
 	 * Execute solution and return result of execution
 	 * @param sandboxSolution
 	 * @return
-	 * @throws NoSandboxFactoryException
+	 * @throws NoSandboxException
 	 * @throws ExecutionException 
 	 */
 	protected ExecutionResult execute(evaluationserver.server.sandbox.Solution sandboxSolution) throws NoSandboxException, ExecutionException {
@@ -126,5 +143,17 @@ public class SolutionWorker extends Thread {
 		final Sandbox sandbox = sandboxResolver.getSandbox(sandboxSolution.getLanguageKey());
 		final ExecutionResult result = sandbox.execute();
 		return result;
+	}
+	
+	/**
+	 * Inspect solution by evaluator
+	 * @param inspectionSolution
+	 * @return
+	 * @throws InspectionException 
+	 */
+	protected InspectionResult inspect(evaluationserver.server.inspection.Solution inspectionSolution) throws InspectionException {
+		logger.log(Level.FINER, "Inspecting result");
+		final InspectionResult inspectionResult = inspector.execute(inspectionSolution);
+		return inspectionResult;
 	}
 }

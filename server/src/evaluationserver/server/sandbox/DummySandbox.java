@@ -14,6 +14,6 @@ public class DummySandbox implements Sandbox {
 	
 	@Override
 	public ExecutionResult execute() {
-		return new ExecutionResult("accept", new Date(), new Date(), 100);
+		return new ExecutionResult(null, new Date(), 50, 100, 1000);
 	}
 }

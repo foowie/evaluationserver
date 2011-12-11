@@ -1,7 +1,6 @@
 package evaluationserver.server.datasource;
 
 import evaluationserver.server.entities.Solution;
-import evaluationserver.server.sandbox.ExecutionResult;
 
 public interface DataSource {
 	
@@ -16,5 +15,5 @@ public interface DataSource {
 	 * @param solution
 	 * @param result 
 	 */
-	void setResult(Solution solution, ExecutionResult result);
+	void setResult(Solution solution, Result result);
 }

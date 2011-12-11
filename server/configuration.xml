@@ -78,6 +78,11 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	</bean>
 	<!-- END SANDBOXES -->
 	
+	<!-- INSPECTION -->
+	<bean id="inspector" class="evaluationserver.server.inspection.InspectorImpl">
+	</bean>
+	<!-- END INSPECTION -->
+	
 	<!-- FILE MANAGMENT -->
 	<bean id="fileManager" class="evaluationserver.server.filemanagment.FileManagerImpl">
 		<constructor-arg>
