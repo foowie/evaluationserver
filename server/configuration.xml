@@ -8,7 +8,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 			<ref bean="datasource" />
 		</constructor-arg>
 		<constructor-arg>
-			<ref bean="sandboxFactoryResolver" />
+			<ref bean="sandboxResolver" />
 		</constructor-arg>
 		<constructor-arg>
 			<ref bean="compilerResolver" />
@@ -67,14 +67,14 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	<!-- END COMPILERS -->
 	
 	<!-- SANDBOXES -->
-	<bean id="sandboxFactoryResolver" class="evaluationserver.server.sandbox.SandboxFactoryResolverImpl">
+	<bean id="sandboxResolver" class="evaluationserver.server.sandbox.SandboxResolverImpl">
 		<constructor-arg>
 			<map>
-				<entry key="c" value-ref="dummySandboxFactory" />
+				<entry key="c" value-ref="dummySandbox" />
 			</map>
 		</constructor-arg>
 	</bean>
-	<bean id="dummySandboxFactory" class="evaluationserver.server.sandbox.DummySandboxFactory">
+	<bean id="dummySandbox" class="evaluationserver.server.sandbox.DummySandbox">
 	</bean>
 	<!-- END SANDBOXES -->
 	

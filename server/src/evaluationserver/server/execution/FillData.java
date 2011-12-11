@@ -4,16 +4,16 @@
  */
 package evaluationserver.server.execution;
 
-import evaluationserver.entities.Category;
-import evaluationserver.entities.Competition;
-import evaluationserver.entities.File;
-import evaluationserver.entities.Language;
-import evaluationserver.entities.Role;
-import evaluationserver.entities.Solution;
-import evaluationserver.entities.SystemReply;
-import evaluationserver.entities.Task;
-import evaluationserver.entities.User;
-import evaluationserver.entities.UserGroup;
+import evaluationserver.server.entities.Category;
+import evaluationserver.server.entities.Competition;
+import evaluationserver.server.entities.File;
+import evaluationserver.server.entities.Language;
+import evaluationserver.server.entities.Role;
+import evaluationserver.server.entities.Solution;
+import evaluationserver.server.entities.SystemReply;
+import evaluationserver.server.entities.Task;
+import evaluationserver.server.entities.User;
+import evaluationserver.server.entities.UserGroup;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.BeanFactory;

@@ -1,6 +1,6 @@
 package evaluationserver.server.datasource;
 
-import evaluationserver.entities.Solution;
+import evaluationserver.server.entities.Solution;
 import evaluationserver.server.sandbox.ExecutionResult;
 
 public interface DataSource {

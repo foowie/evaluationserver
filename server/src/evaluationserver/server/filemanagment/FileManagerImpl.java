@@ -45,7 +45,7 @@ public class FileManagerImpl implements FileManager {
 	 * @throws IOException 
 	 */
 	@Override
-	public File createFile(evaluationserver.entities.File file) throws IOException {
+	public File createFile(evaluationserver.server.entities.File file) throws IOException {
 		if(file == null)
 			throw new NullPointerException("File can't be null !");
 		if(file.getPath() != null) {

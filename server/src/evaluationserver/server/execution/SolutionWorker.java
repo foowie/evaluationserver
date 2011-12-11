@@ -1,19 +1,18 @@
 package evaluationserver.server.execution;
 
-import evaluationserver.entities.Solution;
-import evaluationserver.entities.SystemReply;
+import evaluationserver.server.entities.Solution;
+import evaluationserver.server.entities.SystemReply;
 import evaluationserver.server.compile.CompilationException;
 import evaluationserver.server.compile.CompilerResolver;
 import evaluationserver.server.compile.NoCompilerException;
 import evaluationserver.server.filemanagment.FileManager;
 import evaluationserver.server.sandbox.ExecutionException;
 import evaluationserver.server.sandbox.ExecutionResult;
-import evaluationserver.server.sandbox.NoSandboxFactoryException;
 import evaluationserver.server.sandbox.Sandbox;
-import evaluationserver.server.sandbox.SandboxFactory;
-import evaluationserver.server.sandbox.SandboxFactoryResolver;
+import evaluationserver.server.sandbox.SandboxResolver;
 import evaluationserver.server.datasource.DataSource;
 import evaluationserver.server.compile.Compiler;
+import evaluationserver.server.sandbox.NoSandboxException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -25,14 +24,14 @@ public class SolutionWorker extends Thread {
 	private static final Logger logger = Logger.getLogger(SolutionWorker.class.getPackage().getName());	
 
 	protected final DataSource dataSource;
-	protected final SandboxFactoryResolver sandboxFactoryResolver;
+	protected final SandboxResolver sandboxResolver;
 	protected final CompilerResolver compilerResolver;
 	protected final FileManager fileManager;
 	protected final BlockingQueue<Solution> solutions;
 
-	public SolutionWorker(DataSource dataSource, SandboxFactoryResolver sandboxFactoryResolver, CompilerResolver compilerResolver, FileManager fileManager, BlockingQueue<Solution> solutions) {
+	public SolutionWorker(DataSource dataSource, SandboxResolver sandboxResolver, CompilerResolver compilerResolver, FileManager fileManager, BlockingQueue<Solution> solutions) {
 		this.dataSource = dataSource;
-		this.sandboxFactoryResolver = sandboxFactoryResolver;
+		this.sandboxResolver = sandboxResolver;
 		this.compilerResolver = compilerResolver;
 		this.fileManager = fileManager;
 		this.solutions = solutions;
@@ -41,7 +40,7 @@ public class SolutionWorker extends Thread {
 	@Override
 	public void run() {
 		try {
-			Logger.getLogger(ServerImpl.class.getName()).log(Level.FINER, ("SolutionWorker '" + getName() + "' starts"));
+			logger.log(Level.FINER, ("SolutionWorker '" + getName() + "' starts"));
 			while (true) {
 				final Solution solution;
 				try {
@@ -121,10 +120,9 @@ public class SolutionWorker extends Thread {
 	 * @throws NoSandboxFactoryException
 	 * @throws ExecutionException 
 	 */
-	protected ExecutionResult execute(evaluationserver.server.sandbox.Solution sandboxSolution) throws NoSandboxFactoryException, ExecutionException {
+	protected ExecutionResult execute(evaluationserver.server.sandbox.Solution sandboxSolution) throws NoSandboxException, ExecutionException {
 		logger.log(Level.FINER, "Executing sandbox");
-		final SandboxFactory sandboxFactory = sandboxFactoryResolver.getSandboxFactory(sandboxSolution.getLanguageKey());
-		final Sandbox sandbox = sandboxFactory.createSandbox(sandboxSolution);
+		final Sandbox sandbox = sandboxResolver.getSandbox(sandboxSolution.getLanguageKey());
 		final ExecutionResult result = sandbox.execute();
 		return result;
 	}

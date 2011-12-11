@@ -1,7 +1,7 @@
 package evaluationserver.server.dbdatasource;
 
-import evaluationserver.entities.Solution;
-import evaluationserver.entities.SystemReply;
+import evaluationserver.server.entities.Solution;
+import evaluationserver.server.entities.SystemReply;
 import evaluationserver.server.sandbox.ExecutionResult;
 import evaluationserver.server.datasource.DataSource;
 import java.util.Calendar;

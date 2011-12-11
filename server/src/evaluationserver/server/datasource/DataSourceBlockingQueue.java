@@ -1,6 +1,6 @@
 package evaluationserver.server.datasource;
 
-import evaluationserver.entities.Solution;
+import evaluationserver.server.entities.Solution;
 import evaluationserver.server.notification.Notifiable;
 import java.util.Collection;
 import java.util.Iterator;
