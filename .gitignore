@@ -1,2 +1,5 @@
 tracer/build
 tracer/dist
+tracer/tests/tests/*
+!tracer/tests/tests/*.c
+!tracer/tests/tests/*.cpp
