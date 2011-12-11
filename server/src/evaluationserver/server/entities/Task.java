@@ -54,6 +54,10 @@ public class Task implements Serializable {
 	@Column(name = "memoryLimit", nullable = false)
 	private int memoryLimit;
 	
+	@Basic(optional = false)
+	@Column(name = "outputLimit", nullable = false)
+	private int outputLimit;
+	
 	@Lob
 	@Column(name = "sampleInput", length = 65535)
 	private String sampleInput;
@@ -100,13 +104,14 @@ public class Task implements Serializable {
 		this.id = id;
 	}
 
-	public Task(Integer id, String name, String description, int timeLimit, int sourceLimit, int memoryLimit, Date created) {
+	public Task(Integer id, String name, String description, int timeLimit, int sourceLimit, int memoryLimit, int outputLimit, Date created) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.timeLimit = timeLimit;
 		this.sourceLimit = sourceLimit;
 		this.memoryLimit = memoryLimit;
+		this.outputLimit = outputLimit;
 		this.created = created;
 	}
 
@@ -161,6 +166,15 @@ public class Task implements Serializable {
 
 	public Task setMemoryLimit(int memoryLimit) {
 		this.memoryLimit = memoryLimit;
+		return this;
+	}
+	
+	public int getOutputLimit() {
+		return outputLimit;
+	}
+	
+	public Task setOutputLimit(int outputLimit) {
+		this.outputLimit = outputLimit;
 		return this;
 	}
 

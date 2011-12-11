@@ -7,23 +7,17 @@ public class Solution {
 	private final String languageKey;
 	private final File program;
 	private final File inputData;
-	private final File outputData;
-	private final File evaluationProgram;
 	private final int timeLimit;
 	private final int memoryLimit;
+	private final int outputLimit;
 
-	public Solution(String languageKey, File program, File inputData, File outputData, File evaluationProgram, int timeLimit, int memoryLimit) {
+	public Solution(String languageKey, File program, File inputData, int timeLimit, int memoryLimit, int outputLimit) {
 		this.languageKey = languageKey;
 		this.program = program;
 		this.inputData = inputData;
-		this.outputData = outputData;
-		this.evaluationProgram = evaluationProgram;
 		this.timeLimit = timeLimit;
 		this.memoryLimit = memoryLimit;
-	}
-
-	public File getEvaluationProgram() {
-		return evaluationProgram;
+		this.outputLimit = outputLimit;
 	}
 
 	public File getInputData() {
@@ -38,10 +32,6 @@ public class Solution {
 		return memoryLimit;
 	}
 
-	public File getOutputData() {
-		return outputData;
-	}
-
 	public File getProgram() {
 		return program;
 	}
@@ -50,4 +40,7 @@ public class Solution {
 		return timeLimit;
 	}
 
+	public int getOutputLimit() {
+		return outputLimit;
+	}
 }

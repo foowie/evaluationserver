@@ -66,10 +66,11 @@ public class SolutionWorker extends Thread {
 					solution.getLanguage().getKey(),
 					program,
 					solution.getTask().getInputData() == null ? null : fileManager.createFile(solution.getTask().getInputData()),
-					solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
-					fileManager.createFile(solution.getTask().getResultResolver()),
+//					solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
+//					fileManager.createFile(solution.getTask().getResultResolver()),
 					solution.getTask().getTimeLimit(),
-					solution.getTask().getMemoryLimit()
+					solution.getTask().getMemoryLimit(),
+					solution.getTask().getOutputLimit()
 				);
 
 				// get sandbox
@@ -80,9 +81,9 @@ public class SolutionWorker extends Thread {
 				// remove temp files
 				logger.log(Level.FINER, ("Cleanup files"));
 				fileManager.releaseFile(program);
-				fileManager.releaseFile(sandboxSolution.getEvaluationProgram());
+//				fileManager.releaseFile(sandboxSolution.getEvaluationProgram());
 				fileManager.releaseFile(sandboxSolution.getInputData());
-				fileManager.releaseFile(sandboxSolution.getOutputData());
+//				fileManager.releaseFile(sandboxSolution.getOutputData());
 				//todo:
 			}
 
