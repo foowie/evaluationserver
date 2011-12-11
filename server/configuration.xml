@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="server" class="evaluationserver.server.execution.ServerImpl">
+		<constructor-arg>
+			<ref bean="datasource" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="sandboxFactoryResolver" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compilerResolver" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="fileManager" />
+		</constructor-arg>
+	</bean>
+
+	<!-- NOTIFICATION -->
+	<bean id="notificators" class="evaluationserver.server.notification.NotificatorList">
+		<constructor-arg>
+			<list value-type="evaluationserver.server.notification.Notificator">
+				<ref bean="timeNotificator" />
+				<ref bean="tcpNotificator" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="timeNotificator" class="evaluationserver.server.notification.TimeNotificator">
+		<constructor-arg>
+			<value>5000</value>
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="blockingQueue" />
+		</constructor-arg>
+		<property name="name">
+			<value>TimeNotificator</value>
+		</property>
+	</bean>
+	<bean id="tcpNotificator" class="evaluationserver.server.notification.TCPNotificator">
+		<constructor-arg>
+			<value>5879</value>
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="blockingQueue" />
+		</constructor-arg>
+		<property name="name">
+			<value>TCPNotificator</value>
+		</property>
+	</bean>
+	<!-- END NOTIFICATION -->
+
+	<!-- COMPILERS -->
+	<bean id="compilerResolver" class="evaluationserver.server.compile.CompilerResolverImpl">
+		<constructor-arg>
+			<map>
+				<entry key="c" value-ref="cCompiler" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="cCompiler" class="evaluationserver.server.compile.SystemCompiler">
+		<constructor-arg>
+			<value>gcc %input% -o %output%</value>
+		</constructor-arg>
+	</bean>
+	<!-- END COMPILERS -->
+	
+	<!-- SANDBOXES -->
+	<bean id="sandboxFactoryResolver" class="evaluationserver.server.sandbox.SandboxFactoryResolverImpl">
+		<constructor-arg>
+			<map>
+				<entry key="c" value-ref="dummySandboxFactory" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="dummySandboxFactory" class="evaluationserver.server.sandbox.DummySandboxFactory">
+	</bean>
+	<!-- END SANDBOXES -->
+	
+	<!-- FILE MANAGMENT -->
+	<bean id="fileManager" class="evaluationserver.server.filemanagment.FileManagerImpl">
+		<constructor-arg>
+			<value>/home/danrob/Dokumenty/temp</value>
+		</constructor-arg>
+	</bean>
+	<!-- END FILE MANAGMENT -->
+	
+	<bean id="blockingQueue" class="evalutaionserver.server.datasource.DataSourceBlockingQueue">
+		<constructor-arg>
+			<ref bean="datasource" />
+		</constructor-arg>
+	</bean>
+	<bean id="datasource" class="evaluationserver.server.dbdatasource.DBDataSource">
+		<constructor-arg>
+			<ref bean="entityManager" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
+	</bean>
+	<bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">
+		<constructor-arg>
+			<value>PersistenceUnit</value>
+		</constructor-arg>
+	</bean>
+
+</beans>

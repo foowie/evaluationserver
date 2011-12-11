@@ -1,5 +1,12 @@
+# tracer
 tracer/build
 tracer/dist
 tracer/tests/tests/*
 !tracer/tests/tests/*.c
 !tracer/tests/tests/*.cpp
+
+# server
+server/build
+server/dist
+
+# web
