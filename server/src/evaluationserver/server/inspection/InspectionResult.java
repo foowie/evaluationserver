@@ -1,14 +1,16 @@
 package evaluationserver.server.inspection;
 
+import evaluationserver.server.execution.Reply;
+
 public class InspectionResult {
 
-	private final String resultKey;
+	private final Reply reply;
 
-	public InspectionResult(String resultKey) {
-		this.resultKey = resultKey;
+	public InspectionResult(Reply reply) {
+		this.reply = reply;
 	}
 
-	public String getResultKey() {
-		return resultKey;
+	public Reply getReply() {
+		return reply;
 	}
 }

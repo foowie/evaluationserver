@@ -1,16 +1,17 @@
 package evaluationserver.server.datasource;
 
+import evaluationserver.server.execution.Reply;
 import java.util.Date;
 
 public class Result {
 
-	private final String resultKey;
+	private final Reply reply;
 	private final Date start;
 	private final int time;
 	private final int memory;
 
-	public Result(String resultKey, Date start, int time, int memory) {
-		this.resultKey = resultKey;
+	public Result(Reply reply, Date start, int time, int memory) {
+		this.reply = reply;
 		this.start = start;
 		this.time = time;
 		this.memory = memory;
@@ -20,8 +21,8 @@ public class Result {
 		return memory;
 	}
 
-	public String getResultKey() {
-		return resultKey;
+	public Reply getReply() {
+		return reply;
 	}
 
 	public Date getStart() {

@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "SystemReply")
 @XmlRootElement
 public class SystemReply implements Serializable {
-	public static final String COMPILATION_ERROR = "compile-error";
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -40,7 +39,7 @@ public class SystemReply implements Serializable {
 	private boolean accepting;
 	
 	@Basic(optional = false)
-    @Column(name = "keyName", nullable = false, length = 200)
+    @Column(name = "keyName", nullable = false, length = 2)
 	private String key;
 	
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "systemReply", fetch = FetchType.LAZY)

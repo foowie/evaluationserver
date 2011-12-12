@@ -1,5 +1,6 @@
 package evaluationserver.server.inspection;
 
+import evaluationserver.server.execution.Reply;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,9 +66,12 @@ public class InspectorImpl implements Inspector {
 			throw new InspectionException(ex);
 		}		
 		
-		final String result = sb.toString();
-		
-		return new InspectionResult(result);
+		try {
+			final Reply reply = Reply.fromCode(sb.toString());
+			return new InspectionResult(reply);
+		} catch (IllegalArgumentException ex) {
+			throw new InspectionException("Invalid system reply '" + sb.toString() + "'", ex);
+		}
 	}
 	
 	protected String prepareCommand(Solution solution) {

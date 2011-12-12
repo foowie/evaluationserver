@@ -27,7 +27,7 @@ public class DBDataSource implements DataSource {
 		logger.log(Level.FINER, ("Update result of solution " + solution.getId()));
 		synchronized(em) {
 			// TODO - check for noresultexception
-			SystemReply reply = (SystemReply) em.createQuery("SELECT r FROM SystemReply r WHERE r.key = :key").setParameter("key", result.getResultKey()).getSingleResult();
+			SystemReply reply = (SystemReply) em.createQuery("SELECT r FROM SystemReply r WHERE r.key = :key").setParameter("key", result.getReply().getCode()).getSingleResult();
 
 			if(solution.getEvaluationLockUntil().before(new Date())) {
 				// this solving goes unexpectedly long ... throw it away

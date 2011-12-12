@@ -1,17 +1,18 @@
 package evaluationserver.server.sandbox;
 
+import evaluationserver.server.execution.Reply;
 import java.util.Date;
 
 public class ExecutionResult {
 
-	private final String resultKey;
+	private final Reply reply;
 	private final Date start;
 	private final int time;
 	private final int memory;
 	private final int output;
 
-	public ExecutionResult(String resultKey, Date start, int time, int memory, int output) {
-		this.resultKey = resultKey;
+	public ExecutionResult(Reply reply, Date start, int time, int memory, int output) {
+		this.reply = reply;
 		this.start = start;
 		this.time = time;
 		this.memory = memory;
@@ -30,8 +31,8 @@ public class ExecutionResult {
 	 * Result of execution. If set, means error
 	 * @return 
 	 */
-	public String getResultKey() {
-		return resultKey;
+	public Reply getReply() {
+		return reply;
 	}
 
 	public Date getStart() {

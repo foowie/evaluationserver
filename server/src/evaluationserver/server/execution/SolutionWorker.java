@@ -1,7 +1,6 @@
 package evaluationserver.server.execution;
 
 import evaluationserver.server.entities.Solution;
-import evaluationserver.server.entities.SystemReply;
 import evaluationserver.server.compile.CompilationException;
 import evaluationserver.server.compile.CompilerResolver;
 import evaluationserver.server.compile.NoCompilerException;
@@ -63,7 +62,7 @@ public class SolutionWorker extends Thread {
 					program = compile(solution);
 				} catch(CompilationException e) {
 					// error during compilation
-					dataSource.setResult(solution, new Result(SystemReply.COMPILATION_ERROR, new Date(), 0, 0));
+					dataSource.setResult(solution, new Result(Reply.COMPILE_ERROR, new Date(), 0, 0));
 					continue;
 				}
 
@@ -83,9 +82,9 @@ public class SolutionWorker extends Thread {
 
 				// get sandbox
 				final ExecutionResult executionResult = execute(sandboxSolution);
-				if(executionResult.getResultKey() != null) {
+				if(executionResult.getReply() != null) {
 					// error during execution sandbox
-					dataSource.setResult(solution, new Result(executionResult.getResultKey(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+					dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
 				} else {
 					// sandbox successfully executed
 					evaluationserver.server.inspection.Solution inspectionSolution = new evaluationserver.server.inspection.Solution(
@@ -98,7 +97,7 @@ public class SolutionWorker extends Thread {
 					fileManager.releaseFile(inspectionSolution.getOutputData());
 					
 					final InspectionResult inspectionResult = inspect(inspectionSolution);
-					dataSource.setResult(solution, new Result(inspectionResult.getResultKey(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+					dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
 				}
 
 				// remove temp files
