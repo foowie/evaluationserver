@@ -167,10 +167,13 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 	case SYS_munmap: //91
 	case SYS_mprotect: //125
 	case SYS_mmap2: //192
-	case SYS_fstat64: //197 --
 	case SYS_set_thread_area: //243
 	case SYS_exit_group: //252
 	    break;
+
+	case SYS_fstat64: //197 --
+        case SYS_stat64: //195 -- 
+            break;
             
         case -1:
             DUMP_ERROR("UNKNOWN SYSTEM CALL -1")
@@ -180,7 +183,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 	default:
             DUMP_ERROR("UNKNOWN SYSTEM CALL %ld", regs->orig_eax)
             DUMP_REGISTRY(regs)
-	    return 1;
+            return RESTRICTED_FUNCTION;
     }
 
     return 0;
