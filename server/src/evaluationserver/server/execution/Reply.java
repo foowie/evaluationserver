@@ -40,6 +40,7 @@ public enum Reply {
 	}
 	
 	public static Reply fromCode(String code) throws IllegalArgumentException {
+		code = code.toUpperCase().trim();
 		for(Reply r : Reply.values())
 			if(r.getCode().equals(code))
 				return r;

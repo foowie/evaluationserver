@@ -6,14 +6,11 @@ import java.util.logging.Logger;
 public class DummySandbox implements Sandbox {
 	private static final Logger logger = Logger.getLogger(DummySandbox.class.getPackage().getName());	
 
-	protected final Solution solution;
-
-	public DummySandbox(Solution solution) {
-		this.solution = solution;
+	public DummySandbox() {
 	}
 	
 	@Override
-	public ExecutionResult execute() {
+	public ExecutionResult execute(Solution solution) {
 		return new ExecutionResult(null, new Date(), 50, 100, 1000);
 	}
 }

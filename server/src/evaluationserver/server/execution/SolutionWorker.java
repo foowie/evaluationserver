@@ -145,7 +145,7 @@ public class SolutionWorker extends Thread {
 	protected ExecutionResult execute(evaluationserver.server.sandbox.Solution sandboxSolution) throws NoSandboxException, ExecutionException {
 		logger.log(Level.FINER, "Executing sandbox");
 		final Sandbox sandbox = sandboxResolver.getSandbox(sandboxSolution.getLanguageKey());
-		final ExecutionResult result = sandbox.execute();
+		final ExecutionResult result = sandbox.execute(sandboxSolution);
 		return result;
 	}
 	

@@ -1,5 +1,5 @@
 package evaluationserver.server.sandbox;
 
 public interface Sandbox {
-	ExecutionResult execute() throws ExecutionException;
+	ExecutionResult execute(Solution solution) throws ExecutionException;
 }
