@@ -26,6 +26,11 @@ public class SystemCompiler implements Compiler {
 
 	@Override
 	public void compile(File source, File destination) throws CompilationException {
+		if(!source.exists())
+			throw new CompilationException("Source file doesnt exists " + source.getAbsolutePath());
+		if(!source.canWrite())
+			throw new CompilationException("Destination file is not writable " + destination.getAbsolutePath());
+		
 		try {
 			String cmd = command
 					.replace(inputKey, source.getAbsolutePath())

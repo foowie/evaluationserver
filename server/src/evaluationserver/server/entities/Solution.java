@@ -58,17 +58,11 @@ public class Solution implements Serializable {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private File file;
 	
-	@JoinColumn(name = "competition", referencedColumnName = "id", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Competition competition;
 	
 	@JoinColumn(name = "task", referencedColumnName = "id", nullable = false)
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task task;
 	
-	@JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private User user;
 	
 	@Column(name = "evaluationLockUntil")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -149,14 +143,6 @@ public class Solution implements Serializable {
 		return this;
 	}
 
-	public Competition getCompetition() {
-		return competition;
-	}
-
-	public Solution setCompetition(Competition competition) {
-		this.competition = competition;
-		return this;
-	}
 
 	public Task getTask() {
 		return task;
@@ -167,14 +153,6 @@ public class Solution implements Serializable {
 		return this;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public Solution setUser(User user) {
-		this.user = user;
-		return this;
-	}
 
 	public Date getDateEvaluated() {
 		return dateEvaluated;

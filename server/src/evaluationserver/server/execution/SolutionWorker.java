@@ -62,6 +62,7 @@ public class SolutionWorker extends Thread {
 					program = compile(solution);
 				} catch(CompilationException e) {
 					// error during compilation
+					logger.log(Level.FINE, ("Compilation error " + e.getMessage()));
 					dataSource.setResult(solution, new Result(Reply.COMPILE_ERROR, new Date(), 0, 0));
 					continue;
 				}
@@ -82,8 +83,9 @@ public class SolutionWorker extends Thread {
 
 				// get sandbox
 				final ExecutionResult executionResult = execute(sandboxSolution);
-				if(executionResult.getReply() != null) {
+				if(executionResult.getReply() != null && executionResult.getReply() != Reply.ACCEPTED) {
 					// error during execution sandbox
+					logger.log(Level.FINE, ("Error during sandbox execution, system reply: " + executionResult.getReply().getName()));
 					dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
 				} else {
 					// sandbox successfully executed
@@ -93,10 +95,12 @@ public class SolutionWorker extends Thread {
 						solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
 						fileManager.createFile(solution.getTask().getResultResolver())
 					);
+					inspectionSolution.getEvaluationProgram().setExecutable(true);
+					
+					final InspectionResult inspectionResult = inspect(inspectionSolution);
 					fileManager.releaseFile(inspectionSolution.getEvaluationProgram());
 					fileManager.releaseFile(inspectionSolution.getOutputData());
 					
-					final InspectionResult inspectionResult = inspect(inspectionSolution);
 					dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
 				}
 

@@ -22,8 +22,8 @@ public class SandboxImpl implements Sandbox {
 
 	public SandboxImpl(String command, String programKey, String inputDataKey, String solutionDataKey, String timeLimitKey, String memoryLimitKey, String outputLimitKey) {
 		this.command = command;
-		this.inputDataKey = inputDataKey;
 		this.programKey = programKey;
+		this.inputDataKey = inputDataKey;
 		this.solutionDataKey = solutionDataKey;
 		this.timeLimitKey = timeLimitKey;
 		this.memoryLimitKey = memoryLimitKey;
@@ -39,6 +39,7 @@ public class SandboxImpl implements Sandbox {
 		logger.log(Level.FINEST, ("Sandbox start"));
 		final Date start = new Date();
 		final String cmd = this.prepareCommand(solution);
+		logger.log(Level.FINEST, ("Executing command: '" + cmd + "'"));
 		Process exec;
 		try {
 			exec = Runtime.getRuntime().exec(cmd);
@@ -75,28 +76,37 @@ public class SandboxImpl implements Sandbox {
 
 		// reply
 		final Reply reply;
-		if(!st.hasMoreTokens())
+		if (!st.hasMoreTokens()) {
 			throw new ExecutionException("Missing system reply token in sandbox result + '" + data + "'");
+		}
 		try {
 			reply = Reply.fromCode(st.nextToken());
-		} catch(IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			throw new ExecutionException("Invalid system reply in sandbox result + '" + data + "'");
 		}
 
 		// time
-		if(!st.hasMoreTokens())
+		if (!st.hasMoreTokens()) {
 			throw new ExecutionException("Missing time token in sandbox result + '" + data + "'");
+		}
 		int time = Integer.parseInt(st.nextToken());
-		
+
 		// memory
-		if(!st.hasMoreTokens())
+		if (!st.hasMoreTokens()) {
 			throw new ExecutionException("Missing memory token in sandbox result + '" + data + "'");
+		}
 		int memory = Integer.parseInt(st.nextToken());
-		
+
 		return new ExecutionResult(reply, start, time, memory, 0);
 	}
 
 	protected String prepareCommand(Solution solution) {
-		return command.replace(programKey, solution.getProgram().getAbsolutePath()).replace(inputDataKey, solution.getInputData().getAbsolutePath()).replace(solutionDataKey, solution.getSolutionData().getAbsolutePath()).replace(timeLimitKey, Integer.toString(solution.getTimeLimit())).replace(memoryLimitKey, Integer.toString(solution.getMemoryLimit())).replace(outputLimitKey, Integer.toString(solution.getOutputLimit()));
+		return command
+				.replace(programKey, solution.getProgram().getAbsolutePath())
+				.replace(inputDataKey, solution.getInputData().getAbsolutePath())
+				.replace(solutionDataKey, solution.getSolutionData().getAbsolutePath())
+				.replace(timeLimitKey, Integer.toString(solution.getTimeLimit()))
+				.replace(memoryLimitKey, Integer.toString(solution.getMemoryLimit()))
+				.replace(outputLimitKey, Integer.toString(solution.getOutputLimit()));
 	}
 }

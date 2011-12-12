@@ -77,7 +77,7 @@ public class InspectorImpl implements Inspector {
 	protected String prepareCommand(Solution solution) {
 		return command
 				.replace(inputDataKey, solution.getInputData().getAbsolutePath())
-				.replace(outputDataKey, solution.getOutputData().getAbsolutePath())
+				.replace(outputDataKey, solution.getOutputData() == null ? "" : solution.getOutputData().getAbsolutePath())
 				.replace(resolverKey, solution.getEvaluationProgram().getAbsolutePath())
 				.replace(solutionDataKey, solution.getSolutionData().getAbsolutePath());
 	}

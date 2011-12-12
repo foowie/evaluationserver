@@ -1,7 +1,6 @@
 package evaluationserver.server.entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,54 +9,42 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "File")
 @XmlRootElement
 public class File implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id", nullable = false)
-	private Integer id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 50)
+	@Column(name = "id", nullable = false)
+	private Integer id;
+	@Basic(optional = false)
+	@Column(name = "name", nullable = false, length = 50)
 	private String name;
-	
 	@Column(name = "pathName", length = 300)
 	private String path;
-	
 	@Basic(optional = false)
-    @Column(name = "fileSize", nullable = false)
+	@Column(name = "fileSize", nullable = false)
 	private long size;
-	
-	@Lob
-    @Column(name = "fileData")
-	private byte[] data;
-	
+	@JoinColumn(name = "fileData", referencedColumnName = "id", nullable = true)
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private FileData data;
+
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "resultResolver", fetch = FetchType.LAZY)
 //	private List<Task> taskList;
-	
 //	@OneToMany(mappedBy = "outputData", fetch = FetchType.LAZY)
 //	private List<Task> taskList1;
-	
 //	@OneToMany(mappedBy = "inputData", fetch = FetchType.LAZY)
 //	private List<Task> taskList2;
-	
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "file", fetch = FetchType.LAZY)
 //	private List<Solution> solutionList;
-
 	public File() {
 	}
 
@@ -107,12 +94,20 @@ public class File implements Serializable {
 		return this;
 	}
 
-	public byte[] getData() {
+	public FileData getData() {
 		return data;
 	}
 
-	public File setData(byte[] data) {
+	public File setData(FileData data) {
 		this.data = data;
+		return this;
+	}
+	
+	public File setData(byte[] data) {
+		if(this.data == null)
+			this.data = new FileData(null, data);
+		else
+			this.data.setFileData(data);
 		return this;
 	}
 
@@ -155,7 +150,6 @@ public class File implements Serializable {
 //		this.solutionList = solutionList;
 //		return this;
 //	}
-
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -180,5 +174,4 @@ public class File implements Serializable {
 	public String toString() {
 		return "evaluationserver.entities.File[ id=" + id + " ]";
 	}
-	
 }

@@ -10,7 +10,7 @@ import org.springframework.core.io.Resource;
 
 public class Run {
 	public static void main(String[] args) throws Exception {
-		
+FillData.main(args);
 		Resource resource = new FileSystemResource("configuration.xml");
 		BeanFactory factory = new XmlBeanFactory(resource);
 		

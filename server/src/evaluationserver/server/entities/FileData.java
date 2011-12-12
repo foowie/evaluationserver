@@ -7,39 +7,35 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "Category")
-@XmlRootElement
-public class Category implements Serializable {
-	
+@Table(name = "FileData")
+public class FileData implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
 	private Integer id;
-	
 	@Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 200)
-	private String name;
-	
-//	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-//	private List<Task> taskList = new ArrayList<Task>();
+    @Lob
+    @Column(name = "fileData")
+	private byte[] fileData;
+//	@OneToMany(mappedBy = "fileData")
+//	private Collection<File> fileCollection;
 
-	public Category() {
+	public FileData() {
 	}
 
-	public Category(Integer id) {
+	public FileData(Integer id) {
 		this.id = id;
 	}
 
-	public Category(Integer id, String name) {
+	public FileData(Integer id, byte[] fileData) {
 		this.id = id;
-		this.name = name;
+		this.fileData = fileData;
 	}
 
 	public Integer getId() {
@@ -50,21 +46,20 @@ public class Category implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public byte[] getFileData() {
+		return fileData;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFileData(byte[] fileData) {
+		this.fileData = fileData;
 	}
 
-//	@XmlTransient
-//	public List<Task> getTaskList() {
-//		return taskList;
+//	public Collection<File> getFileCollection() {
+//		return fileCollection;
 //	}
 //
-//	public void setTaskList(List<Task> taskList) {
-//		this.taskList = taskList;
+//	public void setFileCollection(Collection<File> fileCollection) {
+//		this.fileCollection = fileCollection;
 //	}
 
 	@Override
@@ -77,10 +72,10 @@ public class Category implements Serializable {
 	@Override
 	public boolean equals(Object object) {
 		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Category)) {
+		if (!(object instanceof FileData)) {
 			return false;
 		}
-		Category other = (Category) object;
+		FileData other = (FileData) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -89,7 +84,7 @@ public class Category implements Serializable {
 
 	@Override
 	public String toString() {
-		return "evaluationserver.entities.Category[ id=" + id + " ]";
+		return "evaluationserver.server.entities.FileData[ id=" + id + " ]";
 	}
 	
 }

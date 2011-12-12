@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 public class DBDataSource implements DataSource {
@@ -27,7 +28,14 @@ public class DBDataSource implements DataSource {
 		logger.log(Level.FINER, ("Update result of solution " + solution.getId()));
 		synchronized(em) {
 			// TODO - check for noresultexception
-			SystemReply reply = (SystemReply) em.createQuery("SELECT r FROM SystemReply r WHERE r.key = :key").setParameter("key", result.getReply().getCode()).getSingleResult();
+			logger.log(Level.FINEST, ("Searching for system reply with key '" + result.getReply().getCode() + "'"));
+			final SystemReply reply;
+			try {
+				reply = (SystemReply) em.createQuery("SELECT r FROM SystemReply r WHERE r.key = :key").setParameter("key", result.getReply().getCode()).getSingleResult();
+			} catch(NonUniqueResultException ex) {
+				logger.log(Level.SEVERE, ("Non-unique key '" + result.getReply().getCode() + "'"));
+				throw ex;
+			}
 
 			if(solution.getEvaluationLockUntil().before(new Date())) {
 				// this solving goes unexpectedly long ... throw it away

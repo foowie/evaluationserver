@@ -16,6 +16,9 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<constructor-arg>
 			<ref bean="fileManager" />
 		</constructor-arg>
+		<constructor-arg>
+			<ref bean="inspector" />
+		</constructor-arg>
 	</bean>
 
 	<!-- NOTIFICATION -->
@@ -70,18 +73,21 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	<bean id="sandboxResolver" class="evaluationserver.server.sandbox.SandboxResolverImpl">
 		<constructor-arg>
 			<map>
-				<entry key="c" value-ref="dummySandbox" />
+				<entry key="c" value-ref="sandbox" />
 			</map>
 		</constructor-arg>
 	</bean>
-	<bean id="dummySandbox" class="evaluationserver.server.sandbox.DummySandbox">
+	<bean id="sandbox" class="evaluationserver.server.sandbox.SandboxImpl">
+		<constructor-arg>
+			<value>../tracer/dist/Release/GNU-Linux-x86/tracer %program% %inputData% %solutionData% ../temp/log.txt %timeLimit% %memoryLimit% %outputLimit%</value>
+		</constructor-arg>		
 	</bean>
 	<!-- END SANDBOXES -->
 	
 	<!-- INSPECTION -->
 	<bean id="inspector" class="evaluationserver.server.inspection.InspectorImpl">
 		<constructor-arg>
-			<value>%resolver% %inputData% %outputData% %solutionData%</value>
+			<value>%resolver% %solutionData% %inputData% %outputData% </value>
 		</constructor-arg>
 	</bean>
 	<!-- END INSPECTION -->
@@ -89,12 +95,12 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	<!-- FILE MANAGMENT -->
 	<bean id="fileManager" class="evaluationserver.server.filemanagment.FileManagerImpl">
 		<constructor-arg>
-			<value>/home/danrob/Dokumenty/temp</value>
+			<value>../temp/</value>
 		</constructor-arg>
 	</bean>
 	<!-- END FILE MANAGMENT -->
 	
-	<bean id="blockingQueue" class="evalutaionserver.server.datasource.DataSourceBlockingQueue">
+	<bean id="blockingQueue" class="evaluationserver.server.datasource.DataSourceBlockingQueue">
 		<constructor-arg>
 			<ref bean="datasource" />
 		</constructor-arg>
@@ -104,6 +110,30 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 			<ref bean="entityManager" />
 		</constructor-arg>
 	</bean>
+	
+	
+<!--	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
+		<property name="persistenceUnitName" value="PersistenceUnit"/>  
+		<property name="dataSource" ref="jpaDataSource"/>  
+		<property name="persistenceXmlLocation" value="classpath:my/test/dao/jpa/persistence.xml"/>  
+		<property name="loadTimeWeaver">          
+			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>  
+		</property>  
+		<property name="jpaVendorAdapter">  
+			<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">  
+				<property name="generateDdl" value="false"/>  
+				<property name="database" value="MYSQL"/>  
+				<property name="databasePlatform" value="org.eclipse.persistence.platform.database.MySQLPlatform"/>  
+			</bean>  
+		</property>  
+	</bean>  	
+	<bean id="jpaDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/evaluationserver"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+	</bean>-->
+	
 	
 	<bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
 	</bean>

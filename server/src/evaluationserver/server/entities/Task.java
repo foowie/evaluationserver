@@ -71,12 +71,6 @@ public class Task implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 	
-	@ManyToMany(mappedBy = "taskList", fetch = FetchType.LAZY)
-	private List<Competition> competitionList;
-	
-	@JoinColumn(name = "category", referencedColumnName = "id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Category category;
 	
 	@JoinColumn(name = "resultResolver", referencedColumnName = "id", nullable = false)
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -86,13 +80,10 @@ public class Task implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private File outputData;
 	
-	@JoinColumn(name = "inputData", referencedColumnName = "id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "inputData", referencedColumnName = "id", nullable = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private File inputData;
 	
-	@JoinColumn(name = "creator", referencedColumnName = "id", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private User creator;
 	
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
 //	private List<Solution> solutionList;
@@ -205,24 +196,6 @@ public class Task implements Serializable {
 		return this;
 	}
 
-	@XmlTransient
-	public List<Competition> getCompetitionList() {
-		return competitionList;
-	}
-
-	public Task setCompetitionList(List<Competition> competitionList) {
-		this.competitionList = competitionList;
-		return this;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public Task setCategory(Category category) {
-		this.category = category;
-		return this;
-	}
 
 	public File getResultResolver() {
 		return resultResolver;
@@ -248,15 +221,6 @@ public class Task implements Serializable {
 
 	public Task setInputData(File inputData) {
 		this.inputData = inputData;
-		return this;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public Task setCreator(User creator) {
-		this.creator = creator;
 		return this;
 	}
 

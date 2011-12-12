@@ -23,6 +23,18 @@ public class FileManagerImpl implements FileManager {
 
 	public FileManagerImpl(String tempPath) {
 		this.tempPath = tempPath;
+
+		prepareTemp(new File(tempPath));
+	}
+	
+	private void prepareTemp(File temp) {
+		if(!temp.exists())
+			if(!temp.mkdirs())
+				throw new IllegalStateException("Can't create temp folder");
+		if(!temp.isDirectory())
+			throw new IllegalStateException("Temp folder is not directory");
+		if(!temp.canWrite())
+			throw new IllegalStateException("Temp folder is not writable");
 	}
 
 	/**
@@ -57,9 +69,13 @@ public class FileManagerImpl implements FileManager {
 		}
 		if(file.getData() != null) {
 			final File result = getFreeFile(file.getName()); // todo
+			final boolean isCreated = result.createNewFile();
+			if(!isCreated || !result.canWrite())
+				throw new IOException("Can't write into temp file " + result.getAbsolutePath());
+			
 			logger.log(Level.FINER, ("Creating new file with data " + result.getAbsolutePath()));
 			FileOutputStream fos = new FileOutputStream(result);
-			fos.write(file.getData());
+			fos.write(file.getData().getFileData());
 			fos.flush();
 			fos.close();
 			return result;

@@ -29,7 +29,7 @@ public class ServerImpl implements Server {
 
 	@Override
 	public void runServer() {
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < 1; i++) {
 			Thread worker = new SolutionWorker(dataSource, sandboxResolver, compilerResolver, fileManager, solutions, inspectior);
 //			worker.setDaemon(true);
 			worker.setName("Worker-" + (i+1));
