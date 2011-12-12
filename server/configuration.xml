@@ -81,7 +81,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	<!-- INSPECTION -->
 	<bean id="inspector" class="evaluationserver.server.inspection.InspectorImpl">
 		<constructor-arg>
-			<value>%resolver% %inputData% %outputData% < %solutionData%</value>
+			<value>%resolver% %inputData% %outputData% %solutionData%</value>
 		</constructor-arg>
 	</bean>
 	<!-- END INSPECTION -->
