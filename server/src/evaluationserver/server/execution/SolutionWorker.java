@@ -67,11 +67,15 @@ public class SolutionWorker extends Thread {
 					continue;
 				}
 
+				// file for solution of data
+				final File solutionData = fileManager.createFile();
+				
 				// prepare solution
 				evaluationserver.server.sandbox.Solution sandboxSolution = new evaluationserver.server.sandbox.Solution(
 					solution.getLanguage().getKey(),
 					program,
 					solution.getTask().getInputData() == null ? null : fileManager.createFile(solution.getTask().getInputData()),
+					solutionData,
 					solution.getTask().getTimeLimit(),
 					solution.getTask().getMemoryLimit(),
 					solution.getTask().getOutputLimit()
@@ -85,7 +89,7 @@ public class SolutionWorker extends Thread {
 				} else {
 					// sandbox successfully executed
 					evaluationserver.server.inspection.Solution inspectionSolution = new evaluationserver.server.inspection.Solution(
-						program, 
+						solutionData, 
 						sandboxSolution.getInputData(), 
 						solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
 						fileManager.createFile(solution.getTask().getResultResolver())
@@ -99,6 +103,7 @@ public class SolutionWorker extends Thread {
 
 				// remove temp files
 				logger.log(Level.FINER, ("Cleanup files"));
+				fileManager.releaseFile(solutionData);
 				fileManager.releaseFile(program);
 				fileManager.releaseFile(sandboxSolution.getInputData());
 				//todo:

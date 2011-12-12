@@ -27,7 +27,9 @@ public class SystemCompiler implements Compiler {
 	@Override
 	public void compile(File source, File destination) throws CompilationException {
 		try {
-			String cmd = command.replaceAll(inputKey, source.getAbsolutePath()).replaceAll(outputKey, destination.getAbsolutePath());
+			String cmd = command
+					.replace(inputKey, source.getAbsolutePath())
+					.replace(outputKey, destination.getAbsolutePath());
 			logger.log(Level.FINER, ("Start compilling file " + source.getAbsolutePath() + " ..."));
 			Process exec = Runtime.getRuntime().exec(cmd);
 			BufferedReader input = new BufferedReader(new InputStreamReader(exec.getInputStream()));

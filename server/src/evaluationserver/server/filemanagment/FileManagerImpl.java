@@ -26,7 +26,7 @@ public class FileManagerImpl implements FileManager {
 	}
 
 	/**
-	 * Creates empty file with unique name in temp
+	 * Get empty file with unique name in temp (dont create it)
 	 * @return Empty file
 	 * @throws IOException 
 	 */
