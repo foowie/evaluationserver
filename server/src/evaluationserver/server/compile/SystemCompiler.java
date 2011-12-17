@@ -1,23 +1,28 @@
 package evaluationserver.server.compile;
 
-import java.io.BufferedReader;
+import evaluationserver.server.util.SystemCommand;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SystemCompiler implements Compiler {
-	private static final Logger logger = Logger.getLogger(SystemCompiler.class.getPackage().getName());	
 
+	private static final Logger logger = Logger.getLogger(SystemCompiler.class.getPackage().getName());
 	private final String command;
 	private final String inputKey;
 	private final String outputKey;
+	private final SystemCommand systemCommand;
 
-	public SystemCompiler(String command, String inputKey, String outputKey) {
+	public SystemCompiler(String command, String inputKey, String outputKey, SystemCommand systemCommand) {
 		this.command = command;
 		this.inputKey = inputKey;
 		this.outputKey = outputKey;
+		this.systemCommand = systemCommand;
+	}
+
+	public SystemCompiler(String command, String inputKey, String outputKey) {
+		this(command, inputKey, outputKey, new SystemCommand());
 	}
 
 	public SystemCompiler(String command) {
@@ -26,35 +31,28 @@ public class SystemCompiler implements Compiler {
 
 	@Override
 	public void compile(File source, File destination) throws CompilationException {
-		if(!source.exists())
+		if (!source.exists()) {
 			throw new CompilationException("Source file doesnt exists " + source.getAbsolutePath());
-		if(!source.canWrite())
-			throw new CompilationException("Destination file is not writable " + destination.getAbsolutePath());
-		
+		}
+
 		try {
-			String cmd = command
-					.replace(inputKey, source.getAbsolutePath())
-					.replace(outputKey, destination.getAbsolutePath());
+			String cmd = this.formatCommand(source, destination);
 			logger.log(Level.FINER, ("Start compilling file " + source.getAbsolutePath() + " ..."));
-			Process exec = Runtime.getRuntime().exec(cmd);
-			BufferedReader input = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = input.readLine()) != null)
-				sb.append(line);
-			logger.log(Level.FINEST, ("Compilator message: '" + sb.toString() + "'"));
 			
-			try {
-				int exitVal = exec.waitFor();
-				if (exitVal != 0) {
-					throw new CompilationException("Compilation process return value: " + exitVal + "(" + sb.toString() + ")");
-				}
-			} catch (InterruptedException ex) {
-				throw new CompilationException(ex);
-			}
+			if(systemCommand.exec(cmd) != 0)
+				throw new CompilationException("Compilation process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ") (" + systemCommand.getError() + ")");
+				
+			logger.log(Level.FINEST, ("Compilator message: '" + systemCommand.getOutput() + "'"));
+
+		} catch (InterruptedException ex) {
+			throw new CompilationException(ex);
 		} catch (IOException ex) {
 			throw new CompilationException(ex);
 		}
 		logger.log(Level.FINER, ("Compiled successfully into " + destination.getAbsolutePath() + ""));
+	}
+
+	protected String formatCommand(File source, File destination) {
+		return command.replace(inputKey, source.getAbsolutePath()).replace(outputKey, destination.getAbsolutePath());
 	}
 }
