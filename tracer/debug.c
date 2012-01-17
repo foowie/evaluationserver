@@ -13,8 +13,10 @@ FILE * log_file;
 char log_prefix[DEBUG_PREFIX_LENGTH];
 
 void init_debug(const char * file_name, const char * prefix) {
-    log_file = fopen(file_name, "a");
-    
+    if(file_name == NULL)
+        log_file = NULL;
+    else
+        log_file = fopen(file_name, "a");
     strncpy(log_prefix, prefix, DEBUG_PREFIX_LENGTH - 1);
     log_prefix[DEBUG_PREFIX_LENGTH - 1] = '\0';
 }
@@ -29,19 +31,20 @@ void log_time() {
 
     strftime(li, 20, "%d.%m.%Y %H:%M:%S", date);
 
-    fprintf(log_file, "%s", li);
+    fprintf(log_file == NULL ? stderr : log_file, "%s", li);
 }
 
 void log_message(const char * name, const char * format, ...) {
     va_list arg;
     va_start(arg, format);
     log_time();
-    fprintf(log_file, " - %s - %s - ", name, log_prefix);
-    vfprintf(log_file, format, arg);
-    fprintf(log_file, "\n");
+    fprintf(log_file == NULL ? stderr : log_file, " - %s - %s - ", name, log_prefix);
+    vfprintf(log_file == NULL ? stderr : log_file, format, arg);
+    fprintf(log_file == NULL ? stderr : log_file, "\n");
     va_end(arg);
 }
 
 void close_debug() {
-    fclose(log_file);
+    if(log_file != NULL)
+        fclose(log_file);
 }

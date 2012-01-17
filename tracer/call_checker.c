@@ -114,7 +114,7 @@ int check_library(char* name) {
 
 void print_ptrace_text(pid_t child, long addr, int length) {
     char* str = get_ptrace_text(child, addr, length);
-    printf(" --> Argument: '%s'", str);
+    DUMP_ERROR(" --> Argument: '%s'", str);
     free(str);
 }
 

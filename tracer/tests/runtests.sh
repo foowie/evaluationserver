@@ -21,8 +21,8 @@ echo "Processing ${#tests[*]} tests"
 for index in ${!tests[*]}
 do
     printf "Test [%s] with expected result %s\n" ${tests[$index]} ${results[$index]}
-    #     tracer           test file                       infile outfile logfile time memory  output
-    torun=$tracer" \""`pwd`"/"$testsDir${tests[$index]}"\" input  output  log.txt  1000 5000000 1000"
+    #     tracer           test file                       infile outfile time memory  output log file
+    torun=$tracer" \""`pwd`"/"$testsDir${tests[$index]}"\" input  output  1000 5000000 1000"
     output=$(eval $torun)
 
     printf "Code: %s Time: %sms Memory: %sb - " $output
@@ -38,4 +38,4 @@ do
 done
 
 rm output
-rm log.txt
+#rm log.txt

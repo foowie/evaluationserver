@@ -150,14 +150,14 @@ int main(int argc, char *argv[]) {
     pid_t child;
     struct Limits limit;
     
-    if(argc != 8) {
-	printf("Arguments for run are: program_to_run input_file_name output_file_name log_file_name time_limit[ms] memory_limit[byte] output_limit[byte]\n");
+    if(argc < 7 || argc > 8) {
+	printf("Arguments for run are: program_to_run input_file_name output_file_name time_limit[ms] memory_limit[byte] output_limit[byte] log_file_name\n");
 	return -1;
     }
 
-    sscanf(argv[5], "%ld", &limit.time_limit);
-    sscanf(argv[6], "%ld", &limit.memory_limit);
-    sscanf(argv[7], "%ld", &limit.output_limit);
+    sscanf(argv[4], "%ld", &limit.time_limit);
+    sscanf(argv[5], "%ld", &limit.memory_limit);
+    sscanf(argv[6], "%ld", &limit.output_limit);
     
     child = fork();
 
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
         return 1;
     } else { // parent proces
         int result;
-        init_debug(argv[4], argv[1]);
+        init_debug(argc == 8 ? argv[7] : NULL, argv[1]);
         init_limits(&limit, child);
         result = trace(&limit);
         close_debug();
