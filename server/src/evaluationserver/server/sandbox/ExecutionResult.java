@@ -28,7 +28,7 @@ public class ExecutionResult {
 	}
 
 	/**
-	 * Result of execution. If set, means error
+	 * Result of execution. If set (except of AC), means error
 	 * @return 
 	 */
 	public Reply getReply() {

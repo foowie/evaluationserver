@@ -34,7 +34,7 @@ public class TimeNotificator extends Thread implements Notificator {
 	public void run() {
 		while(true) {
 			try {
-				Thread.currentThread().sleep(time);
+				Thread.sleep(time);
 			} catch (InterruptedException ex) {
 			}
 			notifyObjects();

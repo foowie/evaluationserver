@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 public class FillData {
 	public static void main(String[] args) throws Exception {
@@ -148,8 +148,8 @@ public class FillData {
 
 		String program = "#include <stdio.h>\nint main()\n{\nprintf(\"Hello World!\");\nreturn 0;\n}";
 		
-		Resource resource = new FileSystemResource("configuration.xml");
-		BeanFactory factory = new XmlBeanFactory(resource);
+		BeanFactory factory = new XmlBeanFactory(new FileSystemResource("configuration.xml"));
+//		factory.getBean(PropertyPlaceholderConfigurer.class).postProcessBeanFactory(factory);
 		
 		// get server instance
 		EntityManager em = factory.getBean(EntityManager.class);

@@ -133,11 +133,19 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="password" value="root"/>
 	</bean>-->
 	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="config.properties"/>
+	</bean>
+	
 	<bean id="jpaDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost:3306/evaluationserver"/>
 		<property name="username" value="root"/>
 		<property name="password" value="root"/>
+<!--		<property name="driverClassName" value="${datasource.driverClassName}"/>
+		<property name="url" value="${datasource.url}"/>
+		<property name="username" value="${datasource.username}"/>
+		<property name="password" value="${datasource.password}"/>-->
 	</bean>	
 	<bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
 	</bean>
@@ -163,6 +171,9 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="jpaProperties">
 			<props>
 				<prop key="eclipselink.ddl-generation.table-creation-suffix">engine=InnoDB</prop>
+				<prop key="eclipselink.ddl-generation">drop-and-create-tables</prop>
+				<prop key="eclipselink.ddl-generation.output-mode">database</prop>
+<!--				<prop key="eclipselink.ddl-generation">none</prop>-->
 			</props>
 		</property>
 	</bean>

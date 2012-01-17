@@ -39,7 +39,7 @@ public class SystemReply implements Serializable {
 	private boolean accepting;
 	
 	@Basic(optional = false)
-    @Column(name = "keyName", nullable = false, length = 2)
+    @Column(name = "keyName", nullable = false, unique = true, length = 2)
 	private String key;
 	
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "systemReply", fetch = FetchType.LAZY)
