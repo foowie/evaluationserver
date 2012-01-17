@@ -31,15 +31,9 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		</constructor-arg>
 	</bean>
 	<bean id="timeNotificator" class="evaluationserver.server.notification.TimeNotificator">
-		<constructor-arg>
-			<value>5000</value>
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="blockingQueue" />
-		</constructor-arg>
-		<property name="name">
-			<value>TimeNotificator</value>
-		</property>
+		<constructor-arg value="5000" />
+		<constructor-arg ref="blockingQueue" />
+		<property name="name" value="TimeNotificator" />
 	</bean>
 	<bean id="tcpNotificator" class="evaluationserver.server.notification.TCPNotificator">
 		<constructor-arg>
@@ -81,6 +75,11 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<constructor-arg>
 			<value>../tracer/dist/Release/GNU-Linux-x86/tracer %program% %inputData% %solutionData% ../temp/log.txt %timeLimit% %memoryLimit% %outputLimit%</value>
 		</constructor-arg>		
+		<constructor-arg>
+			<ref bean="executionResultFactory" />
+		</constructor-arg>		
+	</bean>
+	<bean id="executionResultFactory" class="evaluationserver.server.sandbox.ExecutionResultFactoryImpl">
 	</bean>
 	<!-- END SANDBOXES -->
 	
@@ -134,13 +133,37 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="password" value="root"/>
 	</bean>-->
 	
-	
+	<bean id="jpaDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/evaluationserver"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+	</bean>	
 	<bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
 	</bean>
-	<bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">
+<!--	<bean id="entityManagerFactory" class="javax.persistence.Persistence" factory-method="createEntityManagerFactory">
 		<constructor-arg>
 			<value>PersistenceUnit</value>
 		</constructor-arg>
+	</bean>-->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+		<property name="persistenceXmlLocation" value="classpath:./META-INF/persistence.xml"/>
+		<property name="persistenceUnitName" value="PersistenceUnit"/>
+		<property name="dataSource" ref="jpaDataSource"/>
+		<property name="loadTimeWeaver">          
+			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>  
+		</property>  
+		<property name="jpaVendorAdapter"> 
+			<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter"> 
+				<property name="databasePlatform" value="org.eclipse.persistence.platform.database.MySQLPlatform"/> 
+				<property name="showSql" value="true" /> 
+				<property name="generateDdl" value="false"/>
+			</bean> 
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="eclipselink.ddl-generation.table-creation-suffix">engine=InnoDB</prop>
+			</props>
+		</property>
 	</bean>
-
 </beans>

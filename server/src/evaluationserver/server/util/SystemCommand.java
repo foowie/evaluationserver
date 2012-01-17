@@ -7,12 +7,11 @@ import java.io.OutputStream;
 public class SystemCommand {
 
 	private final Runtime runtime;
-	
-	private String command;
+	private String command = null;
 	private Process process = null;
 	private String output = null;
 	private String error = null;
-	
+
 	public SystemCommand(Runtime runtime) {
 		this.runtime = runtime;
 	}
@@ -23,12 +22,12 @@ public class SystemCommand {
 
 	public int exec(String command, String input) throws IOException, InterruptedException {
 		this.command = command;
-		
+
 		this.output = null;
 		this.error = null;
-		
+
 		process = runtime.exec(command);
-		if(input != null) {
+		if (input != null) {
 			OutputStream outputStream = process.getOutputStream();
 			outputStream.write(input.getBytes());
 			outputStream.close();
@@ -36,21 +35,22 @@ public class SystemCommand {
 		return process.waitFor();
 	}
 
-
 	public int exec(String command) throws IOException, InterruptedException {
 		return exec(command, null);
-	}	
-	
+	}
+
 	public int getReturnCode() {
-		if(process == null)
+		if (process == null) {
 			throw new IllegalStateException("Execute command before 'getReturnCode' call");
+		}
 		return process.exitValue();
 	}
 
 	public String getOutput() throws IOException {
-		if(process == null)
+		if (process == null) {
 			throw new IllegalStateException("Execute command before 'getOutput' call");
-		if(output == null) {
+		}
+		if (output == null) {
 			InputStream inputStream = process.getInputStream();
 			output = new InputStreamString(inputStream).readAll();
 			inputStream.close();
@@ -59,9 +59,10 @@ public class SystemCommand {
 	}
 
 	public String getError() throws IOException {
-		if(process == null)
+		if (process == null) {
 			throw new IllegalStateException("Execute command before 'getOutput' call");
-		if(error == null) {
+		}
+		if (error == null) {
 			InputStream errorStream = process.getErrorStream();
 			error = new InputStreamString(errorStream).readAll();
 			errorStream.close();
@@ -69,4 +70,7 @@ public class SystemCommand {
 		return error;
 	}
 
+	public String getCommand() {
+		return command;
+	}
 }

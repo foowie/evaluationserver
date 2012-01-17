@@ -42,4 +42,44 @@ public class ExecutionResult {
 	public int getTime() {
 		return time;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ExecutionResult other = (ExecutionResult) obj;
+		if (this.reply != other.reply) {
+			return false;
+		}
+		if (this.start != other.start && (this.start == null || !this.start.equals(other.start))) {
+			return false;
+		}
+		if (this.time != other.time) {
+			return false;
+		}
+		if (this.memory != other.memory) {
+			return false;
+		}
+		if (this.output != other.output) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 47 * hash + (this.reply != null ? this.reply.hashCode() : 0);
+		hash = 47 * hash + (this.start != null ? this.start.hashCode() : 0);
+		hash = 47 * hash + this.time;
+		hash = 47 * hash + this.memory;
+		hash = 47 * hash + this.output;
+		return hash;
+	}
+	
+	
 }

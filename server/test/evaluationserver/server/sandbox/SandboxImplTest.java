@@ -10,11 +10,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author danrob
- */
 public class SandboxImplTest {
+	
+	private ExecutionResultFactory resultFactory;
 	
 	public SandboxImplTest() {
 	}
@@ -29,6 +27,7 @@ public class SandboxImplTest {
 	
 	@Before
 	public void setUp() {
+		this.resultFactory = new ExecutionResultFactoryImpl();
 	}
 	
 	@After
@@ -42,8 +41,8 @@ public class SandboxImplTest {
 	public void testCreateResult() throws ExecutionException {
 		System.out.println("createResult");
 		Date start = new Date();
-		SandboxImpl instance = new SandboxImpl("run");
-		ExecutionResult result = instance.createResult("AC 153 10021421", start); // code time[ms] memory[byte]
+		SandboxImpl instance = new SandboxImpl("run", this.resultFactory);
+		ExecutionResult result = resultFactory.create("AC 153 10021421", start); // code time[ms] memory[byte]
 		
 		assertEquals(Reply.ACCEPTED, result.getReply());
 		assertEquals(153, result.getTime());
@@ -58,7 +57,7 @@ public class SandboxImplTest {
 	public void testPrepareCommand() {
 		System.out.println("prepareCommand");
 		Solution solution = new Solution("c", new File("/program"), new File("/inputdata"), new File("/solutiondata"), 11, 22, 33);
-		SandboxImpl instance = new SandboxImpl("sandbox %program% %inputData% %solutionData% log %timeLimit% %memoryLimit% %outputLimit%");
+		SandboxImpl instance = new SandboxImpl("sandbox %program% %inputData% %solutionData% log %timeLimit% %memoryLimit% %outputLimit%", resultFactory);
 		String expResult = "sandbox /program /inputdata /solutiondata log 11 22 33";
 		String result = instance.prepareCommand(solution);
 		assertEquals(expResult, result);

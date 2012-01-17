@@ -1,11 +1,9 @@
 package evaluationserver.server.sandbox;
 
-import evaluationserver.server.execution.Reply;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,8 +17,9 @@ public class SandboxImpl implements Sandbox {
 	private final String timeLimitKey;
 	private final String memoryLimitKey;
 	private final String outputLimitKey;
-
-	public SandboxImpl(String command, String programKey, String inputDataKey, String solutionDataKey, String timeLimitKey, String memoryLimitKey, String outputLimitKey) {
+	private final ExecutionResultFactory resultFactory;
+	
+	public SandboxImpl(String command, ExecutionResultFactory resultFactory, String programKey, String inputDataKey, String solutionDataKey, String timeLimitKey, String memoryLimitKey, String outputLimitKey) {
 		this.command = command;
 		this.programKey = programKey;
 		this.inputDataKey = inputDataKey;
@@ -28,10 +27,11 @@ public class SandboxImpl implements Sandbox {
 		this.timeLimitKey = timeLimitKey;
 		this.memoryLimitKey = memoryLimitKey;
 		this.outputLimitKey = outputLimitKey;
+		this.resultFactory = resultFactory;
 	}
 
-	public SandboxImpl(String command) {
-		this(command, "%program%", "%inputData%", "%solutionData%", "%timeLimit%", "%memoryLimit%", "%outputLimit%");
+	public SandboxImpl(String command, ExecutionResultFactory resultFactory) {
+		this(command, resultFactory, "%program%", "%inputData%", "%solutionData%", "%timeLimit%", "%memoryLimit%", "%outputLimit%");
 	}
 
 	@Override
@@ -68,37 +68,9 @@ public class SandboxImpl implements Sandbox {
 			throw new ExecutionException(ex);
 		}
 
-		return createResult(sb.toString(), start);
+		return resultFactory.create(sb.toString(), start);
 	}
 
-	protected ExecutionResult createResult(String data, Date start) throws ExecutionException {
-		StringTokenizer st = new StringTokenizer(data);
-
-		// reply
-		final Reply reply;
-		if (!st.hasMoreTokens()) {
-			throw new ExecutionException("Missing system reply token in sandbox result + '" + data + "'");
-		}
-		try {
-			reply = Reply.fromCode(st.nextToken());
-		} catch (IllegalArgumentException ex) {
-			throw new ExecutionException("Invalid system reply in sandbox result + '" + data + "'");
-		}
-
-		// time
-		if (!st.hasMoreTokens()) {
-			throw new ExecutionException("Missing time token in sandbox result + '" + data + "'");
-		}
-		int time = Integer.parseInt(st.nextToken());
-
-		// memory
-		if (!st.hasMoreTokens()) {
-			throw new ExecutionException("Missing memory token in sandbox result + '" + data + "'");
-		}
-		int memory = Integer.parseInt(st.nextToken());
-
-		return new ExecutionResult(reply, start, time, memory, 0);
-	}
 
 	protected String prepareCommand(Solution solution) {
 		return command
