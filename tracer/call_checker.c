@@ -181,7 +181,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
             return RUNTIME_ERROR;
 
 	default:
-            DUMP_ERROR("UNKNOWN SYSTEM CALL %ld", regs->orig_eax)
+            DUMP_ERROR("RESTRICTED SYSTEM CALL %ld", regs->orig_eax)
             DUMP_REGISTRY(regs)
             return RESTRICTED_FUNCTION;
     }

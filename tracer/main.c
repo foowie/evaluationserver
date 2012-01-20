@@ -173,7 +173,8 @@ int main(int argc, char *argv[]) {
         return 1;
     } else { // parent proces
         int result;
-        init_debug(argc == 8 ? argv[7] : NULL, argv[1]);
+        char * fileName = strrchr(argv[1], '/');
+        init_debug(argc == 8 ? argv[7] : NULL, fileName == NULL ? argv[1] : fileName+1);
         init_limits(&limit, child);
         result = trace(&limit);
         close_debug();
