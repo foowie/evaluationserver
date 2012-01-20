@@ -1,6 +1,7 @@
 package evaluationserver.server.inspection;
 
 import evaluationserver.server.execution.Reply;
+import evaluationserver.server.util.SystemCommand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,38 +40,22 @@ public class InspectorImpl implements Inspector {
 	public InspectionResult execute(Solution solution) throws InspectionException {
 		logger.log(Level.FINEST, ("Inspection start"));
 		final String cmd = this.prepareCommand(solution);
-		Process exec;
-		try {
-			exec = Runtime.getRuntime().exec(cmd);
-		} catch (IOException ex) {
-			throw new InspectionException("Error during inspector execution", ex);
-		}
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-		StringBuilder sb = new StringBuilder();
-		String line;
+		SystemCommand systemCommand = new SystemCommand();
 		try {
-			while ((line = input.readLine()) != null)
-				sb.append(line);
+			systemCommand.exec(cmd);
+			
+			if(systemCommand.getReturnCode() != 0)
+				throw new InspectionException("Inspection process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ")");
+			
+			logger.log(Level.FINEST, ("Inspection message: '" + systemCommand.getOutput() + "'"));
+			
+			final Reply reply = Reply.fromCode(systemCommand.getOutput());
+			return new InspectionResult(reply);			
 		} catch (IOException ex) {
 			throw new InspectionException("Error during inspector processing", ex);
-		}
-		logger.log(Level.FINEST, ("Inspection message: '" + sb.toString() + "'"));
-
-		try {
-			int exitVal = exec.waitFor();
-			if (exitVal != 0) {
-				throw new InspectionException("Inspection process return value: " + exitVal + "(" + sb.toString() + ")");
-			}
 		} catch (InterruptedException ex) {
-			throw new InspectionException(ex);
-		}		
-		
-		try {
-			final Reply reply = Reply.fromCode(sb.toString());
-			return new InspectionResult(reply);
-		} catch (IllegalArgumentException ex) {
-			throw new InspectionException("Invalid system reply '" + sb.toString() + "'", ex);
+			throw new InspectionException("Error during inspector processing", ex);
 		}
 	}
 	

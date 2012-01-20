@@ -19,6 +19,7 @@ public class CachingFileManager extends FileManagerImpl {
 	/**
 	 * If file entity contains data, creates new file and fill it
 	 * If file entity contains reference of file, return file showing to that file
+	 * If file is from "file.getData()", and should be cached by resolver, it is cached
 	 * @param file Entity where-to-get data
 	 * @return File with data
 	 * @throws IOException 
