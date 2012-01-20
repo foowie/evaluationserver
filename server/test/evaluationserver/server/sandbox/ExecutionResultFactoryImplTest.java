@@ -16,7 +16,7 @@ public class ExecutionResultFactoryImplTest {
 		String data = null;
 		Date start = new Date();
 		ExecutionResultFactoryImpl instance = new ExecutionResultFactoryImpl();
-		ExecutionResult result = instance.create(data, start);
+		ExecutionResult result = instance.create(data, start, "");
 	}
 	
 	@Test(expected=NullPointerException.class)
@@ -25,7 +25,7 @@ public class ExecutionResultFactoryImplTest {
 		String data = "AC 153 10021421";
 		Date start = null;
 		ExecutionResultFactoryImpl instance = new ExecutionResultFactoryImpl();
-		ExecutionResult result = instance.create(data, start);
+		ExecutionResult result = instance.create(data, start, "");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -34,7 +34,7 @@ public class ExecutionResultFactoryImplTest {
 		String data = "XY AV GG";
 		Date start = new Date();
 		ExecutionResultFactoryImpl instance = new ExecutionResultFactoryImpl();
-		ExecutionResult result = instance.create(data, start);
+		ExecutionResult result = instance.create(data, start, "");
 	}
 	
 	@Test
@@ -43,8 +43,8 @@ public class ExecutionResultFactoryImplTest {
 		String data = "AC 153 10021421";
 		Date start = new Date();
 		ExecutionResultFactoryImpl instance = new ExecutionResultFactoryImpl();
-		ExecutionResult result = instance.create(data, start);
-		ExecutionResult expected = new ExecutionResult(Reply.ACCEPTED, start, 153, 10021421, 0);
+		ExecutionResult result = instance.create(data, start, "x");
+		ExecutionResult expected = new ExecutionResult(Reply.ACCEPTED, start, 153, 10021421, 0, "x");
 		assertEquals(expected, result);
 	}
 	

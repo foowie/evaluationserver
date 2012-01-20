@@ -1,8 +1,7 @@
 package evaluationserver.server.sandbox;
 
-import java.io.BufferedReader;
+import evaluationserver.server.util.SystemCommand;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,42 +32,32 @@ public class SandboxImpl implements Sandbox {
 	public SandboxImpl(String command, ExecutionResultFactory resultFactory) {
 		this(command, resultFactory, "%program%", "%inputData%", "%solutionData%", "%timeLimit%", "%memoryLimit%", "%outputLimit%");
 	}
-
+	
 	@Override
 	public ExecutionResult execute(Solution solution) throws ExecutionException {
 		logger.log(Level.FINEST, ("Sandbox start"));
 		final Date start = new Date();
 		final String cmd = this.prepareCommand(solution);
 		logger.log(Level.FINEST, ("Executing command: '" + cmd + "'"));
-		Process exec;
+		
+		SystemCommand systemCommand = new SystemCommand(Runtime.getRuntime());
 		try {
-			exec = Runtime.getRuntime().exec(cmd);
+			
+			systemCommand.exec(cmd);
+			logger.log(Level.FINEST, ("Sandbox message: '" + systemCommand.getOutput() + "'"));
+			
+			if (systemCommand.getReturnCode() != 0)
+				throw new ExecutionException("Sandbox process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ")");
+			
+			return resultFactory.create(systemCommand.getOutput(), start, systemCommand.getError());
+			
 		} catch (IOException ex) {
 			throw new ExecutionException("Error during sandbox execution", ex);
-		}
-
-		BufferedReader input = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-		StringBuilder sb = new StringBuilder();
-		String line;
-		try {
-			while ((line = input.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (IOException ex) {
-			throw new ExecutionException("Error during sandbox processing", ex);
-		}
-		logger.log(Level.FINEST, ("Sandbox message: '" + sb.toString() + "'"));
-
-		try {
-			int exitVal = exec.waitFor();
-			if (exitVal != 0) {
-				throw new ExecutionException("Sandbox process return value: " + exitVal + "(" + sb.toString() + ")");
-			}
 		} catch (InterruptedException ex) {
-			throw new ExecutionException(ex);
+			throw new ExecutionException("Error during sandbox execution", ex);
+		} catch (IllegalArgumentException ex) {
+			throw new ExecutionException("Error during sandbox execution (format output)", ex);
 		}
-
-		return resultFactory.create(sb.toString(), start);
 	}
 
 

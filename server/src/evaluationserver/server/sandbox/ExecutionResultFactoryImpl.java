@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 public class ExecutionResultFactoryImpl implements ExecutionResultFactory {
 
 	@Override
-	public ExecutionResult create(String data, Date start) throws IllegalArgumentException {
+	public ExecutionResult create(String data, Date start, String log) throws IllegalArgumentException {
 		if(data == null || start == null)
 			throw new NullPointerException("Inpurt parameters can't be null !");
 		
@@ -37,7 +37,7 @@ public class ExecutionResultFactoryImpl implements ExecutionResultFactory {
 		}
 		int memory = Integer.parseInt(st.nextToken());
 
-		return new ExecutionResult(reply, start, time, memory, 0);
+		return new ExecutionResult(reply, start, time, memory, 0, log);
 	}
 	
 }

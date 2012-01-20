@@ -4,21 +4,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="server" class="evaluationserver.server.execution.ServerImpl">
-		<constructor-arg>
-			<ref bean="datasource" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="sandboxResolver" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="compilerResolver" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="fileManager" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="inspector" />
-		</constructor-arg>
+		<constructor-arg ref="datasource" />
+		<constructor-arg ref="sandboxResolver" />
+		<constructor-arg ref="compilerResolver" />
+		<constructor-arg ref="cachingFileManager" />
+		<constructor-arg ref="inspector" />
 	</bean>
 
 	<!-- NOTIFICATION -->
@@ -36,15 +26,9 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="name" value="TimeNotificator" />
 	</bean>
 	<bean id="tcpNotificator" class="evaluationserver.server.notification.TCPNotificator">
-		<constructor-arg>
-			<value>5879</value>
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="blockingQueue" />
-		</constructor-arg>
-		<property name="name">
-			<value>TCPNotificator</value>
-		</property>
+		<constructor-arg value="5879" />
+		<constructor-arg ref="blockingQueue" />
+		<property name="name" value="TCPNotificator" />
 	</bean>
 	<!-- END NOTIFICATION -->
 
@@ -57,9 +41,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		</constructor-arg>
 	</bean>
 	<bean id="cCompiler" class="evaluationserver.server.compile.SystemCompiler">
-		<constructor-arg>
-			<value>gcc %input% -o %output%</value>
-		</constructor-arg>
+		<constructor-arg value="gcc %input% -o %output%" />
 	</bean>
 	<!-- END COMPILERS -->
 	
@@ -72,42 +54,38 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		</constructor-arg>
 	</bean>
 	<bean id="sandbox" class="evaluationserver.server.sandbox.SandboxImpl">
-		<constructor-arg>
-			<value>../tracer/dist/Release/GNU-Linux-x86/tracer %program% %inputData% %solutionData% ../temp/log.txt %timeLimit% %memoryLimit% %outputLimit%</value>
-		</constructor-arg>		
-		<constructor-arg>
-			<ref bean="executionResultFactory" />
-		</constructor-arg>		
+		<constructor-arg value="../tracer/dist/Release/GNU-Linux-x86/tracer %program% %inputData% %solutionData% %timeLimit% %memoryLimit% %outputLimit%" />
+		<constructor-arg ref="executionResultFactory" />
 	</bean>
-	<bean id="executionResultFactory" class="evaluationserver.server.sandbox.ExecutionResultFactoryImpl">
-	</bean>
+	<bean id="executionResultFactory" class="evaluationserver.server.sandbox.ExecutionResultFactoryImpl" />
 	<!-- END SANDBOXES -->
 	
 	<!-- INSPECTION -->
 	<bean id="inspector" class="evaluationserver.server.inspection.InspectorImpl">
-		<constructor-arg>
-			<value>%resolver% %solutionData% %inputData% %outputData% </value>
-		</constructor-arg>
+		<constructor-arg value="%resolver% %solutionData% %inputData% %outputData%" />
 	</bean>
 	<!-- END INSPECTION -->
 	
 	<!-- FILE MANAGMENT -->
 	<bean id="fileManager" class="evaluationserver.server.filemanagment.FileManagerImpl">
-		<constructor-arg>
-			<value>../temp/</value>
-		</constructor-arg>
+		<constructor-arg value="../temp/" />
+	</bean>
+	<bean id="cachingFileManager" class="evaluationserver.server.filemanagment.CachingFileManager">
+		<constructor-arg value="../temp/" />
+		<constructor-arg ref="typeFileCacheResolver" />
+	</bean>
+	
+	<bean id="dummyFileCacheResolver" class="evaluationserver.server.filemanagment.DummyFileCacheResolver" />
+	<bean id="typeFileCacheResolver" class="evaluationserver.server.dbdatasource.TypeFileCacheResolver" >
+		<constructor-arg ref="entityManager" />
 	</bean>
 	<!-- END FILE MANAGMENT -->
 	
 	<bean id="blockingQueue" class="evaluationserver.server.datasource.DataSourceBlockingQueue">
-		<constructor-arg>
-			<ref bean="datasource" />
-		</constructor-arg>
+		<constructor-arg ref="datasource" />
 	</bean>
 	<bean id="datasource" class="evaluationserver.server.dbdatasource.DBDataSource">
-		<constructor-arg>
-			<ref bean="entityManager" />
-		</constructor-arg>
+		<constructor-arg ref="entityManager" />
 	</bean>
 	
 	

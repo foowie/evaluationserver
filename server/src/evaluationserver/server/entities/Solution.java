@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -58,11 +56,13 @@ public class Solution implements Serializable {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private File file;
 	
-	
 	@JoinColumn(name = "task", referencedColumnName = "id", nullable = false)
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task task;
 	
+	@Basic(optional = false)
+	@Column(name = "log", nullable = true, length = 1024)
+	private String log;	
 	
 	@Column(name = "evaluationLockUntil")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -162,6 +162,24 @@ public class Solution implements Serializable {
 		this.dateEvaluated = dateEvaluated;
 		return this;
 	}
+	
+	public String getEvaluationLog() {
+		return log;
+	}
+
+	public Solution setLog(String log) {
+		this.log = log.length() > 1024 ? log.substring(0, 1024) : log;
+		return this;
+	}
+	
+	public Date getEvaluationLockUntil() {
+		return evaluationLockUntil;
+	}
+
+	public Solution setEvaluationLockUntil(Date evaluationLockUntil) {
+		this.evaluationLockUntil = evaluationLockUntil;
+		return this;
+	}
 
 	@Override
 	public int hashCode() {
@@ -181,14 +199,6 @@ public class Solution implements Serializable {
 			return false;
 		}
 		return true;
-	}
-
-	public Date getEvaluationLockUntil() {
-		return evaluationLockUntil;
-	}
-
-	public void setEvaluationLockUntil(Date evaluationLockUntil) {
-		this.evaluationLockUntil = evaluationLockUntil;
 	}
 
 	@Override

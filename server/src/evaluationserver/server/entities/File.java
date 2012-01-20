@@ -1,6 +1,7 @@
 package evaluationserver.server.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -36,6 +39,9 @@ public class File implements Serializable {
 	@JoinColumn(name = "fileData", referencedColumnName = "id", nullable = true)
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FileData data;
+	@Column(name = "created")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created = new Date();
 
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "resultResolver", fetch = FetchType.LAZY)
 //	private List<Task> taskList;
@@ -102,13 +108,18 @@ public class File implements Serializable {
 		this.data = data;
 		return this;
 	}
-	
+
 	public File setData(byte[] data) {
-		if(this.data == null)
+		if (this.data == null) {
 			this.data = new FileData(null, data);
-		else
+		} else {
 			this.data.setFileData(data);
+		}
 		return this;
+	}
+
+	public Date getCreated() {
+		return created;
 	}
 
 //	@XmlTransient

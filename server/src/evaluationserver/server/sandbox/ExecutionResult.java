@@ -10,13 +10,15 @@ public class ExecutionResult {
 	private final int time;
 	private final int memory;
 	private final int output;
+	private final String log;
 
-	public ExecutionResult(Reply reply, Date start, int time, int memory, int output) {
+	public ExecutionResult(Reply reply, Date start, int time, int memory, int output, String log) {
 		this.reply = reply;
 		this.start = start;
 		this.time = time;
 		this.memory = memory;
 		this.output = output;
+		this.log = log;
 	}
 
 	public int getMemory() {
@@ -43,6 +45,10 @@ public class ExecutionResult {
 		return time;
 	}
 
+	public String getLog() {
+		return log;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -67,19 +73,15 @@ public class ExecutionResult {
 		if (this.output != other.output) {
 			return false;
 		}
+		if ((this.log == null) ? (other.log != null) : !this.log.equals(other.log)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 47 * hash + (this.reply != null ? this.reply.hashCode() : 0);
-		hash = 47 * hash + (this.start != null ? this.start.hashCode() : 0);
-		hash = 47 * hash + this.time;
-		hash = 47 * hash + this.memory;
-		hash = 47 * hash + this.output;
+		int hash = 5;
 		return hash;
 	}
-	
-	
 }

@@ -62,8 +62,9 @@ public class SolutionWorker extends Thread {
 					program = compile(solution);
 				} catch(CompilationException e) {
 					// error during compilation
-					logger.log(Level.FINE, ("Compilation error " + e.getMessage()));
-					dataSource.setResult(solution, new Result(Reply.COMPILE_ERROR, new Date(), 0, 0));
+					final String log = "Compilation error " + e.getMessage();
+					logger.log(Level.FINE, log);
+					dataSource.setResult(solution, new Result(Reply.COMPILE_ERROR, new Date(), 0, 0, log));
 					continue;
 				}
 
@@ -85,8 +86,9 @@ public class SolutionWorker extends Thread {
 				final ExecutionResult executionResult = execute(sandboxSolution);
 				if(executionResult.getReply() != null && executionResult.getReply() != Reply.ACCEPTED) {
 					// error during execution sandbox
-					logger.log(Level.FINE, ("Error during sandbox execution, system reply: " + executionResult.getReply().getName()));
-					dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+					final String log = "Error during sandbox execution, system reply: " + executionResult.getReply().getName();
+					logger.log(Level.FINE, log);
+					dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), (log + "\n" + executionResult.getLog())));
 				} else {
 					// sandbox successfully executed
 					evaluationserver.server.inspection.Solution inspectionSolution = new evaluationserver.server.inspection.Solution(
@@ -101,7 +103,7 @@ public class SolutionWorker extends Thread {
 					fileManager.releaseFile(inspectionSolution.getEvaluationProgram());
 					fileManager.releaseFile(inspectionSolution.getOutputData());
 					
-					dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory()));
+					dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), ""));
 				}
 
 				// remove temp files

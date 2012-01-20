@@ -48,6 +48,7 @@ public class DBDataSource implements DataSource {
 			solution.setMemory(result.getMemory());
 			solution.setTime(result.getTime());
 			solution.setSystemReply(reply);
+			solution.setLog(result.getLog());
 			em.flush();
 			em.getTransaction().commit();
 		}

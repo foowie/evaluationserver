@@ -42,12 +42,13 @@ public class SandboxImplTest {
 		System.out.println("createResult");
 		Date start = new Date();
 		SandboxImpl instance = new SandboxImpl("run", this.resultFactory);
-		ExecutionResult result = resultFactory.create("AC 153 10021421", start); // code time[ms] memory[byte]
+		ExecutionResult result = resultFactory.create("AC 153 10021421", start, "log"); // code time[ms] memory[byte]
 		
 		assertEquals(Reply.ACCEPTED, result.getReply());
 		assertEquals(153, result.getTime());
 		assertEquals(10021421, result.getMemory());
 		assertEquals(start, result.getStart());
+		assertEquals("log", result.getLog());
 	}
 
 	/**
