@@ -6,11 +6,11 @@ extern "C" {
 #endif
 
 
-    // Log registry on program fail
-    #define DEBUG_REGISTRY
+	// Log registry on program fail
+#define DEBUG_REGISTRY
 
-    // Log program errors
-    #define DEBUG_ERRORS
+	// Log program errors
+#define DEBUG_ERRORS
 
 
 #ifdef	__cplusplus
