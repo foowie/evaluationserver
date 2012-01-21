@@ -24,14 +24,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SolutionWorker extends Thread {
-	private static final Logger logger = Logger.getLogger(SolutionWorker.class.getPackage().getName());	
 
+	private static final Logger logger = Logger.getLogger(SolutionWorker.class.getPackage().getName());
+	protected static volatile long counter = 0;
 	protected final DataSource dataSource;
 	protected final SandboxResolver sandboxResolver;
 	protected final CompilerResolver compilerResolver;
 	protected final FileManager fileManager;
 	protected final BlockingQueue<Solution> solutions;
 	protected final Inspector inspector;
+	protected long tag = -1;
 
 	public SolutionWorker(DataSource dataSource, SandboxResolver sandboxResolver, CompilerResolver compilerResolver, FileManager fileManager, BlockingQueue<Solution> solutions, Inspector inspector) {
 		this.dataSource = dataSource;
@@ -44,79 +46,112 @@ public class SolutionWorker extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			logger.log(Level.FINER, ("SolutionWorker '" + getName() + "' starts"));
-			while (true) {
-				final Solution solution;
-				try {
-					solution = solutions.take();
-					logger.log(Level.FINER, ("Taking solution number " + solution.getId()));
-				} catch (InterruptedException ex) {
-					logger.log(Level.FINER, ("Ending..."));
-					return;
-				}
+		logger.log(Level.FINER, ("SolutionWorker '" + getName() + "' starts"));
+		while (true) {
+			tag = counter++;
+			final Solution solution;
+			try {
+				solution = solutions.take();
+				logger.log(Level.FINER, ("Taking solution number " + solution.getId()));
+			} catch (InterruptedException ex) {
+				logger.log(Level.FINER, ("Ending..."));
+				return;
+			}
 
-				// compilation
-				final File program;
-				try {
-					program = compile(solution);
-				} catch(CompilationException e) {
-					// error during compilation
-					final String log = "Compilation error " + e.getMessage();
-					logger.log(Level.FINE, log);
-					dataSource.setResult(solution, new Result(Reply.COMPILE_ERROR, new Date(), 0, 0, log));
-					continue;
-				}
+			// compilation
+			final File program;
+			try {
+				program = compile(solution);
+			} catch (CompilationException ex) {
+				// error during compilation
+				logError(solution, Reply.COMPILE_ERROR, ex, Level.FINE, "Compilation error");
+				continue;
+			} catch (NoCompilerException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "Compilation error - no compiler found for language '" + solution.getLanguage().getKey());
+				continue;
+			} catch (IOException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "Compilation error - IOException");
+				continue;
+			}
+			
+			// file for solution of data
+			final File solutionData;
+			try {
+				solutionData = fileManager.createFile(tag);
+			} catch (IOException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "File manager error - IOException");
+				continue;
+			}
 
-				// file for solution of data
-				final File solutionData = fileManager.createFile();
-				
-				// prepare solution
-				evaluationserver.server.sandbox.Solution sandboxSolution = new evaluationserver.server.sandbox.Solution(
+			// prepare solution
+			evaluationserver.server.sandbox.Solution sandboxSolution;
+			try {
+				sandboxSolution = new evaluationserver.server.sandbox.Solution(
 					solution.getLanguage().getKey(),
 					program,
-					solution.getTask().getInputData() == null ? null : fileManager.createFile(solution.getTask().getInputData()),
+					solution.getTask().getInputData() == null ? null : fileManager.createFile(solution.getTask().getInputData(), tag),
 					solutionData,
 					solution.getTask().getTimeLimit(),
 					solution.getTask().getMemoryLimit(),
-					solution.getTask().getOutputLimit()
-				);
-
-				// get sandbox
-				final ExecutionResult executionResult = execute(sandboxSolution);
-				if(executionResult.getReply() != null && executionResult.getReply() != Reply.ACCEPTED) {
-					// error during execution sandbox
-					final String log = "Error during sandbox execution, system reply: " + executionResult.getReply().getName();
-					logger.log(Level.FINE, log);
-					dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), (log + "\n" + executionResult.getLog())));
-				} else {
-					// sandbox successfully executed
-					evaluationserver.server.inspection.Solution inspectionSolution = new evaluationserver.server.inspection.Solution(
-						solutionData, 
-						sandboxSolution.getInputData(), 
-						solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData()),
-						fileManager.createFile(solution.getTask().getResultResolver())
-					);
-					inspectionSolution.getEvaluationProgram().setExecutable(true);
-					
-					final InspectionResult inspectionResult = inspect(inspectionSolution);
-					fileManager.releaseFile(inspectionSolution.getEvaluationProgram());
-					fileManager.releaseFile(inspectionSolution.getOutputData());
-					
-					dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), ""));
-				}
-
-				// remove temp files
-				logger.log(Level.FINER, ("Cleanup files"));
-				fileManager.releaseFile(solutionData);
-				fileManager.releaseFile(program);
-				fileManager.releaseFile(sandboxSolution.getInputData());
-				//todo:
+					solution.getTask().getOutputLimit());
+			} catch (IOException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "File manager error - IOException");
+				continue;
 			}
 
-		} catch (Exception ex) {
-			logger.log(Level.SEVERE, null, ex);
+			// get sandbox
+			final ExecutionResult executionResult;
+			try {
+				executionResult = execute(sandboxSolution);
+			} catch (NoSandboxException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "Sandbox error - no sandbox found for language '" + solution.getLanguage().getKey() + "'");
+				continue;
+			} catch (ExecutionException ex) {
+				logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "Sandbox error - execution exception");
+				continue;
+			}
+			if (executionResult.getReply() != null && executionResult.getReply() != Reply.ACCEPTED) {
+				// error during execution sandbox
+				final String log = "Error during sandbox execution, system reply: " + executionResult.getReply().getName();
+				logger.log(Level.FINE, log);
+				dataSource.setResult(solution, new Result(executionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), (log + "\n" + executionResult.getLog())));
+			} else {
+				// sandbox successfully executed
+				evaluationserver.server.inspection.Solution inspectionSolution = null;
+				try {
+					inspectionSolution = new evaluationserver.server.inspection.Solution(
+					solutionData,
+					sandboxSolution.getInputData(),
+					solution.getTask().getOutputData() == null ? null : fileManager.createFile(solution.getTask().getOutputData(), tag),
+					fileManager.createFile(solution.getTask().getResultResolver(), tag));
+				} catch (IOException ex) {
+					logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "File manager exception IO exception");
+					continue;
+				}
+				inspectionSolution.getEvaluationProgram().setExecutable(true);
+
+				final InspectionResult inspectionResult;
+				try {
+					inspectionResult = inspect(inspectionSolution);
+				} catch (InspectionException ex) {
+					logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "Inspection exception");
+					continue;
+				}
+				dataSource.setResult(solution, new Result(inspectionResult.getReply(), executionResult.getStart(), executionResult.getTime(), executionResult.getMemory(), ""));
+			}
+
+			// remove temp files
+			logger.log(Level.FINER, ("Cleanup files"));
+			fileManager.releaseFiles(tag);
 		}
+
+	}
+
+	protected void logError(Solution solution, Reply type, Exception ex, Level level, String log) {
+		final String msg = log + "\n" + ex.getMessage();
+		logger.log(level, msg);
+		dataSource.setResult(solution, new Result(type, new Date(), 0, 0, msg));
+		fileManager.releaseFiles(tag);
 	}
 	
 	/**
@@ -132,15 +167,15 @@ public class SolutionWorker extends Thread {
 		final Compiler compiler = compilerResolver.getCompiler(solution.getLanguage().getKey());
 		File sourceCode = null, program = null;
 		try {
-			sourceCode = fileManager.createFile(solution.getFile());
-			program = fileManager.createFile();
-			compiler.compile(sourceCode, program);		
+			sourceCode = fileManager.createFile(solution.getFile(), tag);
+			program = fileManager.createFile(tag);
+			compiler.compile(sourceCode, program);
 		} finally {
 			fileManager.releaseFile(sourceCode);
 		}
 		return program;
 	}
-	
+
 	/**
 	 * Execute solution and return result of execution
 	 * @param sandboxSolution
@@ -154,7 +189,7 @@ public class SolutionWorker extends Thread {
 		final ExecutionResult result = sandbox.execute(sandboxSolution);
 		return result;
 	}
-	
+
 	/**
 	 * Inspect solution by evaluator
 	 * @param inspectionSolution

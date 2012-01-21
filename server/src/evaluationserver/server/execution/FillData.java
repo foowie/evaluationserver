@@ -191,11 +191,14 @@ public class FillData {
 		};
 		
 		em.getTransaction().begin();
-		for(Object o : replies)
+		for(Object o : replies) {
 			em.persist(o);
-		for(Object o : entities)
+			em.flush();
+		}
+		for(Object o : entities) {
 			em.persist(o);
-		em.flush();
+			em.flush();
+		}
 		em.getTransaction().commit();
 	}	
 }

@@ -25,7 +25,7 @@ public class CachingFileManager extends FileManagerImpl {
 	 * @throws IOException 
 	 */
 	@Override
-	public File createFile(evaluationserver.server.entities.File file) throws IOException {
+	public File createFile(evaluationserver.server.entities.File file, Long tag) throws IOException {
 		if(file == null)
 			throw new NullPointerException("File can't be null !");
 		
@@ -44,7 +44,7 @@ public class CachingFileManager extends FileManagerImpl {
 			}
 			return result;
 		} else
-			return super.createFile(file);
+			return super.createFile(file, tag);
 	}
 	
 	protected String formatFileName(evaluationserver.server.entities.File file) {

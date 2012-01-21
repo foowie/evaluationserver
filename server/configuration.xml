@@ -142,7 +142,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="jpaVendorAdapter"> 
 			<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter"> 
 				<property name="databasePlatform" value="org.eclipse.persistence.platform.database.MySQLPlatform"/> 
-				<property name="showSql" value="true" /> 
+<!--				<property name="showSql" value="true" /> -->
 				<property name="generateDdl" value="false"/>
 			</bean> 
 		</property>
