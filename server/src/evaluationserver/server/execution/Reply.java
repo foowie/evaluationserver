@@ -10,7 +10,8 @@ public enum Reply {
 	TIME_LIMIT_EXCEEDED("TE", "Time limit exceeded", false),
 	MEMORY_LIMIT_EXCEEDED("ME", "Memory limit exceeded", false),
 	OUTPUT_LIMIT_EXCEEDED("OL", "Output limit exceeded", false),
-	RESTRICTED_FUNCTION("RF", "Restricted function", false);
+	RESTRICTED_FUNCTION("RF", "Restricted function", false),
+	INTERNAL_ERROR("IE", "Internal error", false);
 	
 	private final String code;
 	private final String name;
