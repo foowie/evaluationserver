@@ -16,6 +16,9 @@ char * responses[] = {
 };
 
 int process(FILE * solution, FILE * input, FILE * output) {
+	if(output == NULL)
+		return INTERNAL_ERROR;
+	
 	long tokenA, tokenB;
 	int readedA, readedB;
 
@@ -33,21 +36,21 @@ int process(FILE * solution, FILE * input, FILE * output) {
 }
 
 /**
- * @param argc 3
- * @param argv [solutionDataFile, inputDataFile, outputDataFile]
+ * @param argc 3|4
+ * @param argv [runFile, solutionDataFile, inputDataFile, outputDataFile-optional]
  * @return 
  */
 int main(int argc, char** argv) {
-	if (argc != 3) {
+	if (argc < 3 || argc > 4) {
 		printf("%s", responses[INTERNAL_ERROR]);
 		return 1;
 	}
 
-	FILE* solution = fopen(argv[0], "r");
-	FILE* input = fopen(argv[1], "r");
-	FILE* output = fopen(argv[2], "r");
+	FILE* solution = fopen(argv[1], "r");
+	FILE* input = fopen(argv[2], "r");
+	FILE* output = argc == 2 ? NULL : fopen(argv[3], "r");
 
-	if (solution == NULL || input == NULL || output == NULL) {
+	if (solution == NULL || input == NULL || (argc != 3 && output == NULL)) {
 		printf("%s", responses[INTERNAL_ERROR]);
 		return 1;
 	}
@@ -57,7 +60,8 @@ int main(int argc, char** argv) {
 
 	fclose(solution);
 	fclose(input);
-	fclose(output);
+	if(argc != 3)
+		fclose(output);
 
 	return 0;
 }
