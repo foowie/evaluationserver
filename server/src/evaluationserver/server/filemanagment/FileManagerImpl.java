@@ -1,14 +1,10 @@
 package evaluationserver.server.filemanagment;
 
+import evaluationserver.server.util.Tags;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,10 +13,9 @@ public class FileManagerImpl implements FileManager {
 	private static final Logger logger = Logger.getLogger(FileManagerImpl.class.getPackage().getName());	
 
 	/**
-	 * Set of temporary created files to cleanup
+	 * Temporary created files to cleanup
 	 */
-	protected final Map<File, Set<Long>> files = new HashMap<File, Set<Long>>();
-	protected final Map<Long, Set<File>> tags = new TreeMap<Long, Set<File>>();
+	protected final Tags<File, Long> files = new Tags<File, Long>();
 	/**
 	 * Path where-to create new files
 	 */
@@ -97,9 +92,10 @@ public class FileManagerImpl implements FileManager {
 		if(file == null)
 			return;
 		synchronized(files) {
-			if(files.containsKey(file)) {
+			if(files.containsValue(file)) {
 				logger.log(Level.FINER, ("Release file " + file.getAbsolutePath()));
-				unregisterFile(file);
+				files.removeByValue(file);
+				file.delete();
 			}
 		}
 	}
@@ -107,9 +103,14 @@ public class FileManagerImpl implements FileManager {
 	@Override
 	public void releaseFiles(long tag) {
 		synchronized(files) {
-			if(tags.containsKey(tag)) {
-				logger.log(Level.FINER, ("Release files with tag " + tag));
-				unregisterFiles(tag);
+			if(files.containsTag(tag)) {
+				StringBuilder sb = new StringBuilder("Release files with tag ").append(tag);
+				Set<File> delete = files.removeByTag(tag);
+				for(File file : delete) {
+					file.delete();
+					sb.append("\n   ").append(file.getAbsolutePath());
+				}
+				logger.log(Level.FINER, sb.toString());
 			}
 		}
 	}	
@@ -120,49 +121,10 @@ public class FileManagerImpl implements FileManager {
 			do {
 				String name = UUID.randomUUID().toString() + (ext == null ? "" : ext);
 				file = new File(tempPath + File.separator + name);
-			} while(files.containsKey(file) || file.exists());
-			registerFile(file, tag);
+			} while(files.containsValue(file) || file.exists());
+			files.add(file, tag);
 		}
 		return file;
-	}
-	
-	protected void registerFile(File file, long tag) {
-		if(!files.containsKey(file))
-			files.put(file, new TreeSet<Long>());
-		if(!tags.containsKey(tag))
-			tags.put(tag, new HashSet<File>());
-			
-		if(!files.get(file).contains(tag))
-			files.get(file).add(tag);
-		if(tags.containsKey(tag) && !tags.get(tag).contains(file))
-			tags.get(tag).add(file);
-	}
-	
-	protected void unregisterFile(File file) {
-		if(files.containsKey(file)) { // todo: only when contains?
-			for(long tag : files.get(file)) {
-				if(tags.get(tag).size() > 1)
-					tags.get(tag).remove(file);
-				else
-					tags.remove(tag);
-			}
-			files.remove(file);
-			file.delete();
-		}
-	}
-	
-	protected void unregisterFiles(long tag) {
-		if(tags.containsKey(tag)) {
-			for(File file : tags.get(tag)) {
-				if(files.get(file).size() > 1)
-					files.get(file).remove(tag);
-				else {
-					files.remove(file);
-					file.delete();
-				}
-			}
-			tags.remove(tag);
-		}
 	}
 
 }
