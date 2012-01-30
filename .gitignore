@@ -13,6 +13,13 @@ tracer/diff/*
 # server
 server/build
 server/dist
+server/nbproject/private/
 
 # web
-/server/nbproject/private/
+web/evaluationserver/tmp
+web/evaluationserver/modules
+web/evaluationserver/lib
+web/evaluationserver/test-result
+web/evaluationserver/logs
+web/evaluationserver/nbproject
+
