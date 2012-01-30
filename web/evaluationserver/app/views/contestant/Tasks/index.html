@@ -2,11 +2,6 @@
 
 #{set title:'Tasks' /}
 
-<table>
-	<tr><th>Name</th></tr>
-	#{list competition.tasks, as:'task'}
-		<tr>
-			<td><a href="@{contestant.Task.index(competition.id, task.id)}">${task.name}</a></td>
-		</tr>
-	#{/list}
-</table>
+#{table competition.tasks, as:'task'}
+  #{column 'Task'} <a href="@{contestant.Task.index(competition.id, task.id)}">${task.name}</a> #{/column}
+#{/table}

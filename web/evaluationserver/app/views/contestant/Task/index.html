@@ -7,4 +7,27 @@
 		<th>Name</th>
 		<td>${task.name}</td>
 	</tr>
+	<tr>
+		<th>Time limit</th>
+		<td>${task.timeLimit} ms</td>
+	</tr>
+	<tr>
+		<th>Memory limit</th>
+		<td>${task.memoryLimit} bytes</td>
+	</tr>
+	<tr>
+		<th>Source limit</th>
+		<td>${task.sourceLimit} bytes</td>
+	</tr>
 </table>
+
+<h2>Description</h2>
+<p>${task.description.raw()}</p>
+
+<h2>Sample input</h2>
+<p><code>${task.sampleInput.raw()}</code></p>
+
+<h2>Sample output</h2>
+<p><code>${task.sampleOutput.raw()}</code></p>
+
+<a href="@{contestant.Submit.index(competition.id)}">Submit solution</a>

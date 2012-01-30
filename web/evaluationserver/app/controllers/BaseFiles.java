@@ -15,7 +15,7 @@ public class BaseFiles extends CRUD {
 		if (validation.required(data).message("crud.help.required").ok) {
 			final long size = data.length();
 			if (validation.max(size, Integer.MAX_VALUE).ok) {
-				final byte[] fileData = new byte[(int)size];
+				final byte[] fileData = new byte[(int)size]; // todo: use constructor
 				if(new FileInputStream(data).read(fileData) != size)
 					throw new Exception("Upload failed");
 				FileData fd = new FileData(fileData);

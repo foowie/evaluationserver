@@ -1,0 +1,29 @@
+#{extends 'contestant/main.html' /}
+
+#{set title:'Submit solution' /}
+
+#{form @submit(competition.id), enctype:'multipart/form-data'}
+
+	<table>
+		<tr>
+			<th>Task:</th>
+			<td><select name="taskId">#{list tasks, as:'task'}<option value="${task.id}" #{if flash.taskId==task.id.toString()}selected="selected"#{/if}>${task.name}</option>#{/list}</select></td>
+		</tr>
+		<tr>
+			<th>Language:</th>
+			<td><select name="languageId">#{list languages, as:'language'}<option value="${language.id}" #{if flash.languageId==language.id.toString()}selected="selected"#{/if}>${language.name}</option>#{/list}</select></td>
+		</tr>
+		<tr>
+			<th>File:</th>
+			<td><input type="file" name="solution" /></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="submit" value="Submit" /></td>
+		</tr>
+	</table>
+
+	
+
+#{/form}
+

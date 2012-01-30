@@ -11,6 +11,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
+import java.io.FileInputStream;
+import java.io.IOException;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.FetchType;
@@ -68,16 +71,26 @@ abstract public class File extends Model {
 	@Exclude
 	@Required
 	@JoinColumn(name = "fileData", referencedColumnName = "id")
-    @OneToOne(fetch= FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public FileData data;
 	
 //	@JoinColumn(name = "type", referencedColumnName = "id")
 //	@ManyToOne
 //	public FileType type;
+
+	public File() {
+	}
 	
-	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "file")
-//	public List<Solution> solutionList;
+	public File(java.io.File file) throws IOException {
+		size = file.length();
+		name = file.getName();
+		created = new Date();
+		final byte[] fileData = new byte[(int)size];
+		if(new FileInputStream(file).read(fileData) != size)
+			throw new IOException("File creation failed");
+		data = new FileData(fileData);	
+	}
+
 
 	@Override
 	public void _save() {

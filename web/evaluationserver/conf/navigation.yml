@@ -11,6 +11,7 @@ MenuItem(contestantCompetitions):
   - Tasks
   - Task
   - Solutions
+  - Submit
   
 MenuItem(contestantCompetition):
  text: Competition
@@ -23,6 +24,7 @@ MenuItem(contestantCompetition):
   - Tasks
   - Task
   - Solutions
+  - Submit
   
 MenuItem(contestantTasks):
  text: Tasks
@@ -35,6 +37,7 @@ MenuItem(contestantTasks):
   - Tasks
   - Task
   - Solutions
+  - Submit
   
 MenuItem(contestantTask):
  text: Task
@@ -57,4 +60,18 @@ MenuItem(contestantSolutions):
   - Tasks
   - Task
   - Solutions
+  - Submit
+
+MenuItem(contestantSubmit):
+ text: Submit solution
+ parent: contestant
+ action: contestant.Submit.index
+ params:
+   competitionId: :competitionId
+ labels: 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  - Submit
  

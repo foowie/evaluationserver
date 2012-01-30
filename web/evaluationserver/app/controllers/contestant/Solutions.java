@@ -1,8 +1,11 @@
 package controllers.contestant;
 
-import java.util.List;
+import controllers.Security;
+import java.io.ByteArrayInputStream;
 import models.Contestant;
 import models.Role;
+import models.SolutionFile;
+import models.User;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -18,5 +21,12 @@ public class Solutions extends Controller {
 		renderArgs.put("solutions", models.Solution.find("competition=? AND user=? ORDER BY created DESC", renderArgs.get("competition"), Contestant.getLoggedUser()).fetch());
 		render();
 	}	
+	
+	public static void download(long competitionId, long fileId) {
+		SolutionFile file = SolutionFile.findById(fileId);
+		if(file == null || file.solution.competition.id != competitionId || file.solution.user.id != User.getLoggedUser().id)
+			Security.onCheckFailed();
+		renderBinary(new ByteArrayInputStream(file.data.data), file.name, file.size);		
+	}
 	
 }

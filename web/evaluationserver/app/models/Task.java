@@ -19,6 +19,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
+import javax.persistence.OneToOne;
 import play.Play;
 import play.db.jpa.JPA;
 
@@ -85,16 +86,16 @@ public class Task extends Model {
 	
 	@Required
 	@JoinColumn(name = "resultResolver", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
 	public ResolverFile resultResolver;
 	
 	@Required
 	@JoinColumn(name = "inputData", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
 	public InputFile inputData;
 	
 	@JoinColumn(name = "outputData", referencedColumnName = "id")
-    @ManyToOne
+    @OneToOne
 	public OutputFile outputData;
 	
 	@Exclude

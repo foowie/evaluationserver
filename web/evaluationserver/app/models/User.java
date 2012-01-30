@@ -24,7 +24,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Query;
 import play.db.jpa.JPA;
-import play.mvc.Scope.Session;
 
 @Entity
 @Table(name = "User")

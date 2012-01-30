@@ -11,6 +11,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToOne;
 import play.data.validation.Required;
 
 @Entity
@@ -61,7 +63,7 @@ public class Solution extends Model {
 	
 	@Required
 	@JoinColumn(name = "file", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
 	public SolutionFile file;
 	
 	@Required

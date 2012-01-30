@@ -149,7 +149,7 @@ hr {
 
 /** Tables **/
 
-#crud #crudContent table {
+table {
 	width: 100%;
 	border: 1px solid #8F753F;
 	border-top: none;
@@ -157,40 +157,40 @@ hr {
 	background-color: #F9E0B0;
 }
 
-#crud #crudContent table thead tr {
+table thead tr {
 	background: #8F753F;
 	border: 1px solid #8F753F;
 }
 
-#crud #crudContent table th {
+table th {
 	color: #fff;
 	font-weight: bold;
 }
 
-#crud #crudContent table th a {
+table th a {
 	color: #fff;
 	font-weight: bold;
 }
 
-#crud #crudContent table th {
+table th {
 	text-align: left;
 	padding: 6px 5px;
 }
 
-#crud #crudContent table td {
+table td {
 	text-align: left;
 	padding: 4px 5px;
 }
 
-#crud #crudContent table td {
+table td {
 	border-bottom: 1px solid #8F753F;
 }
 
-#crud #crudContent table tr.even {
+table tr.even {
 	background: #f9f9f9;
 }
 
-#crud #crudContent table tr:last-child td {
+table tr:last-child td {
 	border-bottom: 1px solid #8F753F;
 }
 
