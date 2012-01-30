@@ -1,0 +1,60 @@
+MenuItem(contestant):
+ name: Contestant - competitions
+ 
+MenuItem(contestantCompetitions):
+ text: Competitions
+ parent: contestant
+ action: contestant.Competitions.index
+ labels: 
+  - Competitions 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  
+MenuItem(contestantCompetition):
+ text: Competition
+ parent: contestant
+ action: contestant.Competition.index
+ params:
+   competitionId: :competitionId
+ labels: 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  
+MenuItem(contestantTasks):
+ text: Tasks
+ parent: contestant
+ action: contestant.Tasks.index
+ params:
+   competitionId: :competitionId
+ labels: 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  
+MenuItem(contestantTask):
+ text: Task
+ parent: contestant
+ action: contestant.Task.index
+ params:
+   competitionId: :competitionId
+   taskId: :taskId
+ labels: 
+  - Task
+
+MenuItem(contestantSolutions):
+ text: Solutions
+ parent: contestant
+ action: contestant.Solutions.index
+ params:
+   competitionId: :competitionId
+ labels: 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+ 

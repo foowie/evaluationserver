@@ -1,0 +1,14 @@
+#{extends 'contestant/main.html' /}
+
+#{set title:'Competitions' /}
+
+<table>
+	<tr><th>Name</th><th>Start</th><th>End</th></tr>
+	#{list competitions, as:'competition'}
+		<tr>
+			<td><a href="@{contestant.Competition.index(competition.id)}">${competition.name}</a></td>
+			<td>${competition.startDate}</td>
+			<td>${competition.stopDate}</td>
+		</tr>
+	#{/list}
+</table>

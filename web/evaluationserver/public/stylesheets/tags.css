@@ -1,0 +1,11 @@
+div.crudField.crud_number input {
+	width: 200px;
+}
+
+div.crudField.crud_relation select {
+	min-width: 200px;
+}
+
+div.crudField.crud_relation select[multiple=yes] {
+	height: 200px;
+}

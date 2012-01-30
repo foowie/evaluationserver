@@ -1,0 +1,29 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+# Contestant
+GET		/contestant								contestant.Competitions.index
+GET		/contestant/competition					contestant.Competition.index
+GET		/contestant/competition/tasks			contestant.Tasks.index
+GET		/contestant/competition/task			contestant.Task.index
+GET		/contestant/competition/solutions		contestant.Solutions.index
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# CRUD routes
+GET    /admin/files/download/{id}				Files.download
+*      /admin									module:crud
+
+# Secure routes
+*       /                                       module:secure
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

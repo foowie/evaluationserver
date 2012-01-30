@@ -1,0 +1,14 @@
+#{extends 'contestant/main.html' /}
+
+#{set title:'Solutions' /}
+
+<table>
+	<tr><th>Created</th><th>Task</th><th>Reply</th></tr>
+	#{list solutions, as:'solution'}
+		<tr>
+			<td>${solution.created}</td>
+			<td><a href="@{contestant.Task.index(competition.id, solution.task.id)}">${solution.task.name}</a></td>
+			<td>${solution.systemReply}</td>
+		</tr>
+	#{/list}
+</table>
