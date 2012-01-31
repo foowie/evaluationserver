@@ -1,0 +1,11 @@
+#{extends 'contestant/main.html' /}
+
+#{set title:'Statistics' /}
+
+#{table statistics, as:'statistic'}
+  #{column 'Task'} <a href="@{contestant.Task.index(competition.id, statistic[0])}">${statistic[1]}</a> #{/column}
+  #{column 'Accepted'} #{if statistic[2] > 0} YES #{/if}#{else} NO #{/else} #{/column}
+  #{column 'Wrong solutions'} ${statistic[3]} #{/column}
+  #{column 'In queue'} ${statistic[4]} #{/column}
+#{/table}
+

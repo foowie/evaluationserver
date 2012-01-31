@@ -1,0 +1,31 @@
+#{extends 'main.html' /}
+
+#{set title:'Change password' /}
+
+<h2>Change password</h2>
+
+#{form @submit()}
+
+	<table>
+		<tr>
+			<th>Old password:</th>
+			<td><input type="password" name="oldPassword" value="${flash.oldPassword}" /></td>
+		</tr>
+		<tr>
+			<th>New password:</th>
+			<td><input type="password" name="newPassword" value="${flash.newPassword}" /></td>
+		</tr>
+		<tr>
+			<th>New password again:</th>
+			<td><input type="password" name="newPassword2" value="${flash.newPassword2}" /></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="submit" name="submit" value="Submit" />
+			<input type="submit" name="cancel" value="Cancel" /></td>
+		</tr>
+	</table>
+
+	
+
+#{/form}

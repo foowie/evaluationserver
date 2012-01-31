@@ -12,6 +12,7 @@ MenuItem(contestantCompetitions):
   - Task
   - Solutions
   - Submit
+  - Statistics
   
 MenuItem(contestantCompetition):
  text: Competition
@@ -25,6 +26,7 @@ MenuItem(contestantCompetition):
   - Task
   - Solutions
   - Submit
+  - Statistics
   
 MenuItem(contestantTasks):
  text: Tasks
@@ -38,16 +40,7 @@ MenuItem(contestantTasks):
   - Task
   - Solutions
   - Submit
-  
-MenuItem(contestantTask):
- text: Task
- parent: contestant
- action: contestant.Task.index
- params:
-   competitionId: :competitionId
-   taskId: :taskId
- labels: 
-  - Task
+  - Statistics
 
 MenuItem(contestantSolutions):
  text: Solutions
@@ -61,6 +54,7 @@ MenuItem(contestantSolutions):
   - Task
   - Solutions
   - Submit
+  - Statistics
 
 MenuItem(contestantSubmit):
  text: Submit solution
@@ -74,4 +68,30 @@ MenuItem(contestantSubmit):
   - Task
   - Solutions
   - Submit
+  - Statistics
+
+MenuItem(contestantStatistics):
+ text: Statistics
+ parent: contestant
+ action: contestant.Statistics.index
+ params:
+   competitionId: :competitionId
+ labels: 
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  - Submit
+  - Statistics
+  
+MenuItem(contestantTask):
+ text: Task
+ parent: contestant
+ action: contestant.Task.index
+ params:
+   competitionId: :competitionId
+   taskId: :taskId
+ labels: 
+  - Task 
+  
  

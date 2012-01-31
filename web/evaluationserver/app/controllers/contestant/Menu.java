@@ -23,4 +23,5 @@ public class Menu extends Controller {
 		
 		renderArgs.put("menu", menu);
 	}
+	
 }

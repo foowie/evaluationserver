@@ -5,6 +5,31 @@
 .primary-5 { background-color: #F9E0B0 }
 
 
+/* Menu */
+#menu {
+	display: block;
+	height: 30px;
+	background-color: #F9CA6D;
+}
+#menu ul {
+	display: block;
+}
+#menu ul li {
+	list-style: none;
+	float: left;
+	margin: 8px 8px;
+}
+#menu ul li a {
+	font-size: 12px;
+	font-weight: bold;
+	color: #8F753F;
+	text-decoration: none;
+}
+#menu ul li a.active,  #menu ul li a:hover{
+	text-decoration: underline;
+}
+
+
 body {
 	margin: auto;
 	background: white;
@@ -22,7 +47,7 @@ p {
 	margin: 0.5em 0;
 }
 a {
-	color: #F9CA6D;
+	color: #8F753F;
 }
 
 .color-table {

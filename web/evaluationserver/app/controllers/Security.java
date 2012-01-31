@@ -75,4 +75,5 @@ public class Security extends Secure.Security {
 	public static String getUsername() {
 		return isConnected() ? connected() : null;
 	}
+	
 }

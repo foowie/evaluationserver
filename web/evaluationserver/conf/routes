@@ -11,6 +11,7 @@ GET		/contestant/competition					contestant.Competition.index
 GET		/contestant/competition/tasks			contestant.Tasks.index
 GET		/contestant/competition/task			contestant.Task.index
 GET		/contestant/competition/solutions		contestant.Solutions.index
+GET		/contestant/competition/statistics		contestant.Statistics.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
@@ -21,6 +22,8 @@ GET    /admin/files/download/{id}				Files.download
 
 # Secure routes
 *       /                                       module:secure
+*		/change-password						ChangePassword.index
+*		/change-password/{action}				ChangePassword.{action}
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
