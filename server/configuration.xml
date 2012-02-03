@@ -37,11 +37,15 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<constructor-arg>
 			<map>
 				<entry key="c" value-ref="cCompiler" />
+				<entry key="cpp" value-ref="cppCompiler" />
 			</map>
 		</constructor-arg>
 	</bean>
 	<bean id="cCompiler" class="evaluationserver.server.compile.SystemCompiler">
 		<constructor-arg value="gcc %input% -o %output%" />
+	</bean>
+	<bean id="cppCompiler" class="evaluationserver.server.compile.SystemCompiler">
+		<constructor-arg value="g++ %input% -o %output%" />
 	</bean>
 	<!-- END COMPILERS -->
 	
@@ -50,6 +54,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<constructor-arg>
 			<map>
 				<entry key="c" value-ref="sandbox" />
+				<entry key="cpp" value-ref="sandbox" />
 			</map>
 		</constructor-arg>
 	</bean>
