@@ -5,8 +5,8 @@ testsDir="tests/"
 chmod +x $tracer
 
 # test: (script_name, expected_result)
-tests=("printf" "scanf" "fopen" "memory" "memory_malloc" "sigsegv" "output" "time")
-results=("AC"   "AC"    "RF"    "ML"     "ML"            "RE"      "OL"     "TL")
+tests=("printf" "scanf" "fopen" "memory" "memory_malloc" "sigsegv" "output" "time" "time2")
+results=("AC"   "AC"    "RF"    "ML"     "ML"            "RE"      "OL"     "TL"   "TL")
 
 echo "Compiling ..."
 

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
 
 #include "limits.h"
 #include "proc_stat.h"
@@ -80,17 +81,27 @@ int initialize_output_limit(struct Limits *limit) {
 }
 
 int initialize_time_limit(struct Limits *limit) {
-	struct itimerval time;
+	struct itimerval timeVirtual, timeReal;
 	if (getpid() != limit->pid) {
 		DUMP_ERROR("INVALID PID ON initializeTimeLimit")
 		return -1;
 	}
 
-	memset(&time, 0, sizeof (struct itimerval));
-	time.it_value.tv_usec = (limit->time_limit % 1000) * 1000;
-	time.it_value.tv_sec = limit->time_limit / 1000;
+	memset(&timeVirtual, 0, sizeof (struct itimerval));
+	timeVirtual.it_value.tv_usec = (limit->time_limit % 1000) * 1000;
+	timeVirtual.it_value.tv_sec = limit->time_limit / 1000;
+	
+	if (setitimer(ITIMER_VIRTUAL, &timeVirtual, NULL) != 0) {
+		DUMP_ERROR("TIMER SET ERROR ERRNO=%d", errno)
+		return -1;
+	}
 
-	if (setitimer(ITIMER_VIRTUAL, &time, NULL) != 0) {
+	// In case when virtual timer doesnt work (blocking input etc), set real timer
+	memset(&timeReal, 0, sizeof (struct itimerval));
+	timeReal.it_value.tv_usec = ((limit->time_limit * REAL_TIMER_MULTIPLICATION) % 1000) * 1000;
+	timeReal.it_value.tv_sec = (limit->time_limit * REAL_TIMER_MULTIPLICATION) / 1000;
+	
+	if (setitimer(ITIMER_REAL, &timeReal, NULL) != 0) {
 		DUMP_ERROR("TIMER SET ERROR ERRNO=%d", errno)
 		return -1;
 	}

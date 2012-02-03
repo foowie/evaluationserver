@@ -4,7 +4,8 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
+	
+#define REAL_TIMER_MULTIPLICATION 5
 
 	// System limits for executed program
 
