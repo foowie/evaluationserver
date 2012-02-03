@@ -56,7 +56,7 @@ public class SandboxImpl implements Sandbox {
 		} catch (InterruptedException ex) {
 			throw new ExecutionException("Error during sandbox execution", ex);
 		} catch (IllegalArgumentException ex) {
-			throw new ExecutionException("Error during sandbox execution (format output)", ex);
+			throw new ExecutionException(ex.getMessage());
 		}
 	}
 

@@ -7,8 +7,8 @@ public enum Reply {
 	PRESENTATION_ERROR("PE", "Presentation error", false),
 	WRONG_ANSWER("WA", "Wrong answer", false),
 	RUNTIME_ERROR("RE", "Runtime error", false),
-	TIME_LIMIT_EXCEEDED("TE", "Time limit exceeded", false),
-	MEMORY_LIMIT_EXCEEDED("ME", "Memory limit exceeded", false),
+	TIME_LIMIT_EXCEEDED("TL", "Time limit exceeded", false),
+	MEMORY_LIMIT_EXCEEDED("ML", "Memory limit exceeded", false),
 	OUTPUT_LIMIT_EXCEEDED("OL", "Output limit exceeded", false),
 	RESTRICTED_FUNCTION("RF", "Restricted function", false),
 	INTERNAL_ERROR("IE", "Internal error", false);
