@@ -19,7 +19,7 @@ import play.data.validation.Required;
 @Table(name = "Solution")
 public class Solution extends Model {
 	
-	@Exclude
+//	@Exclude
 	@Basic(optional = false)
     @Column(name = "dateInsert")
     @Temporal(TemporalType.TIMESTAMP)

@@ -2,7 +2,7 @@
 
 #{set title:'Solutions' /}
 
-#{table solutions, as:'solution'}
+#{table solutions, as:'solution', class:'datagrid'}
   #{column 'Created'} ${solution.created} #{/column}
   #{column 'Task'} <a href="@{contestant.Task.index(competition.id, solution.task.id)}">${solution.task}</a> #{/column}
   #{column 'Language'} ${solution.language} #{/column}

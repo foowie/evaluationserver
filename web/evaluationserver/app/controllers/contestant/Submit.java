@@ -17,8 +17,8 @@ import play.mvc.With;
 @controllers.Check(Role.Check.CONTESTANT)
 @With({
 	controllers.Secure.class,
-	CompetitionCheck.class,
-	Menu.class
+	controllers.contestant.with.Competition.class,
+	controllers.contestant.with.Menu.class
 })
 public class Submit extends Controller {
 

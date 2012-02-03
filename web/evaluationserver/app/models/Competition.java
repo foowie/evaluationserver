@@ -19,6 +19,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import controllers.CRUD.Exclude;
 import javax.persistence.Query;
+import play.data.binding.As;
 import play.db.jpa.JPA;
 
 @Entity
@@ -37,10 +38,12 @@ public class Competition extends Model {
 	@Column(name = "name")
 	public String name;
 	
+	@As(lang={"*"}, value={"yyyy-MM-dd HH:mm"}) 
 	@Column(name = "startDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date startDate;
 	
+	@As(lang={"*"}, value={"yyyy-MM-dd HH:mm"}) 
 	@Column(name = "stopDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date stopDate;
@@ -57,8 +60,8 @@ public class Competition extends Model {
 	public List<UserGroup> groups;
 	
 	@JoinTable(name = "CompetitionTask", joinColumns = {
-    	@JoinColumn(name = "taskId", referencedColumnName = "id")}, inverseJoinColumns = {
-    	@JoinColumn(name = "competitionId", referencedColumnName = "id")})
+    	@JoinColumn(name = "competitionId", referencedColumnName = "id")}, inverseJoinColumns = {
+    	@JoinColumn(name = "taskId", referencedColumnName = "id")})
     @ManyToMany	
 	public List<Task> tasks;
 	

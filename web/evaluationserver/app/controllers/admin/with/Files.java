@@ -1,4 +1,4 @@
-package controllers;
+package controllers.admin.with;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -7,15 +7,19 @@ import models.FileData;
 import play.db.jpa.JPA;
 import play.mvc.After;
 import play.mvc.Before;
+import play.mvc.Controller;
 
-public class BaseFiles extends CRUD {
+public class Files extends Controller {
 
-	@Before(only = "create")
+	@Before
 	public static void beforeCreate(java.io.File data) throws Exception {
+		String action = request.action.substring(request.action.lastIndexOf(".") + 1);
+		if(!action.equals("create"))
+			return;
 		if (validation.required(data).message("crud.help.required").ok) {
 			final long size = data.length();
 			if (validation.max(size, Integer.MAX_VALUE).ok) {
-				final byte[] fileData = new byte[(int)size]; // todo: use constructor
+				final byte[] fileData = new byte[(int)size];
 				if(new FileInputStream(data).read(fileData) != size)
 					throw new Exception("Upload failed");
 				FileData fd = new FileData(fileData);
@@ -27,16 +31,17 @@ public class BaseFiles extends CRUD {
 		}
 	}
 
-	@After(only = "delete")
+	@After
 	public static void afterDelete() throws Exception {
+		String action = request.action.substring(request.action.lastIndexOf(".") + 1);
+		if(!action.equals("delete"))
+			return;
 		JPA.em().createQuery("DELETE FROM FileData fd WHERE fd NOT IN (SELECT f.data FROM File f)").executeUpdate();
 	}
 	
 	
 	public static void download(Long id) throws Exception {
-        ObjectType type = ObjectType.get(getControllerClass());
-        notFoundIfNull(type);
-        File file = (File)type.findById(id);
+        File file = File.findById(id);
         notFoundIfNull(file);
 		renderBinary(new ByteArrayInputStream(file.data.data), file.name, file.size);
 	}

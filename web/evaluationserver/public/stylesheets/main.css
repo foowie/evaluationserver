@@ -1,12 +1,225 @@
-.primary-1 { background-color: #E6A117 }
+/*.primary-1 { background-color: #E6A117 } zahlavi
 .primary-2 { background-color: #8F753F }
 .primary-3 { background-color: #6D4A03 }
-.primary-4 { background-color: #F9CA6D }
-.primary-5 { background-color: #F9E0B0 }
+.primary-4 { background-color: #F9CA6D } světlé
+.primary-5 { background-color: #F9E0B0 } pozadí
+*/
 
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+
+
+html {
+/*	height: 100%;*/
+}
+
+body {
+    display: block;
+	border-width: 0px;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: sans-serif;
+}
+
+.inner-body {
+	margin: auto;
+	width: 1100px;
+	height: auto;
+	border-top: 0px;
+	border-bottom: 0px;
+	/*min-height: 100%;*/
+	margin: 0 auto;
+}
+
+#header {
+	position: fixed;
+	top: 0px;
+	width: 1100px;
+	border-width: 0px;
+	padding: 5px 0px 5px 0px;
+	height: 25px;
+	background-color: white;
+	z-index: 1000;
+}
+#header h1 {
+	font-size: 22px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+
+#menu {
+	position: fixed;
+	top: 35px;	
+	height: 32px;
+	width: 1100px;
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	background-color: #E6A117;
+	z-index: 1000;
+}
+#menu ul {
+	display: inline;
+	height: 100%;
+	width: 1060px;
+}
+#menu ul li {
+	display: inline;
+	float: left;
+	text-align: center;
+	height: 100%;
+	padding: 6px 5px 0 0;
+}
+#menu ul li.right {
+	float: right;
+}
+#menu ul li a {
+	font-family: sans-serif;
+	font-size: .8em;
+	padding: 2px 15px 2px 15px;
+	height: 100%;
+/*	text-decoration: none;*/
+	font-weight: bold;
+	color: #6D4A03;
+}
+#menu ul li a.active {
+	text-decoration: underline;
+}
+
+#content {
+	padding: 0;
+	border-width: 0;
+	width: 1100px;
+	margin-top: 80px;
+}
+.inner-content {
+	width: 95%;
+	margin: 40px auto auto auto;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+h3 {
+	font-size: 1em;
+/*	font-style: italic;*/
+	text-decoration: underline;
+	margin: 30px 0 0 0;
+}
+
+a {
+	color: #6D4A03;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+.flashes {
+	text-align: center;
+	z-index: 90;
+}
+
+.flashes .flash {
+	padding-top: 2px;
+}
+
+input.datepicker, input.datetimepicker {
+	background-color: white;
+	background-image: url('calendar.png');
+	background-position: right;
+	background-repeat: no-repeat;
+}
+
+table.table, form table {
+	border-collapse: collapse;
+}
+table.table th, table.table td, form table th, form table td {
+	text-align: left;
+/*	border: 1px black solid;*/
+	padding: 4px 15px 4px 0px;
+}
+
+
+table.datagrid {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-collapse: collapse;
+	background-color: #F9E0B0;
+	font-size: .8em;
+}
+table.datagrid thead tr {
+	background-color: #E6A117;
+	color: #6D4A03;
+}
+table.datagrid th, table.datagrid td {
+	border: 1px black solid;
+	padding: 3px 5px 3px 5px;
+/*	font-size: 12px;*/
+}
+
+
+.ui-icon.text-preview {
+	position: relative;
+	top: -6px;
+	left: -6px;
+	margin: 0;
+	padding: 0;
+}
+.text-preview:hover {
+	z-index: 100;
+}
+#text-preview-window {
+	 position: fixed;
+	 _position: absolute;
+	 top: 0px;
+	 left: 0px;
+	 background-color: white;
+	 width: 800px;
+	 border: 1px black solid;
+	 z-index: 10;
+}
+
+.text-preview-content {
+	display: none;
+}
+
+
+
+/* Multiselect */
+select[multiple="yes"] {
+	width: 450px;
+	height: 200px;
+}
+.ui-multiselect {
+	float: left;
+}
+.crud_relation.crud_multiple {
+	height: 200px;
+}
+
+
+/* CRUD */
+
+#crudListAdd {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+#crudListSearch {
+	float: right;
+}
 
 /* Menu */
-#menu {
+/*#menu {
 	display: block;
 	height: 30px;
 	background-color: #F9CA6D;
@@ -27,10 +240,10 @@
 }
 #menu ul li a.active,  #menu ul li a:hover{
 	text-decoration: underline;
-}
+}*/
 
 
-body {
+/*body {
 	margin: auto;
 	background: white;
 	color: #666;
@@ -104,7 +317,7 @@ hr {
 	color: #E6A117;
 }
 
-/*CRUD*/
+CRUD
 .crudSortedAsc:after {
 	content: '▼';
 }
@@ -113,7 +326,7 @@ hr {
 	content: '▲';
 }
 
-/** Breadcrumb **/
+* Breadcrumb *
 
 #crudBreadcrumb {
 	padding: 5px 20px;
@@ -140,7 +353,7 @@ hr {
 	text-decoration: none;
 }
 
-/** Flash message **/
+* Flash message *
 
 .crudFlash {
 	padding: 5px 20px;
@@ -156,7 +369,7 @@ hr {
 	background: #54BD06;
 }
 
-/** Content **/
+* Content *
 
 #crud #crudContent {
 	padding: 10px 20px;
@@ -172,7 +385,7 @@ hr {
 	color: #444;
 }
 
-/** Tables **/
+* Tables *
 
 table {
 	width: 100%;
@@ -227,7 +440,7 @@ table tr:last-child td {
 	content: '▲';
 }
 
-/** Forms **/
+* Forms *
 
 form {
 	margin: 0;
@@ -263,6 +476,10 @@ label {
 
 .crud_hidden {
     display: none;
+}
+
+.crud_number {
+
 }
 
 .crudButtons {
@@ -309,7 +526,7 @@ form .removeAttachment {
     margin-left: 20%;
 }
 
-/** Footer **/
+* Footer *
 
 #crud #crudFooter {
 	font-size: 80%;
@@ -324,7 +541,7 @@ form .removeAttachment {
 	color: #333;
 }
 
-/** Home **/
+* Home *
 
 .crudNew {
 	text-align: right !important;
@@ -344,7 +561,7 @@ form .removeAttachment {
 	opacity: .8;
 }
 
-/** List **/
+* List *
 
 #crudList {
 	position: relative;
@@ -403,7 +620,7 @@ form .removeAttachment {
 	top: 4px;
 }
 
-/** Show **/
+* Show *
 
 #crudShow {
 	position: relative;
@@ -426,4 +643,4 @@ form .removeAttachment {
 
 .crudDelete input:hover {
 	opacity: .7;
-}
+}*/

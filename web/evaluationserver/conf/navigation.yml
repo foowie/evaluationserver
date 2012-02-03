@@ -1,5 +1,5 @@
 MenuItem(contestant):
- name: Contestant - competitions
+ name: Contestant
  
 MenuItem(contestantCompetitions):
  text: Competitions
@@ -92,6 +92,193 @@ MenuItem(contestantTask):
    competitionId: :competitionId
    taskId: :taskId
  labels: 
+  - Task
+
+MenuItem(contestantLogout):
+ text: Logout
+ parent: contestant
+ action: Secure.logout
+ properties:
+   class: right
+ labels: 
+  - Competitions
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  - Submit
+  - Statistics
+  - Task  
+  
+MenuItem(contestantChangePassword):
+ text: Change password
+ parent: contestant
+ action: ChangePassword.index
+ properties:
+   class: right
+ labels: 
+  - Competitions
+  - Competition
+  - Tasks
+  - Task
+  - Solutions
+  - Submit
+  - Statistics
   - Task 
   
+
+#-------------------------------------------------------------------------------
+
+MenuItem(admin):
+ name: Admin
  
+
+MenuItem(adminCompetitions):
+ text: Competitions
+ parent: admin
+ action: admin.Competitions.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+
+MenuItem(adminTasks):
+ text: Tasks
+ parent: admin
+ action: admin.Tasks.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminContestants):
+ text: Contestants
+ parent: admin
+ action: admin.Contestants.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminUserGroups):
+ text: User groups
+ parent: admin
+ action: admin.UserGroups.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminAdmins):
+ text: Administrators
+ parent: admin
+ action: admin.Admins.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminCategories):
+ text: Categories
+ parent: admin
+ action: admin.Categories.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+
+MenuItem(adminResolvers):
+ text: Resolvers
+ parent: admin
+ action: admin.ResolverFiles.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminSolutions):
+ text: Solutions
+ parent: admin
+ action: admin.Solutions.list
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+
+
+
+
+MenuItem(adminLogout):
+ text: Logout
+ parent: admin
+ action: Secure.logout
+ properties:
+   class: right
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups
+
+MenuItem(adminChangePassword):
+ text: Change password
+ parent: admin
+ action: ChangePassword.index
+ properties:
+   class: right
+ labels: 
+  - Admins
+  - Categories
+  - Competitions
+  - Contestants
+  - ResolverFiles
+  - Solutions
+  - Tasks
+  - UserGroups

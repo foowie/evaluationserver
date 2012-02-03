@@ -2,32 +2,32 @@
 
 #{set title:'Task' /}
 
-<table>
+<table class="table">
 	<tr>
-		<th>Name</th>
+		<th>Name:</th>
 		<td>${task.name}</td>
 	</tr>
 	<tr>
-		<th>Time limit</th>
+		<th>Time limit:</th>
 		<td>${task.timeLimit} ms</td>
 	</tr>
 	<tr>
-		<th>Memory limit</th>
+		<th>Memory limit:</th>
 		<td>${task.memoryLimit} bytes</td>
 	</tr>
 	<tr>
-		<th>Source limit</th>
+		<th>Source limit:</th>
 		<td>${task.sourceLimit} bytes</td>
 	</tr>
 </table>
 
-<h2>Description</h2>
+<h3>Description</h3>
 <p>${task.description.raw()}</p>
 
-<h2>Sample input</h2>
-<p><code>${task.sampleInput.raw()}</code></p>
+<h3>Sample input</h3>
+<p><code>${task.sampleInput.nl2br()}</code></p>
 
-<h2>Sample output</h2>
-<p><code>${task.sampleOutput.raw()}</code></p>
+<h3>Sample output</h3>
+<p><code>${task.sampleOutput.nl2br()}</code></p>
 
 <a href="@{contestant.Submit.index(competition.id)}">Submit solution</a>

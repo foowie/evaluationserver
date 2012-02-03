@@ -1,0 +1,21 @@
+#{extends 'CRUD/layout.html' /}
+#{set title:messages.get('crud.blank.title', type.modelName) /}
+
+<div id="crudBlank" class="${type.name}">
+
+    #{form action:@create(), enctype:'multipart/form-data'}
+	<table class="table">
+        #{crud.form /}
+		<tr>
+			<th></th>
+			<td>
+				<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+				<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+				<input type="submit" name="_saveAndAddAnother" value="&{'crud.saveAndAddAnother', type.modelName}" />
+			</td>
+		</tr>
+	</table>
+    #{/form}
+
+	
+</div>

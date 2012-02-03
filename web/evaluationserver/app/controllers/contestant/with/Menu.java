@@ -1,4 +1,4 @@
-package controllers.contestant;
+package controllers.contestant.with;
 
 import java.util.Map;
 import play.mvc.Before;

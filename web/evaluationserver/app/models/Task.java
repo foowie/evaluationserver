@@ -121,6 +121,15 @@ public class Task extends Model {
 		super._save();
 	}	
 	
+	public void deleteOutputData() {
+		if(outputData != null) {
+			File file = outputData;
+			outputData = null;
+			save();
+			file.delete();
+		}
+	}
+	
 	public boolean isInCompetition(Long competitionId) {
 		Query query = JPA.em().createQuery("SELECT COUNT(c) AS count FROM Competition c JOIN c.tasks t WHERE c.id=:cId AND t.id=:tId");
 		query.setParameter("cId", competitionId);
@@ -130,7 +139,7 @@ public class Task extends Model {
 	
 	@Override
 	public String toString() {
-		return name;
+		return category == null ? name : (category.name + " - " + name);
 	}
 	
 }

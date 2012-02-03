@@ -1,8 +1,17 @@
-package controllers;
+package controllers.admin;
 
-import models.Category;
+import controllers.CRUD;
+import controllers.Check;
+import models.Role;
+import play.mvc.With;
 
-@CRUD.For(Category.class)
+@Check(Role.Check.ADMIN)
+@With({
+	controllers.Secure.class,
+	controllers.admin.with.CRUDSearch.class,
+	controllers.admin.with.Menu.class
+})
+@CRUD.For(models.Category.class)
 public class Categories extends CRUD {
 	
 }

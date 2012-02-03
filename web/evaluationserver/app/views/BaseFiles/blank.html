@@ -3,29 +3,31 @@
 
 <div id="crudBlank" class="${type.name}">
 
-    <h2 id="crudBlankTitle">&{'crud.blank.title', type.modelName}</h2>
-
-    <div class="objectForm">
-		#{form action:@create(), enctype:'multipart/form-data'}
+    #{form action:@create(), enctype:'multipart/form-data'}
+	<table class="table">
         #{crud.form /}
 		
-		<div class="crudField crud_binary">
-			<label for="data">&{'file'}</label>
-			<input id="data" class="" type="file" name="data" />
-			#{ifError 'data'}
-				#{errors 'data'}
-					<span class="error">${error.raw()}</span>
-				#{/errors}
-			#{/ifError}			
-			<span class="crudHelp">&{'crud.help.required'}</span>
-		</div>
+		<tr class="crudField crud_binary">
+			<th><label for="data">&{'file'}</label></th>
+			<td>
+				<input id="data" class="" type="file" name="data" />
+				#{ifError 'data'}
+					#{errors 'data'}
+						<span class="error">${error.raw()}</span>
+					#{/errors}
+				#{/ifError}			
+			</th>
+		</tr>		
 		
-        <p class="crudButtons">
-            <input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
-            <input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
-            <input type="submit" name="_saveAndAddAnother" value="&{'crud.saveAndAddAnother', type.modelName}" />
-        </p>
-		#{/form}
-    </div>
+		<tr>
+			<th></th>
+			<td>
+				<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+				<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+				<input type="submit" name="_saveAndAddAnother" value="&{'crud.saveAndAddAnother', type.modelName}" />
+			</td>
+		</tr>
+	</table>
+    #{/form}	
 
 </div>

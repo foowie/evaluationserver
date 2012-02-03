@@ -1,20 +1,17 @@
-package controllers;
+package controllers.admin;
 
-import play.mvc.After;
-import play.mvc.Before;
+import controllers.CRUD;
+import controllers.Check;
+import models.Role;
 import play.mvc.With;
 
-@With(BaseFiles.class)
-public class OutputFiles extends BaseFiles {
-	
-	@Before(only = "create")
-	public static void beforeCreate(java.io.File data) throws Exception {
-		BaseFiles.beforeCreate(data);
-	}
-	
-	@After(only = "delete")
-	public static void afterDelete() throws Exception {
-		BaseFiles.afterDelete();
-	}	
+@Check(Role.Check.ADMIN)
+@With({
+	controllers.Secure.class,
+	controllers.admin.with.Files.class,
+	controllers.admin.with.CRUDSearch.class,
+	controllers.admin.with.Menu.class
+})
+public class OutputFiles extends CRUD {
 	
 }

@@ -1,0 +1,10 @@
+#{field 'object.' + _name}
+<th>
+    <input id="${field.id}" class="${field.errorClass}" type="hidden" name="${field.name}" value="${params[field.name]?.escape()?.raw() ?: field.error?.message == 'validation.required' ? '' : _value?.escape()?.raw()}" size="50" />
+</th>
+<td>
+    #{ifError field.name}
+        <span class="error">${field.error.raw()}</span>
+    #{/ifError}
+</td>
+#{/field}

@@ -66,6 +66,7 @@ abstract public class User extends Model {
 	@Column(name = "surname")
 	public String surname;
 	
+	@Exclude
 	@ManyToMany(mappedBy = "users")
 	public List<UserGroup> groups;
 	

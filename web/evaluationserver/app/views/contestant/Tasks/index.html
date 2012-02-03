@@ -2,6 +2,6 @@
 
 #{set title:'Tasks' /}
 
-#{table competition.tasks, as:'task'}
+#{table competition.tasks, as:'task', class:'datagrid'}
   #{column 'Task'} <a href="@{contestant.Task.index(competition.id, task.id)}">${task.name}</a> #{/column}
 #{/table}

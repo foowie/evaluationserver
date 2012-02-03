@@ -1,10 +1,10 @@
-package controllers.contestant;
+package controllers.contestant.with;
 
 import controllers.Security;
 import play.mvc.Before;
 import play.mvc.Controller;
 
-public class TaskCheck extends Controller {
+public class Task extends Controller {
 	
 	@Before
 	public static void checkTask(Long competitionId, Long taskId) {

@@ -1,11 +1,11 @@
-package controllers.contestant;
+package controllers.contestant.with;
 
 import controllers.Security;
 import models.Contestant;
 import play.mvc.Before;
 import play.mvc.Controller;
 
-public class CompetitionCheck extends Controller {
+public class Competition extends Controller {
 	
 	@Before
 	public static void checkCompetition(Long competitionId) {

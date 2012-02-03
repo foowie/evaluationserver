@@ -1,0 +1,26 @@
+#{extends 'CRUD/layout.html' /}
+#{set title:messages.get('crud.show.title', type.modelName) /}
+
+<div id="crudShow" class="${type.name}">
+
+    
+    #{form action:@save(object._key()), enctype:'multipart/form-data'}
+	<table class="table">
+        #{crud.form /}
+		<tr>
+			<th></th>
+			<td>
+				<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+				<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+			</td>
+		</tr>
+	</table>
+    #{/form}
+
+    #{form @delete(object._key())}
+        <p class="crudDelete">
+            <input type="submit" value="&{'crud.delete', type.modelName}" />
+        </p>
+    #{/form}
+
+</div>
