@@ -8,15 +8,34 @@
 #include "responses.h"
 #include "debug.h"
 
-#define LIBRARIES_COUNT 5
-int libraries_count = LIBRARIES_COUNT;
-const char * libraries[LIBRARIES_COUNT] = {
+#define MAX_LIBRARIES_COUNT 20
+#define MAX_LIBRARY_SIZE 100
+int libraries_count = 5;
+char libraries[MAX_LIBRARIES_COUNT][MAX_LIBRARY_SIZE] = {
 	"ld.so.cache", // chache of loaded libraries
 	"libstdc++.so.6", // std
 	"libm.so.6", // math
 	"libgcc_s.so.1", // gcc
 	"libc.so.6", // c
 };
+
+
+int load_libraries(char * filename) {
+	libraries_count = 0;
+	FILE * file = fopen(filename, "r");
+	if(file == NULL)
+		return -1;
+	while(fgets(libraries[libraries_count], MAX_LIBRARY_SIZE - 1, file) != NULL) {
+		int len = strlen(libraries[libraries_count]);
+		if (libraries[libraries_count][len - 1] == '\n')
+			libraries[libraries_count][len - 1] = '\0';	
+		if(strlen(libraries[libraries_count]) != 0)
+			libraries_count++;
+	}
+	if(ferror(file))
+		return -1;
+	return (fclose(file) == 0) ? 0 : -1;
+}
 
 /**
  * Creates array of char of given length. In case there's original, is copied in front of new string
@@ -139,7 +158,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 				return RESTRICTED_FUNCTION; // write not to std out
 			}
 		}
-		break;
+			break;
 
 			// debug only todo: obalit debugem
 		case SYS_writev:
@@ -148,7 +167,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 				return RESTRICTED_FUNCTION; // wrote not to std out
 			}
 		}
-		break;
+			break;
 
 		case SYS_open:
 		case SYS_openat:
@@ -164,7 +183,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 			}
 			free(lib);
 		}
-		break;
+			break;
 
 
 			// allowed
