@@ -31,6 +31,8 @@ int load_libraries(char * filename) {
 			libraries[libraries_count][len - 1] = '\0';	
 		if(strlen(libraries[libraries_count]) != 0)
 			libraries_count++;
+		if(len == MAX_LIBRARY_SIZE - 1 || libraries_count == MAX_LIBRARIES_COUNT)
+			return -1;
 	}
 	if(ferror(file))
 		return -1;
