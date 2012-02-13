@@ -52,9 +52,9 @@ public class SandboxImpl implements Sandbox {
 			return resultFactory.create(systemCommand.getOutput(), start, systemCommand.getError());
 			
 		} catch (IOException ex) {
-			throw new ExecutionException("Error during sandbox execution", ex);
+			throw new ExecutionException("Error during sandbox execution (" + ex.getMessage() + ")", ex);
 		} catch (InterruptedException ex) {
-			throw new ExecutionException("Error during sandbox execution", ex);
+			throw new ExecutionException("Error during sandbox execution (" + ex.getMessage() + ")", ex);
 		} catch (IllegalArgumentException ex) {
 			throw new ExecutionException(ex.getMessage());
 		}

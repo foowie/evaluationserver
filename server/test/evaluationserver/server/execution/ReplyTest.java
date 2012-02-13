@@ -35,7 +35,7 @@ public class ReplyTest {
 	public void testFromCode() {
 		System.out.println("fromCode");
 		assertEquals(Reply.ACCEPTED, Reply.fromCode("AC"));
-		assertEquals(Reply.MEMORY_LIMIT_EXCEEDED, Reply.fromCode(" me "));
+		assertEquals(Reply.MEMORY_LIMIT_EXCEEDED, Reply.fromCode(" ML "));
 		assertEquals(Reply.COMPILE_ERROR, Reply.fromCode("\n ce \n\r\n "));
 	}
 }
