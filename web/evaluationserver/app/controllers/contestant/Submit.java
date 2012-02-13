@@ -11,6 +11,7 @@ import models.Solution;
 import models.SolutionFile;
 import models.Task;
 import play.data.validation.Required;
+import play.db.jpa.JPA;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -18,7 +19,8 @@ import play.mvc.With;
 @With({
 	controllers.Secure.class,
 	controllers.contestant.with.Competition.class,
-	controllers.contestant.with.Menu.class
+	controllers.contestant.with.Menu.class,
+	controllers.contestant.with.SubmitNotification.class
 })
 public class Submit extends Controller {
 
@@ -36,6 +38,9 @@ public class Submit extends Controller {
 			validation.addError("taskId", "Invalid task");
 		if(lang == null)
 			validation.addError("languageId", "Invalid language");
+		Contestant loggedUser = Contestant.getLoggedUser();
+		Long count = (Long)JPA.em().createQuery("SELECT COUNT(s) FROM Solution s WHERE s.user = :contestant AND s.evaluated IS NULL").setParameter("contestant", loggedUser).getSingleResult();
+		validation.max(count, 5).key("error").message("You have reached maximum submitted solution in queue");
 		
 		if (validation.hasErrors()) {
 			params.flash();
@@ -49,8 +54,9 @@ public class Submit extends Controller {
 		s.created = new Date();
 		s.language = lang;
 		s.task = task;
-		s.user = Contestant.getLoggedUser();
+		s.user = loggedUser;
 		s.save();
+		JPA.em().getTransaction().commit();
 		
 		Solutions.index(competitionId);
 	}

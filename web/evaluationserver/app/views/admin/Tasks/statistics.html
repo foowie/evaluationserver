@@ -1,0 +1,19 @@
+#{extends 'CRUD/layout.html' /}
+#{set title: 'Statistics of task "' + task.name + '"' /}
+
+<div >
+
+<h3>System reply statistics</h3>	
+#{table systemReplyStatistics, as:'stat', class:'datagrid'}
+  #{column 'System reply'} ${stat.name} #{/column}
+  #{column 'Count'} ${stat.count} #{/column}
+  #{column 'Relative count'} ${(stat.relativeCount * 100).round(2)} % #{/column}
+#{/table}	
+	
+<h3>Top 10 users statistics</h3>	
+#{table contestantStatistics, as:'stat', class:'datagrid'}
+  #{column 'Name'} <a href="@{admin.Contestants.show(stat.user._key())}">${stat.user.login}</a> #{/column}
+  #{column 'Name'} <a href="@{gotoSolution(task.id, stat.user.id, stat.time)}">${stat.time} ms</a> #{/column}
+#{/table}	
+
+</div>

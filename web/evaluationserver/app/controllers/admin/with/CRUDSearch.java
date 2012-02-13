@@ -55,6 +55,5 @@ public class CRUDSearch extends Controller {
 		if(!"".equals(where))
 			request.args.put("where", where);
 		renderArgs.put("crudSearch", search);
-		System.out.println(where);
 	}
 }

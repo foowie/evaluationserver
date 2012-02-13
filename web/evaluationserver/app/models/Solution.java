@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import play.db.jpa.Model;
-import controllers.CRUD.Exclude;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
 import play.data.validation.Required;

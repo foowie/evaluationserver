@@ -11,7 +11,11 @@
 			#{crud.search /}
 		</div>
 		<div id="crudListTable">
-			#{crud.table fields:['name', 'category'] /}
+			#{crud.table fields:['name', 'category', '']}
+			   #{crud.custom ''}
+				   <a href="@{statistics(object._key())}">Statistics</a>
+			   #{/crud.custom}		
+			#{/crud.table}
 		</div>
 	#{/form}
 

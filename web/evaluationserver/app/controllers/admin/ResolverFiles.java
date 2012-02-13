@@ -17,20 +17,20 @@ import play.data.validation.Error;
 	controllers.admin.with.Menu.class
 })
 public class ResolverFiles extends CRUD {
-	@After
-	public static void rollbackOnValidationError() {
-		
-		
-		if(validation.hasErrors()) {
-			System.out.println("------------------------------------------\nErrors:");
-			Map<String, List<Error>> errorsMap = validation.errorsMap();
-			for(String field : errorsMap.keySet()) {
-				System.out.println("\"" + field + "\"");
-				for(Error error : errorsMap.get(field)) {
-					System.out.println(" - " + error.message());
-				}
-			}
-				
-		}
-	}
+//	@After
+//	public static void rollbackOnValidationError() {
+//		
+//		
+//		if(validation.hasErrors()) {
+//			System.out.println("------------------------------------------\nErrors:");
+//			Map<String, List<Error>> errorsMap = validation.errorsMap();
+//			for(String field : errorsMap.keySet()) {
+//				System.out.println("\"" + field + "\"");
+//				for(Error error : errorsMap.get(field)) {
+//					System.out.println(" - " + error.message());
+//				}
+//			}
+//				
+//		}
+//	}
 }
