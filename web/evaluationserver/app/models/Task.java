@@ -19,6 +19,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import play.Play;
 import play.db.jpa.JPA;
@@ -81,30 +82,30 @@ public class Task extends Model {
 	public String sampleOutput;
 	
 	@Exclude
-	@ManyToMany(mappedBy = "tasks")
+	@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
 	public List<Competition> competitions;
 	
 	@Required
 	@JoinColumn(name = "resultResolver", referencedColumnName = "id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
 	public ResolverFile resultResolver;
 	
 	@Required
 	@JoinColumn(name = "inputData", referencedColumnName = "id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
 	public InputFile inputData;
 	
 	@JoinColumn(name = "outputData", referencedColumnName = "id")
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
 	public OutputFile outputData;
 	
 	@Exclude
 	@Required
 	@JoinColumn(name = "creator", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public Admin creator;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	public List<Solution> solutions;
 
 	public Task() {

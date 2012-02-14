@@ -13,6 +13,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
+import javax.persistence.FetchType;
 
 @Entity
 @Table(name = "UserGroup")
@@ -31,13 +32,13 @@ public class UserGroup extends Model {
 	public String description;	
 	
 	@Exclude
-	@ManyToMany(mappedBy = "groups")
+	@ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
 	public List<Competition> competitions;
 	
 	@JoinTable(name = "UserUserGroup", joinColumns = {
     	@JoinColumn(name = "groupId", referencedColumnName = "id")}, inverseJoinColumns = {
     	@JoinColumn(name = "userId", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
 	public List<Contestant> users;
 
 

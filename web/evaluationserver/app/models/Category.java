@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import play.data.validation.MaxSize;
@@ -20,7 +21,7 @@ public class Category extends Model {
     @Column(name = "name")
 	public String name;
 	
-	@OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	public List<Task> tasks;
 
 

@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import controllers.CRUD.Exclude;
+import javax.persistence.FetchType;
 import javax.persistence.Query;
 import play.data.binding.As;
 import play.db.jpa.JPA;
@@ -56,23 +57,23 @@ public class Competition extends Model {
 	@JoinTable(name = "CompetitionGroup", joinColumns = {
     	@JoinColumn(name = "groupId", referencedColumnName = "id")}, inverseJoinColumns = {
     	@JoinColumn(name = "competitionId", referencedColumnName = "id")})
-    @ManyToMany	
+    @ManyToMany(fetch = FetchType.LAZY)
 	public List<UserGroup> groups;
 	
 	@JoinTable(name = "CompetitionTask", joinColumns = {
     	@JoinColumn(name = "competitionId", referencedColumnName = "id")}, inverseJoinColumns = {
     	@JoinColumn(name = "taskId", referencedColumnName = "id")})
-    @ManyToMany	
+    @ManyToMany(fetch = FetchType.LAZY)
 	public List<Task> tasks;
 	
 	@Exclude
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "competition")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "competition")
 	public List<Solution> solutios;
 	
 	@Exclude
 	@Required
 	@JoinColumn(name = "creator", referencedColumnName = "id")
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public Admin creator;
 
 

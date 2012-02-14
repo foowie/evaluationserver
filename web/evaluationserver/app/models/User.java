@@ -20,6 +20,7 @@ import controllers.CRUD.Exclude;
 import controllers.Security;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Query;
@@ -67,7 +68,7 @@ abstract public class User extends Model {
 	public String surname;
 	
 	@Exclude
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 	public List<UserGroup> groups;
 	
 //	@OneToMany(mappedBy = "user")
@@ -75,11 +76,11 @@ abstract public class User extends Model {
 	
 	@Exclude
 	@JoinColumn(name = "creator", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY)
 	public User creator;
 	
 	@Exclude
-	@JoinColumn(name = "role", referencedColumnName = "id", insertable=false, updatable=false)
+	@JoinColumn(name = "role", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
 	public Role role;
 	
