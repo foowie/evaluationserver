@@ -11,6 +11,6 @@ import play.mvc.With;
 	controllers.admin.with.CRUDSearch.class,
 	controllers.admin.with.Menu.class
 })
-public class Languages extends CRUD {
+public class Languages /*extends CRUD*/ {
 	
 }

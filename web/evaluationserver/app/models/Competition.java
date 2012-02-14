@@ -51,7 +51,7 @@ public class Competition extends Model {
 	
 	@Basic(optional = false)
 	@Column(name = "timePenalization")
-	public int timePenalization;
+	public int timePenalization; // [min]
 
 	
 	@JoinTable(name = "CompetitionGroup", joinColumns = {

@@ -17,10 +17,10 @@ import play.mvc.After;
 import play.mvc.Before;
 import play.mvc.Router;
 import play.mvc.With;
-import services.admin.task.ContestantStatistics;
-import services.admin.task.ContestantStatistics.ContestantResult;
-import services.admin.task.SystemReplyStatistics;
-import services.admin.task.SystemReplyResult;
+import services.task.ContestantStatistics;
+import services.task.ContestantResult;
+import services.task.SystemReplyStatistics;
+import services.task.SystemReplyResult;
 
 @Check(Role.Check.ADMIN)
 @With({

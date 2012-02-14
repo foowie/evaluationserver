@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+
+#{set title:'Statistics' /}
+
+	#{table contestantsStatistics, as:'user', class:'datagrid'}
+		#{column 'Position'} ${user.position} #{/column}
+		#{column 'Contestant'} ${user.contestant.login} #{/column}
+		#{column 'Solved tasks'} 
+			#{list user.solvedTasks.keySet(), as:'key'}
+				${key.name} (${user.solvedTasks[key]})${key_isLast ? '' : ', '} 
+			#{/list}
+		#{/column}
+	#{/table}
+	
+	<a href="@{list}">Back</a>

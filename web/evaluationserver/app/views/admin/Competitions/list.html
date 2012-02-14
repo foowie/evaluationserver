@@ -4,22 +4,25 @@
 <div id="crudList" class="${type.name}">
 
 	#{form action:@list().remove('page'), method:'GET'}
-		<p id="crudListAdd">
-			<a href="@{blank()}">&{'crud.add', type.modelName}</a>
-		</p>
-		<div id="crudListSearch">
-			#{crud.search /}
-		</div>
-		<div id="crudListTable">
-			#{crud.table fields:['name', 'startDate', 'stopDate', 'active']}
-			   #{crud.custom 'startDate'}
-				   ${object.startDate?.format('yyyy-MM-dd HH:mm')}
-			   #{/crud.custom}			
-			   #{crud.custom 'stopDate'}
-				   ${object.stopDate?.format('yyyy-MM-dd HH:mm')}
-			   #{/crud.custom}			
-			#{/crud.table}
-		</div>
+	<p id="crudListAdd">
+		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
+	</p>
+	<div id="crudListSearch">
+		#{crud.search /}
+	</div>
+	<div id="crudListTable">
+		#{crud.table fields:['name', 'startDate', 'stopDate', 'active', '']}
+			#{crud.custom 'startDate'}
+				${object.startDate?.format('yyyy-MM-dd HH:mm')}
+			#{/crud.custom}			
+			#{crud.custom 'stopDate'}
+				${object.stopDate?.format('yyyy-MM-dd HH:mm')}
+			#{/crud.custom}			
+			#{crud.custom ''}
+				<a href="@{statistics(object._key())}">Statistics</a>
+			#{/crud.custom}			
+		#{/crud.table}
+	</div>
 	#{/form}
 
     <div id="crudListPagination">

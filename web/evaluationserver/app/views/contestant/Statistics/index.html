@@ -9,3 +9,16 @@
   #{column 'In queue'} ${statistic[4]} #{/column}
 #{/table}
 
+
+#{if contestantsStatistics != null}
+	<h3>Contestants statistics</h3>
+	#{table contestantsStatistics, as:'user', class:'datagrid'}
+		#{column 'Position'} ${user.position} #{/column}
+		#{column 'Contestant'} ${user.contestant.login} #{/column}
+		#{column 'Solved tasks'} 
+			#{list user.solvedTasks.keySet(), as:'key'}
+				${key.name} (${user.solvedTasks[key]})${key_isLast ? '' : ', '} 
+			#{/list}
+		#{/column}
+	#{/table}
+#{/if}

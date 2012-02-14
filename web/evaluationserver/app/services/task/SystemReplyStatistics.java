@@ -1,4 +1,4 @@
-package services.admin.task;
+package services.task;
 
 import java.util.ArrayList;
 import java.util.Collection;

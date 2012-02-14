@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 import play.db.jpa.Model;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
+import play.data.validation.MaxSize;
 import play.data.validation.Required;
 
 @Entity
@@ -32,6 +33,7 @@ public class Solution extends Model {
     @Temporal(TemporalType.TIMESTAMP)
 	public Date evaluationLockUntil;
 	
+	@MaxSize(1024)
 	@Column(name = "log")
 	public String log;
 	

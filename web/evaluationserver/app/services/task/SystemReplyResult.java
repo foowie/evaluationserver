@@ -1,4 +1,4 @@
-package services.admin.task;
+package services.task;
 
 public class SystemReplyResult {
 	private String name;

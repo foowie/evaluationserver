@@ -3,11 +3,11 @@
 #{set title:'Solutions' /}
 
 #{table solutions, as:'solution', class:'datagrid'}
-  #{column 'Created'} ${solution.created} #{/column}
+  #{column 'Created'} ${solution.created.format()} #{/column}
   #{column 'Task'} <a href="@{contestant.Task.index(competition.id, solution.task.id)}">${solution.task}</a> #{/column}
   #{column 'Language'} ${solution.language} #{/column}
-  #{column 'Memory'} ${solution.memory} bytes #{/column}
-  #{column 'Time'} ${solution.timeLength} ms #{/column}
+  #{column 'Memory'} #{bytes solution.memory /} #{/column}
+  #{column 'Time'} #{time solution.timeLength /} #{/column}
   #{column 'Download'} <a href="@{download(competition.id, solution.file.id)}">${solution.file}</a> #{/column}
   #{column 'Reply'} ${solution.systemReply} #{/column}
 #{/table}

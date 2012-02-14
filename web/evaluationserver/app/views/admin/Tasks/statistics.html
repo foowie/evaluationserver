@@ -13,7 +13,7 @@
 <h3>Top 10 users statistics</h3>	
 #{table contestantStatistics, as:'stat', class:'datagrid'}
   #{column 'Name'} <a href="@{admin.Contestants.show(stat.user._key())}">${stat.user.login}</a> #{/column}
-  #{column 'Name'} <a href="@{gotoSolution(task.id, stat.user.id, stat.time)}">${stat.time} ms</a> #{/column}
+  #{column 'Name'} <a href="@{gotoSolution(task.id, stat.user.id, stat.time)}">#{time stat.time /}</a> #{/column}
 #{/table}	
 
 </div>

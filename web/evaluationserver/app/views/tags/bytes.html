@@ -1,0 +1,19 @@
+%{ 
+	value = _arg
+	
+	if(value != null) {
+		if(value == 1) {
+			unit = 'byte'
+		} else if(value < 10000) {
+			unit = 'bytes'
+		} else if(value < 10000000) {
+			value = value / 1000
+			unit = 'kB'
+		} else {
+			value = value / 1000000
+			unit = 'MB'
+		}
+		value = Math.round(value)
+		println(value + '&nbsp;' + unit)
+	}
+}%

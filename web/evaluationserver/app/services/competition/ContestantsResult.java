@@ -1,26 +1,47 @@
-package services.admin.task;
+package services.competition;
 
-public class SystemReplyResult {
-	private String name;
-	private long count;
-	private double relativeCount;
+import java.util.Map;
+import models.Contestant;
+import models.Task;
 
-	public SystemReplyResult(String name, long count, double relativeCount) {
-		this.name = name;
-		this.count = count;
-		this.relativeCount = relativeCount;
+public class ContestantsResult implements Comparable<ContestantsResult> {
+
+	private Contestant contestant;
+	private Map<Task, Integer> solvedTasks;
+	private long totalPenalization; // [ms]
+	private int position;
+
+	public ContestantsResult(Contestant contestant, Map<Task, Integer> solvedTasks, long totalPenalization) {
+		this.contestant = contestant;
+		this.solvedTasks = solvedTasks;
+		this.totalPenalization = totalPenalization;
 	}
 
-	public long getCount() {
-		return count;
+	public int getPosition() {
+		return position;
 	}
 
-	public String getName() {
-		return name;
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
-	public double getRelativeCount() {
-		return relativeCount;
+	public Contestant getContestant() {
+		return contestant;
 	}
-	
+
+	public Map<Task, Integer> getSolvedTasks() {
+		return solvedTasks;
+	}
+
+	public long getTotalPenalization() {
+		return totalPenalization;
+	}
+
+	public int getSolvedTaskCount() {
+		return solvedTasks.size();
+	}
+
+	public int compareTo(ContestantsResult other) {
+		return (int) (getSolvedTaskCount() == other.getSolvedTaskCount() ? getTotalPenalization() - other.getTotalPenalization() : other.getSolvedTaskCount() - getSolvedTaskCount());
+	}
 }

@@ -1,0 +1,17 @@
+%{ 
+	value = _arg
+	
+	if(value != null) {
+		if(value < 1000) {
+			unit = 'ms'
+		} else if(value < 10000) {
+			value = value / 1000
+			unit = 's'
+		} else {
+			value = value / 1000
+			unit = 's'
+			value = Math.round(value)
+		}
+		println(value + '&nbsp;' + unit)
+	}
+}%

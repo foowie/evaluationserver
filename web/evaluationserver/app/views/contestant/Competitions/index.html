@@ -4,6 +4,6 @@
 
 #{table competitions, as:'competition', class:'datagrid'}
   #{column 'Name'} <a href="@{contestant.Competition.index(competition.id)}">${competition.name}</a> #{/column}
-  #{column 'Start'} ${competition.startDate} #{/column}
-  #{column 'End'} ${competition.stopDate} #{/column}
+  #{column 'Start'} ${competition.startDate.format()} #{/column}
+  #{column 'End'} ${competition.stopDate.format()} #{/column}
 #{/table}	
