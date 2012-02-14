@@ -1,3 +1,35 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+name = Name
+startDate = Start date
+stopDate = Stop date
+active = Active
+timePenalization = Time penalization
+groups = Groups
+tasks = Tasks
+login = Login
+firstName = First name
+surname = Surname
+password = Password
+email = E-mail
+UserGroups = User groups
+UserGroup = User group
+description = Description
+users = Users
+Admin = Administrator
+ResolverFiles = Resolvers
+ResolverFile = Resolver
+title = Title
+created = Created
+user = User
+task = Task
+competition = Competition
+systemReply = System reply
+evaluated = Evaluated
+evaluationLockUntil = Evaluation lock
+log = Log
+memory = Memory
+timeLength = Time
+language = Language
+file = File
