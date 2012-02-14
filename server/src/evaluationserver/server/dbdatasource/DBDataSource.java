@@ -63,7 +63,12 @@ public class DBDataSource implements DataSource {
 				// create transaction
 				// take next free solution
 				try {
-					solution = (Solution) em.createQuery("SELECT s FROM Solution s WHERE s.dateEvaluated IS NULL AND (s.evaluationLockUntil IS NULL OR s.evaluationLockUntil < CURRENT_TIMESTAMP)").setMaxResults(1).getSingleResult();
+					solution = (Solution) em.createQuery(
+						"SELECT s " + 
+						"FROM Solution s " + 
+						"WHERE s.dateEvaluated IS NULL " + 
+							"AND (s.evaluationLockUntil IS NULL OR s.evaluationLockUntil < CURRENT_TIMESTAMP)"
+					).setMaxResults(1).getSingleResult();
 				} catch(NoResultException e) {
 					logger.log(Level.FINER, ("No free solution to took"));
 					return null;
@@ -96,6 +101,7 @@ public class DBDataSource implements DataSource {
 				em.getTransaction().commit();
 			}
 		}
+		em.refresh(solution.getTask()); // check task for changes
 		logger.log(Level.FINER, ("Unresolved solution found id=" + solution.getId()));
 		return solution;
 	}
