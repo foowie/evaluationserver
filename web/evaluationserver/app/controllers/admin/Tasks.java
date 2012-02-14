@@ -68,6 +68,16 @@ public class Tasks extends CRUD {
 		}
 	}
 	
+	@Before(only={"create", "save"})
+	public static void fixUnits() {
+		String[] convert = new String[] {"object.sourceLimit", "object.memoryLimit", "object.outputLimit"};
+		for(String key : convert) {
+			int parameter = Integer.parseInt(params.get(key)) * 1024;
+			System.out.println(Integer.toString(parameter));
+			params.put(key, Integer.toString(parameter));
+		}
+	}
+	
 	@After(only={"save", "delete"})
 	public static void afterSaveAndDelete() {
 		InputFile.deleteUnused();

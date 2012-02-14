@@ -1,13 +1,19 @@
 #{extends 'CRUD/layout.html' /}
 #{set title:messages.get('crud.show.title', type.modelName) /}
 
+%{
+	object.sourceLimit /= 1024
+	object.memoryLimit /= 1024
+	object.outputLimit /= 1024
+}%
+
 <div id="crudShow" class="${type.name}">
 
     
     #{form action:@save(object._key()), enctype:'multipart/form-data'}
 	<table class="table">
         #{crud.form}
-				#{crud.custom 'inputData' }
+				#{crud.custom 'inputData'}
 					<tr>
 						<th>&{'inputData'}</th>
 						<td>
@@ -21,7 +27,7 @@
 						</td>
 					</tr>
 				#{/crud.custom}			
-				#{crud.custom 'outputData' }
+				#{crud.custom 'outputData'}
 					<tr>
 						<th>&{'outputData'}</th>
 						<td>
