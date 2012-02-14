@@ -4,9 +4,6 @@
 <div id="crudList" class="${type.name}">
 
 	#{form action:@list().remove('page'), method:'GET'}
-		<p id="crudListAdd">
-			<a href="@{blank()}">&{'crud.add', type.modelName}</a>
-		</p>
 		<div id="crudListSearch">
 			#{crud.search /}
 		</div>

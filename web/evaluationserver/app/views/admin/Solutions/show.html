@@ -12,7 +12,21 @@
 						<th>&{'created'}</th>
 						<td>${object.created.format('yyyy-MM-dd HH:mm:ss')}</td>
 					</tr>
-				#{/crud.custom}			
+				#{/crud.custom}
+				#{crud.custom 'file' }
+					<tr>
+						<th>&{'file'}</th>
+						<td>
+							<input id="file" type="file" name="file" />
+							#{if object.file != null}
+								<a href="@{admin.with.Files.download(object.file._key())}">${object.file.name}</a>
+							#{/if}
+							#{ifError 'inputData'}
+								<span class="error">#{error 'inputData' /}</span>
+							#{/ifError}							
+						</td>
+					</tr>
+				#{/crud.custom}					
 		#{/crud.form}
 		<tr>
 			<th></th>
@@ -27,6 +41,11 @@
     #{form @delete(object._key())}
         <p class="crudDelete">
             <input type="submit" value="&{'crud.delete', type.modelName}" />
+        </p>
+    #{/form}
+    #{form @unevaluate(object._key())}
+        <p class="crudDelete">
+            <input type="submit" value="&{'Remove evaluation'}" />
         </p>
     #{/form}
 
