@@ -3,6 +3,7 @@ temp/*
 # tracer
 tracer/build
 tracer/dist
+tracer/nbproject/private
 tracer/tests/tests/*
 !tracer/tests/tests/*.c
 !tracer/tests/tests/*.cpp
@@ -13,7 +14,7 @@ tracer/diff/*
 # server
 server/build
 server/dist
-server/nbproject/private/
+server/nbproject/private
 
 # web
 web/evaluationserver/tmp

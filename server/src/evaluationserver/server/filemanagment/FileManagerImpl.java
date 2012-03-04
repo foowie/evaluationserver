@@ -32,9 +32,9 @@ public class FileManagerImpl implements FileManager {
 			if(!temp.mkdirs())
 				throw new IllegalStateException("Can't create temp folder");
 		if(!temp.isDirectory())
-			throw new IllegalStateException("Temp folder is not directory");
+			throw new IllegalStateException("Temp folder is not directory: " + temp.getAbsolutePath());
 		if(!temp.canWrite())
-			throw new IllegalStateException("Temp folder is not writable");
+			throw new IllegalStateException("Temp folder is not writable: " + temp.getAbsolutePath());
 	}
 
 	/**

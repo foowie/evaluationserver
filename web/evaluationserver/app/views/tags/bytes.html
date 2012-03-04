@@ -4,14 +4,14 @@
 	if(value != null) {
 		if(value == 1) {
 			unit = 'byte'
-		} else if(value < 10000) {
+		} else if(value < 10240) {
 			unit = 'bytes'
-		} else if(value < 10000000) {
-			value = value / 1000
-			unit = 'kB'
+		} else if(value < 10485760) {
+			value = value / 1024
+			unit = 'KiB'
 		} else {
-			value = value / 1000000
-			unit = 'MB'
+			value = value / 1048576 
+			unit = 'MiB'
 		}
 		value = Math.round(value)
 		println(value + '&nbsp;' + unit)
