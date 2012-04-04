@@ -71,32 +71,32 @@ char* create_string(int size, char* original, int original_size) {
  */
 char* get_ptrace_text(pid_t child, long addr, int length) {
 
-	union u {
+	union { // 4 loaded characters
 		long val;
 		char chars[sizeof (long) ];
 	} data;
 
-	int str_size = 50;
-	char* str = create_string(str_size, NULL, 0);
+	int str_size = 50; // initial string size
+	char* str = create_string(str_size, NULL, 0); // create empty string
 
-	int str_pos = 0;
+	int str_pos = 0; // actual buffer position
 	int i;
 	int end = 0;
 
 	while (end == 0) {
-		if (str_pos + 6 > str_size) {
+		if (str_pos + 6 > str_size) { // if buffer is to small for next read, resize
 			str = create_string(str_size * 2, str, str_size);
 			str_size *= 2;
 		}
 
-		data.val = ptrace(PTRACE_PEEKDATA, child, addr + str_pos, NULL);
-		for (i = 0; i < sizeof (long); i++) {
+		data.val = ptrace(PTRACE_PEEKDATA, child, addr + str_pos, NULL); // load next 4 characters
+		for (i = 0; i < sizeof (long); i++) { // test end of string
 			if ((length == -1 && data.chars[i] == '\0') || (length != -1 && length == i + 1)) {
 				end = 1;
 				break;
 			}
 		}
-		memcpy(str + str_pos, data.chars, ++i);
+		memcpy(str + str_pos, data.chars, ++i); // copy 4 chars into buffer
 		str_pos += --i;
 	}
 	str[str_pos] = '\0';
@@ -153,20 +153,12 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 		}
 
 		case SYS_write:
-		{
-			if (regs->ebx != STDOUT_FILENO) {
-				DUMP_ERROR("SYS_write INTO %ld", regs->ebx)
-				DUMP_REGISTRY(regs)
-				return RESTRICTED_FUNCTION; // write not to std out
-			}
-		}
-			break;
-
-			// debug only todo: obalit debugem
 		case SYS_writev:
 		{
-			if (regs->ebx != STDERR_FILENO) {
-				return RESTRICTED_FUNCTION; // wrote not to std out
+			if (regs->ebx != STDOUT_FILENO) {
+				DUMP_ERROR("SYS_write/SYS_writev INTO %ld", regs->ebx)
+				DUMP_REGISTRY(regs)
+				return RESTRICTED_FUNCTION; // write not to std out
 			}
 		}
 			break;
@@ -192,6 +184,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 		case SYS_close: //6
 		case SYS_access: //33
 		case SYS_brk: //45
+		case SYS_mmap: //90
 		case SYS_munmap: //91
 		case SYS_mprotect: //125
 		case SYS_mmap2: //192

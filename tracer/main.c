@@ -34,6 +34,7 @@ void send_response(struct Limits * limit, int response) {
 	stop_timer(limit);
 	kill(limit->pid, SIGKILL);
 	printf("%s %.0lf %ld", responses[response], limit->miliseconds, limit->memory_peek);
+	close_debug();
 	exit(0);
 }
 

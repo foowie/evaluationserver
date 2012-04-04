@@ -32,7 +32,7 @@ int has_limit_errors(struct Limits * limit) {
 
 int disable_core_dump(struct Limits *limit) {
 	if (getpid() != limit->pid) {
-		DUMP_ERROR("INVALID PID ON disableCoreDump")
+		DUMP_ERROR("INVALID PID ON disable_core_dump")
 		return -1;
 	}
 
@@ -59,7 +59,7 @@ int initialize_memory_limit(struct Limits *limit) {
 
 int initialize_output_limit(struct Limits *limit) {
 	if (getpid() != limit->pid) {
-		DUMP_ERROR("INVALID PID ON setOutputLimit")
+		DUMP_ERROR("INVALID PID ON initialize_output_limit")
 		return -1;
 	}
 
@@ -83,7 +83,7 @@ int initialize_output_limit(struct Limits *limit) {
 int initialize_time_limit(struct Limits *limit) {
 	struct itimerval timeVirtual, timeReal;
 	if (getpid() != limit->pid) {
-		DUMP_ERROR("INVALID PID ON initializeTimeLimit")
+		DUMP_ERROR("INVALID PID ON initialize_time_limit")
 		return -1;
 	}
 
