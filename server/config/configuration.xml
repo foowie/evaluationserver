@@ -9,6 +9,7 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<constructor-arg ref="compilerResolver" />
 		<constructor-arg ref="cachingFileManager" />
 		<constructor-arg ref="inspector" />
+		<constructor-arg value="${server.threads}" />
 	</bean>
 
 	<!-- NOTIFICATION -->

@@ -16,21 +16,27 @@ public class ServerImpl implements Server {
 	protected final CompilerResolver compilerResolver;
 	protected final FileManager fileManager;
 	protected final DataSourceBlockingQueue solutions;
-	protected final Inspector inspectior;
-
-	public ServerImpl(DataSource dataSource, SandboxResolver sandboxFactoryResolver, CompilerResolver compilerResolver, FileManager fileManager, Inspector inspector) {
+	protected final Inspector inspector;
+	protected final int threadCount;
+	
+	public ServerImpl(DataSource dataSource, SandboxResolver sandboxFactoryResolver, CompilerResolver compilerResolver, FileManager fileManager, Inspector inspector, int threadCount) {
 		this.dataSource = dataSource;
 		this.sandboxResolver = sandboxFactoryResolver;
 		this.compilerResolver = compilerResolver;
 		this.fileManager = fileManager;
 		solutions = new DataSourceBlockingQueue(dataSource);
-		this.inspectior = inspector;
+		this.inspector = inspector;
+		this.threadCount = threadCount > 0 ? threadCount : Runtime.getRuntime().availableProcessors();;
+	}
+	
+	public ServerImpl(DataSource dataSource, SandboxResolver sandboxFactoryResolver, CompilerResolver compilerResolver, FileManager fileManager, Inspector inspector) {
+		this(dataSource, sandboxFactoryResolver, compilerResolver, fileManager, inspector, -1);
 	}
 
 	@Override
 	public void runServer() {
-		for(int i = 0; i < 1; i++) {
-			Thread worker = new SolutionWorker(dataSource, sandboxResolver, compilerResolver, fileManager, solutions, inspectior);
+		for(int i = 0; i < threadCount; i++) {
+			Thread worker = new SolutionWorker(dataSource, sandboxResolver, compilerResolver, fileManager, solutions, inspector);
 //			worker.setDaemon(true);
 			worker.setName("Worker-" + (i+1));
 			worker.start();
