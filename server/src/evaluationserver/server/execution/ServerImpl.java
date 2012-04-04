@@ -26,7 +26,7 @@ public class ServerImpl implements Server {
 		this.fileManager = fileManager;
 		solutions = new DataSourceBlockingQueue(dataSource);
 		this.inspector = inspector;
-		this.threadCount = threadCount > 0 ? threadCount : Runtime.getRuntime().availableProcessors();;
+		this.threadCount = (threadCount > 0 && threadCount < 1000) ? threadCount : Runtime.getRuntime().availableProcessors();
 	}
 	
 	public ServerImpl(DataSource dataSource, SandboxResolver sandboxFactoryResolver, CompilerResolver compilerResolver, FileManager fileManager, Inspector inspector) {

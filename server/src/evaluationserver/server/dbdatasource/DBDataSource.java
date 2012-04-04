@@ -80,7 +80,7 @@ public class DBDataSource implements DataSource {
 				query.setParameter("id", solution.getId());
 				try {
 					Date date = (Date) query.getSingleResult();
-					if(date != null) {
+					if(date != null && date.after(new Date())) {
 						logger.log(Level.FINE, ("Record taken by another thread during retrieve, id=" + solution.getId()));
 						em.getTransaction().rollback();
 						continue;

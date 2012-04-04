@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 public class SolutionWorker extends Thread {
 
 	private static final Logger logger = Logger.getLogger(SolutionWorker.class.getPackage().getName());
+	protected static final Object counterLock = new Object();
 	protected static volatile long counter = 0;
 	protected final DataSource dataSource;
 	protected final SandboxResolver sandboxResolver;
@@ -48,7 +49,9 @@ public class SolutionWorker extends Thread {
 	public void run() {
 		logger.log(Level.FINER, ("SolutionWorker '" + getName() + "' starts"));
 		while (true) {
-			tag = counter++;
+			synchronized(counterLock) {
+				tag = counter++;
+			}
 			final Solution solution;
 			try {
 				solution = solutions.take();
