@@ -23,8 +23,6 @@ public class FileData implements Serializable {
     @Lob
     @Column(name = "fileData")
 	private byte[] fileData;
-//	@OneToMany(mappedBy = "fileData")
-//	private Collection<File> fileCollection;
 
 	public FileData() {
 	}
@@ -53,14 +51,6 @@ public class FileData implements Serializable {
 	public void setFileData(byte[] fileData) {
 		this.fileData = fileData;
 	}
-
-//	public Collection<File> getFileCollection() {
-//		return fileCollection;
-//	}
-//
-//	public void setFileCollection(Collection<File> fileCollection) {
-//		this.fileCollection = fileCollection;
-//	}
 
 	@Override
 	public int hashCode() {

@@ -22,10 +22,6 @@ public class SystemReply implements Serializable {
 	private Integer id;
 	
 	@Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 200)
-	private String name;
-	
-	@Basic(optional = false)
     @Column(name = "accepting", nullable = false)
 	private boolean accepting;
 	
@@ -33,9 +29,6 @@ public class SystemReply implements Serializable {
     @Column(name = "keyName", nullable = false, unique = true, length = 2)
 	private String key;
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "systemReply", fetch = FetchType.LAZY)
-//	private List<Solution> solutionList;
-
 	public SystemReply() {
 	}
 
@@ -43,9 +36,8 @@ public class SystemReply implements Serializable {
 		this.id = id;
 	}
 
-	public SystemReply(Integer id, String name, boolean accepting, String key) {
+	public SystemReply(Integer id, boolean accepting, String key) {
 		this.id = id;
-		this.name = name;
 		this.accepting = accepting;
 		this.key = key;
 	}
@@ -56,14 +48,6 @@ public class SystemReply implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public boolean getAccepting() {
@@ -81,15 +65,6 @@ public class SystemReply implements Serializable {
 	public void setKey(String key) {
 		this.key = key;
 	}
-
-//	@XmlTransient
-//	public List<Solution> getSolutionList() {
-//		return solutionList;
-//	}
-//
-//	public void setSolutionList(List<Solution> solutionList) {
-//		this.solutionList = solutionList;
-//	}
 
 	@Override
 	public int hashCode() {

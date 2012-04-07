@@ -31,9 +31,6 @@ public class File implements Serializable {
 	private String name;
 	@Column(name = "pathName", length = 300)
 	private String path;
-	@Basic(optional = false)
-	@Column(name = "fileSize", nullable = false)
-	private long size;
 	@JoinColumn(name = "fileData", referencedColumnName = "id", nullable = true)
 	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FileData data;
@@ -41,14 +38,6 @@ public class File implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created = new Date();
 
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "resultResolver", fetch = FetchType.LAZY)
-//	private List<Task> taskList;
-//	@OneToMany(mappedBy = "outputData", fetch = FetchType.LAZY)
-//	private List<Task> taskList1;
-//	@OneToMany(mappedBy = "inputData", fetch = FetchType.LAZY)
-//	private List<Task> taskList2;
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "file", fetch = FetchType.LAZY)
-//	private List<Solution> solutionList;
 	public File() {
 	}
 
@@ -56,10 +45,9 @@ public class File implements Serializable {
 		this.id = id;
 	}
 
-	public File(Integer id, String name, int size) {
+	public File(Integer id, String name) {
 		this.id = id;
 		this.name = name;
-		this.size = size;
 	}
 
 	public Integer getId() {
@@ -86,15 +74,6 @@ public class File implements Serializable {
 
 	public File setPath(String path) {
 		this.path = path;
-		return this;
-	}
-
-	public long getSize() {
-		return size;
-	}
-
-	public File setSize(long size) {
-		this.size = size;
 		return this;
 	}
 

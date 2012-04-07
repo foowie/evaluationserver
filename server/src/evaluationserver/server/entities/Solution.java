@@ -27,11 +27,6 @@ public class Solution implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	
-	@Basic(optional = false)
-	@Column(name = "dateInsert", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
-	
 	@Column(name = "dateEvaluated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateEvaluated;
@@ -73,26 +68,12 @@ public class Solution implements Serializable {
 		this.id = id;
 	}
 
-	public Solution(Integer id, Date date) {
-		this.id = id;
-		this.date = date;
-	}
-
 	public Integer getId() {
 		return id;
 	}
 
 	public Solution setId(Integer id) {
 		this.id = id;
-		return this;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public Solution setDate(Date date) {
-		this.date = date;
 		return this;
 	}
 

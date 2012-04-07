@@ -19,16 +19,8 @@ public class Language implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	@Basic(optional = false)
-	@Column(name = "name", nullable = false, length = 200)
-	private String name;
-	@Basic(optional = false)
 	@Column(name = "keyName", nullable = false, length = 100)
 	private String key;
-	@Basic(optional = false)
-	@Column(name = "extension", nullable = false, length = 10)
-	private String extension;
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "language", fetch = FetchType.LAZY)
-//	private List<Solution> solutionList;
 
 	public Language() {
 	}
@@ -37,10 +29,8 @@ public class Language implements Serializable {
 		this.id = id;
 	}
 
-	public Language(Integer id, String name, String extension, String key) {
+	public Language(Integer id, String key) {
 		this.id = id;
-		this.name = name;
-		this.extension = extension;
 		this.key = key;
 	}
 
@@ -51,31 +41,6 @@ public class Language implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getExtension() {
-		return extension;
-	}
-
-	public void setExtension(String extension) {
-		this.extension = extension;
-	}
-
-//	@XmlTransient
-//	public List<Solution> getSolutionList() {
-//		return solutionList;
-//	}
-//
-//	public void setSolutionList(List<Solution> solutionList) {
-//		this.solutionList = solutionList;
-//	}
 
 	public String getKey() {
 		return key;
