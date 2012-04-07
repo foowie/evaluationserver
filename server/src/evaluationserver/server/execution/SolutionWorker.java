@@ -87,7 +87,7 @@ public class SolutionWorker extends Thread {
 			}
 
 			// prepare solution
-			evaluationserver.server.sandbox.Solution sandboxSolution;
+			final evaluationserver.server.sandbox.Solution sandboxSolution;
 			try {
 				sandboxSolution = new evaluationserver.server.sandbox.Solution(
 					solution.getLanguage().getKey(),
@@ -131,7 +131,10 @@ public class SolutionWorker extends Thread {
 					logError(solution, Reply.INTERNAL_ERROR, ex, Level.SEVERE, "File manager exception IO exception");
 					continue;
 				}
-				inspectionSolution.getEvaluationProgram().setExecutable(true);
+				if(!inspectionSolution.getEvaluationProgram().setExecutable(true)) {
+					logError(solution, Reply.INTERNAL_ERROR, new IOException("Cannot set executable flat to " + inspectionSolution.getEvaluationProgram().getName()), Level.SEVERE, "Cannot set executable flag to inspection program on task " + solution.getTask().getId() + " !");
+					continue;
+				}
 
 				final InspectionResult inspectionResult;
 				try {
