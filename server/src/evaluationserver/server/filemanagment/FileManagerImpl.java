@@ -115,7 +115,9 @@ public class FileManagerImpl implements FileManager {
 		}
 	}	
 	
-	protected File getFreeFile(String ext, Long tag) {
+	protected File getFreeFile(String fileName, Long tag) {
+		int dotIndex = fileName == null ? -1 : fileName.lastIndexOf(".");
+		String ext = dotIndex == -1 ? "" : fileName.substring(dotIndex);
 		File file;
 		synchronized(files) {
 			do {

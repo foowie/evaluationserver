@@ -48,7 +48,9 @@ public class CachingFileManager extends FileManagerImpl {
 	}
 	
 	protected String formatFileName(evaluationserver.server.entities.File file) {
-		return file.getId() + "-" + file.getCreated().getTime() + "-" + file.getName();
+		int dotIndex = file.getName() == null ? -1 : file.getName().lastIndexOf(".");
+		String ext = dotIndex == -1 ? "" : file.getName().substring(dotIndex);		
+		return file.getId() + "-" + file.getCreated().getTime() + ext;
 	}
 	
 	
