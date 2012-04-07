@@ -74,7 +74,7 @@ public class FileManagerImpl implements FileManager {
 				throw new IOException("Can't write into temp file " + result.getAbsolutePath());
 			
 			logger.log(Level.FINER, ("Creating new file with data " + result.getAbsolutePath() + " tag=" + tag));
-			FileOutputStream fos = new FileOutputStream(result);
+			final FileOutputStream fos = new FileOutputStream(result);
 			fos.write(file.getData().getFileData());
 			fos.flush();
 			fos.close();
@@ -104,8 +104,8 @@ public class FileManagerImpl implements FileManager {
 	public void releaseFiles(long tag) {
 		synchronized(files) {
 			if(files.containsTag(tag)) {
-				StringBuilder sb = new StringBuilder("Release files with tag ").append(tag);
-				Set<File> delete = files.removeByTag(tag);
+				final StringBuilder sb = new StringBuilder("Release files with tag ").append(tag);
+				final Set<File> delete = files.removeByTag(tag);
 				for(File file : delete) {
 					file.delete();
 					sb.append("\n   ").append(file.getAbsolutePath());
@@ -116,12 +116,11 @@ public class FileManagerImpl implements FileManager {
 	}	
 	
 	protected File getFreeFile(String fileName, Long tag) {
-		int dotIndex = fileName == null ? -1 : fileName.lastIndexOf(".");
-		String ext = dotIndex == -1 ? "" : fileName.substring(dotIndex);
+		final String ext = getExtenxion(fileName);
 		File file;
 		synchronized(files) {
 			do {
-				String name = UUID.randomUUID().toString() + (ext == null ? "" : ext);
+				String name = UUID.randomUUID().toString() + ext;
 				file = new File(tempPath + File.separator + name);
 			} while(files.containsValue(file) || file.exists());
 			files.add(file, tag);
@@ -129,4 +128,9 @@ public class FileManagerImpl implements FileManager {
 		return file;
 	}
 
+	protected String getExtenxion(String fileName) {
+		final int dotIndex = fileName == null ? -1 : fileName.lastIndexOf(".");
+		return dotIndex == -1 ? "" : fileName.substring(dotIndex);
+	}
+	
 }

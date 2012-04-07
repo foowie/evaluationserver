@@ -33,11 +33,9 @@ public class CachingFileManager extends FileManagerImpl {
 			final String fileName = formatFileName(file);
 			final File result = new File(tempPath + File.separator + fileName);
 			if(!result.exists()) {
-//				if(!result.canWrite())
-//					throw new IOException("Can't write into temp file " + result.getAbsolutePath());
 				logger.log(Level.FINER, ("Creating new cached file with data " + result.getAbsolutePath()));
 				
-				FileOutputStream fos = new FileOutputStream(result);
+				final FileOutputStream fos = new FileOutputStream(result);
 				fos.write(file.getData().getFileData());
 				fos.flush();
 				fos.close();
@@ -48,9 +46,7 @@ public class CachingFileManager extends FileManagerImpl {
 	}
 	
 	protected String formatFileName(evaluationserver.server.entities.File file) {
-		int dotIndex = file.getName() == null ? -1 : file.getName().lastIndexOf(".");
-		String ext = dotIndex == -1 ? "" : file.getName().substring(dotIndex);		
-		return file.getId() + "-" + file.getCreated().getTime() + ext;
+		return file.getId() + "-" + file.getCreated().getTime() + getExtenxion(file.getName());
 	}
 	
 	
