@@ -1,7 +1,6 @@
 package evaluationserver.server.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "Task")
@@ -30,10 +27,6 @@ public class Task implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "timeLimit", nullable = false)
 	private int timeLimit;
-	
-	@Basic(optional = false)
-	@Column(name = "sourceLimit", nullable = false)
-	private int sourceLimit;
 	
 	@Basic(optional = false)
 	@Column(name = "memoryLimit", nullable = false)
@@ -63,10 +56,9 @@ public class Task implements Serializable {
 		this.id = id;
 	}
 
-	public Task(Integer id, int timeLimit, int sourceLimit, int memoryLimit, int outputLimit) {
+	public Task(Integer id, int timeLimit, int memoryLimit, int outputLimit) {
 		this.id = id;
 		this.timeLimit = timeLimit;
-		this.sourceLimit = sourceLimit;
 		this.memoryLimit = memoryLimit;
 		this.outputLimit = outputLimit;
 	}
@@ -86,15 +78,6 @@ public class Task implements Serializable {
 
 	public Task setTimeLimit(int timeLimit) {
 		this.timeLimit = timeLimit;
-		return this;
-	}
-
-	public int getSourceLimit() {
-		return sourceLimit;
-	}
-
-	public Task setSourceLimit(int sourceLimit) {
-		this.sourceLimit = sourceLimit;
 		return this;
 	}
 
