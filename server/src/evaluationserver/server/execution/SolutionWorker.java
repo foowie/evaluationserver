@@ -55,9 +55,9 @@ public class SolutionWorker extends Thread {
 			final Solution solution;
 			try {
 				solution = solutions.take();
-				logger.log(Level.FINER, ("Taking solution number " + solution.getId()));
+				logger.log(Level.FINE, ("Processing solution number " + solution.getId()));
 			} catch (InterruptedException ex) {
-				logger.log(Level.FINER, ("Ending..."));
+				logger.log(Level.FINE, ("Ending..."));
 				return;
 			}
 
