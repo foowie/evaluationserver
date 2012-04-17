@@ -5,6 +5,7 @@ import controllers.Check;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import models.InputFile;
 import models.OutputFile;
@@ -26,81 +27,129 @@ import services.task.SystemReplyResult;
 @With({
 	controllers.Secure.class,
 	controllers.admin.with.CRUDSearch.class,
-	controllers.admin.with.Menu.class
+	controllers.admin.with.Menu.class,
+	controllers.contestant.with.SubmitNotification.class
 })
 public class Tasks extends CRUD {
-	
-	@Before(only="create")
+
+	/**
+	 * Check for errors and create files before create
+	 * @param inputData
+	 * @param outputData
+	 * @throws IOException 
+	 */
+	@Before(only = "create")
 	public static void beforeCreate(java.io.File inputData, java.io.File outputData) throws IOException {
 		params.put("object.creator.id", User.getLoggedUser().getId().toString());
 		validation.required(inputData);
-		
-		if(!validation.hasErrors()) {
+
+		if (!validation.hasErrors()) {
 			InputFile inputFile = new InputFile(inputData);
 			inputFile.save();
 			params.put("object.inputData.id", inputFile.getId().toString());
-			
-			if(outputData != null) {
+
+			if (outputData != null) {
 				OutputFile outputFile = new OutputFile(outputData);
 				outputFile.save();
 				params.put("object.outputData.id", outputFile.getId().toString());
 			}
 		}
 	}
-	
-	@Before(only="save")
+
+	/**
+	 * Update files before save
+	 * @param id
+	 * @param inputData
+	 * @param outputData
+	 * @param removeOutputData
+	 * @throws IOException 
+	 */
+	@Before(only = "save")
 	public static void beforeSave(Long id, java.io.File inputData, java.io.File outputData, boolean removeOutputData) throws IOException {
-        models.Task task = models.Task.findById(id);
+		models.Task task = models.Task.findById(id);
 		notFoundIfNull(task);
 
-		if(removeOutputData)
+		if (removeOutputData) {
 			task.deleteOutputData();
-		
-		if(inputData != null) {
+		}
+
+		if (inputData != null) {
 			InputFile inputFile = new InputFile(inputData);
 			inputFile.save();
 			params.put("object.inputData.id", inputFile.getId().toString());
 		}
-		if(outputData != null) {
+		if (outputData != null) {
 			OutputFile outputFile = new OutputFile(outputData);
 			outputFile.save();
 			params.put("object.outputData.id", outputFile.getId().toString());
 		}
 	}
-	
-	@Before(only={"create", "save"})
+
+	/**
+	 * Update units
+	 */
+	@Before(only = {"create", "save"})
 	public static void fixUnits() {
-		String[] convert = new String[] {"object.sourceLimit", "object.memoryLimit", "object.outputLimit"};
-		for(String key : convert) {
+		String[] convert = new String[]{"object.sourceLimit", "object.memoryLimit", "object.outputLimit"};
+		for (String key : convert) {
 			int parameter = Integer.parseInt(params.get(key)) * 1024;
-			System.out.println(Integer.toString(parameter));
 			params.put(key, Integer.toString(parameter));
 		}
 	}
-	
-	@After(only={"save", "delete"})
+
+	/**
+	 * Check for delete constraints
+	 * @param id 
+	 */
+	@Before(only = {"delete"})
+	public static void beforeDelete(Long id) {
+		Task task = Task.findById(id);
+		notFoundIfNull(task);
+		if (!task.competitions.isEmpty()) {
+			flash.error("Can't delete task! Is used in " + task.competitions.size() + " competition" + (task.competitions.size() > 1 ? "s" : "") + ": " + task.competitions.get(0).name + (task.competitions.size() > 1 ? ", ..." : ""));
+			redirect(request.controller + ".show", id);
+		}
+	}
+
+	/**
+	 * Remove unused files
+	 */
+	@After(only = {"save", "delete"})
 	public static void afterSaveAndDelete() {
 		InputFile.deleteUnused();
 		OutputFile.deleteUnused();
 	}
-	
-	
+
+	/**
+	 * Don't save on errors
+	 */
 	@After
 	public static void rollbackOnValidationError() {
-		if(validation.hasErrors())
+		if (validation.hasErrors()) {
 			JPA.setRollbackOnly();
+		}
 	}
-	
+
+	/**
+	 * Show statistics
+	 * @param id 
+	 */
 	public static void statistics(Long id) {
 		Task task = Task.findById(id);
 		notFoundIfNull(task);
 
 		Collection<SystemReplyResult> systemReplyStatistics = new SystemReplyStatistics().getStatistics(task);
 		Collection<ContestantResult> contestantStatistics = new ContestantStatistics().getStatistics(task, 10);
-		
+
 		render(task, systemReplyStatistics, contestantStatistics);
 	}
-	
+
+	/**
+	 * Redirect to task by given parameters
+	 * @param task
+	 * @param user
+	 * @param time 
+	 */
 	public static void gotoSolution(Long task, Long user, Integer time) {
 		Solution first = Solution.find("task.id = ? AND user.id=? AND timeLength=?", task, user, time).first();
 		notFoundIfNull(first);
@@ -108,5 +157,23 @@ public class Tasks extends CRUD {
 		map.put("id", first);
 		redirect(Router.getFullUrl("admin.Solutions.show", map));
 	}
-	
+
+	/**
+	 * Remove all evaluations from single solutions of this task
+	 * @param id 
+	 */
+	public static void unevaluate(Long id) {
+
+		Task task = Task.findById(id);
+		notFoundIfNull(task);
+		List<models.Solution> solutions = models.Solution.find("task=?", task).fetch();
+		for (models.Solution solution : solutions) {
+			solution.unevaluate();
+			solution.save();
+		}
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("search_task", task.id);
+		redirect(Router.getFullUrl("admin.Solutions.list", parameters));
+	}
 }

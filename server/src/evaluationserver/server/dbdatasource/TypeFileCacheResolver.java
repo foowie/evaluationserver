@@ -21,9 +21,12 @@ public class TypeFileCacheResolver implements FileCacheResolver {
 	 */
 	@Override
 	public boolean cache(File file) {
-		Long count = (Long)em.createQuery("SELECT COUNT(s) FROM Solution s WHERE s.file=:file")
-				.setParameter("file", file)
-				.getSingleResult();
+		Long count;
+		synchronized(em) {
+			count = (Long)em.createQuery("SELECT COUNT(s) FROM Solution s WHERE s.file=:file")
+					.setParameter("file", file)
+					.getSingleResult();
+		}
 		return count == 0;
 	}
 	

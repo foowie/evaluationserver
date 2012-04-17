@@ -4,11 +4,12 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="server" class="evaluationserver.server.execution.ServerImpl">
-		<constructor-arg ref="datasource" />
+		<constructor-arg ref="datasourceFactory" />
 		<constructor-arg ref="sandboxResolver" />
 		<constructor-arg ref="compilerResolver" />
 		<constructor-arg ref="cachingFileManager" />
 		<constructor-arg ref="inspector" />
+		<constructor-arg ref="notificators" />
 		<constructor-arg value="${server.threads}" />
 	</bean>
 
@@ -23,12 +24,10 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	</bean>
 	<bean id="timeNotificator" class="evaluationserver.server.notification.TimeNotificator">
 		<constructor-arg value="${notification.time}" />
-		<constructor-arg ref="blockingQueue" />
 		<property name="name" value="TimeNotificator" />
 	</bean>
 	<bean id="tcpNotificator" class="evaluationserver.server.notification.TCPNotificator">
 		<constructor-arg value="${notification.port}" />
-		<constructor-arg ref="blockingQueue" />
 		<property name="name" value="TCPNotificator" />
 	</bean>
 	<!-- END NOTIFICATION -->
@@ -83,15 +82,14 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 	
 	<bean id="dummyFileCacheResolver" class="evaluationserver.server.filemanagment.DummyFileCacheResolver" />
 	<bean id="typeFileCacheResolver" class="evaluationserver.server.dbdatasource.TypeFileCacheResolver" >
-		<constructor-arg ref="entityManager" />
+		<constructor-arg ref="typeFileCacheResolverEntityManager" />
 	</bean>
+	<bean id="typeFileCacheResolverEntityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
+	</bean>	
 	<!-- END FILE MANAGMENT -->
 	
-	<bean id="blockingQueue" class="evaluationserver.server.datasource.DataSourceBlockingQueue">
-		<constructor-arg ref="datasource" />
-	</bean>
-	<bean id="datasource" class="evaluationserver.server.dbdatasource.DBDataSource">
-		<constructor-arg ref="entityManager" />
+	<bean id="datasourceFactory" class="evaluationserver.server.dbdatasource.DBDataSourceFactory">
+		<constructor-arg ref="entityManagerFactory" />
 	</bean>
 	
 	
@@ -106,8 +104,6 @@ xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.spri
 		<property name="username" value="${datasource.username}"/>
 		<property name="password" value="${datasource.password}"/>
 	</bean>	
-	<bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager">
-	</bean>
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="persistenceXmlLocation" value="classpath:./META-INF/persistence.xml"/>

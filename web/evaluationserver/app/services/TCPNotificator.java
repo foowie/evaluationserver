@@ -3,6 +3,8 @@ package services;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TCPNotificator {
 
@@ -14,8 +16,14 @@ public class TCPNotificator {
 		this.addr = addr;
 	}
 
-	public void sendNotification() throws IOException {
-		Socket socket = new Socket(addr, port);
-		socket.close();
+	public void sendNotification() {
+		try {
+			Socket socket = new Socket(addr, port);
+			socket.close();
+		} catch (java.net.ConnectException ex) {
+			Logger.getLogger(TCPNotificator.class.getName()).log(Level.WARNING, ex.getMessage());
+		} catch (IOException ex) {
+			Logger.getLogger(TCPNotificator.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 }

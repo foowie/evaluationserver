@@ -87,7 +87,7 @@ public class Task extends Model {
 	
 	@Required
 	@JoinColumn(name = "resultResolver", referencedColumnName = "id")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public ResolverFile resultResolver;
 	
 	@Required
@@ -137,30 +137,6 @@ public class Task extends Model {
 		query.setParameter("tId", this.getId());
 		return ((Long)query.getSingleResult()) > 0;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Task other = (Task) obj;
-		if (this.getId() != other.getId()) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		long hash = 7;
-		hash = 29 * hash + this.getId();
-		return (int)hash;
-	}
-	
-	
 	
 	@Override
 	public String toString() {

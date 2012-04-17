@@ -55,8 +55,14 @@
 
     #{form @delete(object._key())}
         <p class="crudDelete">
-            <input type="submit" value="&{'crud.delete', type.modelName}" />
+            <input class="confirm" data-confirm="Delete task? It will delete also all solutions!" type="submit" value="&{'crud.delete', type.modelName}" />
         </p>
     #{/form}
 
+    #{form @unevaluate(object._key())}
+        <p class="crudDelete">
+            <input class="confirm" data-confirm="Really remove evaluation of all solutions for this task?" type="submit" value="&{'Remove all evaluations'}" />
+        </p>
+    #{/form}	
+	
 </div>

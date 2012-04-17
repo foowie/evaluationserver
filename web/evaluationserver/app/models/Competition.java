@@ -55,8 +55,8 @@ public class Competition extends Model {
 
 	
 	@JoinTable(name = "CompetitionGroup", joinColumns = {
-    	@JoinColumn(name = "groupId", referencedColumnName = "id")}, inverseJoinColumns = {
-    	@JoinColumn(name = "competitionId", referencedColumnName = "id")})
+    	@JoinColumn(name = "competitionId", referencedColumnName = "id")}, inverseJoinColumns = {
+    	@JoinColumn(name = "groupId", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.LAZY)
 	public List<UserGroup> groups;
 	

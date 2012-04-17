@@ -16,8 +16,6 @@ public class FileData extends Model {
 	@Required
 	public byte[] data;
 
-//	@OneToMany(mappedBy = "fileData")
-//	public List<File> fileList;
 	@Override
 	public String toString() {
 		return getId().toString();

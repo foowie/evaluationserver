@@ -52,8 +52,8 @@ public class SystemCompilerTest {
 		
 		source = new FileMock("/source");
 		
-		SystemCompiler instance = new SystemCompiler("run IN OUT", "IN", "OUT", systemCommand);
-		instance.compile(source, destination);
+		SystemCompiler instance = new SystemCompiler("run IN OUT", "IN", "OUT");
+		instance.compile(source, destination, systemCommand);
 	}
 
 //	@Test(expected=CompilationException.class)
@@ -75,16 +75,16 @@ public class SystemCompilerTest {
 			oneOf(systemCommand).exec("one /source /destination"); will(returnValue(0));
 		}});		
 		
-		SystemCompiler instance = new SystemCompiler("one IN OUT", "IN", "OUT", systemCommand);
-		instance.compile(source, destination);
+		SystemCompiler instance = new SystemCompiler("one IN OUT", "IN", "OUT");
+		instance.compile(source, destination, systemCommand);
 	}
 	
 	@Test(expected=CompilationException.class)
 	public void testCompileFail() throws Exception {
 		System.out.println("compile");
 		
-		SystemCompiler instance = new SystemCompiler("fail IN OUT", "IN", "OUT", systemCommand);
-		instance.compile(source, destination);
+		SystemCompiler instance = new SystemCompiler("fail IN OUT", "IN", "OUT");
+		instance.compile(source, destination, systemCommand);
 	}
 
 	@Test

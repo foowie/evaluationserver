@@ -2,13 +2,15 @@ package controllers.admin;
 
 import controllers.CRUD;
 import controllers.Check;
-import java.util.List;
-import java.util.Map;
+import models.ResolverFile;
 import models.Role;
-import play.mvc.After;
+import play.mvc.Before;
 import play.mvc.With;
-import play.data.validation.Error;
 
+/**
+ * CRUD controller for model ResolverFile
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Check(Role.Check.ADMIN)
 @With({
 	controllers.Secure.class,
@@ -17,20 +19,18 @@ import play.data.validation.Error;
 	controllers.admin.with.Menu.class
 })
 public class ResolverFiles extends CRUD {
-//	@After
-//	public static void rollbackOnValidationError() {
-//		
-//		
-//		if(validation.hasErrors()) {
-//			System.out.println("------------------------------------------\nErrors:");
-//			Map<String, List<Error>> errorsMap = validation.errorsMap();
-//			for(String field : errorsMap.keySet()) {
-//				System.out.println("\"" + field + "\"");
-//				for(Error error : errorsMap.get(field)) {
-//					System.out.println(" - " + error.message());
-//				}
-//			}
-//				
-//		}
-//	}
+
+	/**
+	 * Check for delete constraints
+	 * @param id 
+	 */
+	@Before(only = {"delete"})
+	public static void beforeDelete(Long id) {
+		ResolverFile file = ResolverFile.findById(id);
+		notFoundIfNull(file);
+		if (!file.tasks.isEmpty()) {
+			flash.error("Can't delete this file! Is used in " + file.tasks.size() + " task" + (file.tasks.size() > 1 ? "s" : "") + ": " + file.tasks.get(0).name + (file.tasks.size() > 1 ? ", ..." : ""));
+			redirect(request.controller + ".show", id);
+		}
+	}
 }

@@ -11,6 +11,7 @@ public class SystemCommand {
 	private Process process = null;
 	private String output = null;
 	private String error = null;
+	private int returnCode = -1;
 
 	public SystemCommand(Runtime runtime) {
 		this.runtime = runtime;
@@ -32,7 +33,8 @@ public class SystemCommand {
 			outputStream.write(input.getBytes());
 			outputStream.close();
 		}
-		return process.waitFor();
+		returnCode = process.waitFor();
+		return returnCode;
 	}
 
 	public int exec(String command) throws IOException, InterruptedException {
@@ -43,7 +45,7 @@ public class SystemCommand {
 		if (process == null) {
 			throw new IllegalStateException("Execute command before 'getReturnCode' call");
 		}
-		return process.exitValue();
+		return returnCode;
 	}
 
 	public String getOutput() throws IOException {

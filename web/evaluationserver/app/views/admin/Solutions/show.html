@@ -40,12 +40,12 @@
 
     #{form @delete(object._key())}
         <p class="crudDelete">
-            <input type="submit" value="&{'crud.delete', type.modelName}" />
+            <input class="confirm"type="submit" value="&{'crud.delete', type.modelName}" />
         </p>
     #{/form}
     #{form @unevaluate(object._key())}
         <p class="crudDelete">
-            <input type="submit" value="&{'Remove evaluation'}" />
+            <input class="confirm" data-confirm="Really remove evaluation?" type="submit" value="&{'Remove evaluation'}" />
         </p>
     #{/form}
 

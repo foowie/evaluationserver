@@ -19,4 +19,15 @@ $(function() {
 		} else
 			return true;
 	});
+	
+	$(".confirm").live("click", function (event) {
+		var message = $(this).attr("data-confirm");
+		if(message == undefined)
+			message = "Delete this record?";
+		var e = jQuery.Event(event);
+		if (!confirm(message)) {
+			e.stopImmediatePropagation();
+			e.preventDefault();
+		}
+	});	
 });

@@ -80,6 +80,15 @@ public class Solution extends Model {
 		super._save();
 	}	
 	
+	public void unevaluate() {
+		evaluated = null;
+		evaluationLockUntil = null;
+		log = null;
+		memory = null;
+		systemReply = null;
+		timeLength = null;		
+	}
+	
 	@Override
 	public String toString() {
 		return getId().toString();

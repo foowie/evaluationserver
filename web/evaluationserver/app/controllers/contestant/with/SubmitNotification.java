@@ -13,7 +13,7 @@ public class SubmitNotification extends Controller {
 	@After
 	public static void checkCompetition() throws UnknownHostException, IOException {
 		String action = request.action.substring(request.action.lastIndexOf(".") + 1);
-		if(!action.equals("submit"))
+		if(!action.equals("submit") && !action.equals("unevaluate"))
 			return;
 		
 		InetAddress addr = InetAddress.getByName(Play.configuration.getProperty("server.host", "localhost"));

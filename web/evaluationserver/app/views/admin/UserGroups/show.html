@@ -3,13 +3,10 @@
 
 <div id="crudShow" class="${type.name}">
 
+    
     #{form action:@save(object._key()), enctype:'multipart/form-data'}
 	<table class="table">
         #{crud.form /}
-		<tr>
-			<th></th>
-			<td><a href="@{admin.with.Files.download(object._key())}">Download file '${object.name}'</a></td>
-		</tr>
 		<tr>
 			<th></th>
 			<td>
@@ -22,7 +19,8 @@
 
     #{form @delete(object._key())}
         <p class="crudDelete">
-            <input class="confirm" data-confirm="Delete this file?" type="submit" value="&{'crud.delete', type.modelName}" />
+            <input class="confirm" data-confirm="Delete this team?" type="submit" value="&{'crud.delete', type.modelName}" />
         </p>
-    #{/form}	
+    #{/form}
+
 </div>

@@ -12,17 +12,11 @@ public class SystemCompiler implements Compiler {
 	private final String command;
 	private final String inputKey;
 	private final String outputKey;
-	private final SystemCommand systemCommand;
 
-	public SystemCompiler(String command, String inputKey, String outputKey, SystemCommand systemCommand) {
+	public SystemCompiler(String command, String inputKey, String outputKey) {
 		this.command = command;
 		this.inputKey = inputKey;
 		this.outputKey = outputKey;
-		this.systemCommand = systemCommand;
-	}
-
-	public SystemCompiler(String command, String inputKey, String outputKey) {
-		this(command, inputKey, outputKey, new SystemCommand());
 	}
 
 	public SystemCompiler(String command) {
@@ -31,6 +25,10 @@ public class SystemCompiler implements Compiler {
 
 	@Override
 	public void compile(File source, File destination) throws CompilationException {
+		compile(source, destination, new SystemCommand());
+	}
+	
+	public void compile(File source, File destination, SystemCommand systemCommand) throws CompilationException {
 		if (!source.exists()) {
 			throw new CompilationException("Source file doesnt exists " + source.getAbsolutePath());
 		}
@@ -40,7 +38,7 @@ public class SystemCompiler implements Compiler {
 			logger.log(Level.FINER, ("Start compilling file " + source.getAbsolutePath() + " ..."));
 			
 			if(systemCommand.exec(cmd) != 0)
-				throw new CompilationException("Compilation process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ") (" + systemCommand.getError() + ")");
+				throw new CompilationException("Compilation process return value: " + systemCommand.getReturnCode() + " (" + systemCommand.getOutput() + ") (" + systemCommand.getError() + ")");
 				
 			logger.log(Level.FINEST, ("Compilator message: '" + systemCommand.getOutput() + "'"));
 

@@ -7,6 +7,7 @@
 #include <sys/reg.h>
 #include <sys/user.h>
 #include <sys/syscall.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <errno.h>
 

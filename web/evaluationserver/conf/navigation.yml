@@ -177,7 +177,7 @@ MenuItem(adminContestants):
   - UserGroups
 
 MenuItem(adminUserGroups):
- text: User groups
+ text: Teams
  parent: admin
  action: admin.UserGroups.list
  labels: 
@@ -246,10 +246,6 @@ MenuItem(adminSolutions):
   - Solutions
   - Tasks
   - UserGroups
-
-
-
-
 
 MenuItem(adminLogout):
  text: Logout

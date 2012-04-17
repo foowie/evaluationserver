@@ -42,10 +42,6 @@ public class UserGroup extends Model {
 	public List<Contestant> users;
 
 
-	@Basic(optional = false)
-    @Column(name = "active")
-	public boolean active = true;	
-	
 	@Override
 	public String toString() {
 		return name;

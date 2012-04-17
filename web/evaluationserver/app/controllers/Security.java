@@ -3,13 +3,28 @@ package controllers;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 import models.*;
 
+/**
+ * Extended class for authorization and authentication
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class Security extends Secure.Security {
 
+	/**
+	 * Is this user allowed to log in?
+	 * @param login
+	 * @param password
+	 * @return 
+	 */
 	static boolean authenticate(String login, String password) {
-		User user = User.findActiveByLogin(login);
-		if (!user.active) {
+		User user = null;
+		try {
+			user = User.findActiveByLogin(login);
+		} catch (NoResultException e) {
 			return false;
 		}
 		if (!user.password.equals(hashPassword(password))) {
@@ -18,8 +33,20 @@ public class Security extends Secure.Security {
 		return true;
 	}
 
+	/**
+	 * Processed after authentication
+	 */
 	static void onAuthenticated() {
-		Role role = User.getLoggedUser().role;
+		Role role = null;
+		try {
+			role = User.getLoggedUser().role;
+		} catch (NoResultException e) {
+			try {
+				Secure.login();
+			} catch (Throwable ex) {
+				Logger.getLogger(Security.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 		if (role.is(Role.Check.ADMIN)) {
 			CRUD.index();
 		}
@@ -29,9 +56,19 @@ public class Security extends Secure.Security {
 		throw new IllegalStateException("Invalid role " + role.key);
 	}
 
+	/**
+	 * Has user any role specified in profile? (separated by comma)
+	 * @param profile
+	 * @return 
+	 */
 	static boolean check(String profile) {
 		String[] roles = profile.split(",");
-		String userRole = User.findActiveByLogin(connected()).role.key;
+		String userRole;
+		try {
+			userRole = User.findActiveByLogin(connected()).role.key;
+		} catch (NoResultException e) {
+			return false;
+		}
 		for (String role : roles) {
 			if (userRole.equals(role)) {
 				return true;
@@ -40,14 +77,27 @@ public class Security extends Secure.Security {
 		return false;
 	}
 
+	/**
+	 * When user is not allowed to process action
+	 * @param profile 
+	 */
 	public static void onCheckFailed(String profile) {
 		forbidden();
-	}	
-	
+	}
+
+	/**
+	 * When user is not allowed to process action
+	 * @param profile 
+	 */
 	public static void onCheckFailed() {
 		onCheckFailed(null);
 	}
 
+	/**
+	 * Hash password by SHA-256
+	 * @param password
+	 * @return 
+	 */
 	public static String hashPassword(String password) {
 		MessageDigest md;
 		try {
@@ -72,8 +122,11 @@ public class Security extends Secure.Security {
 		return sb.toString();
 	}
 
+	/**
+	 * Return user name
+	 * @return 
+	 */
 	public static String getUsername() {
 		return isConnected() ? connected() : null;
 	}
-	
 }
