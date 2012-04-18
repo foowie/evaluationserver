@@ -21,6 +21,7 @@ import controllers.CRUD.Exclude;
 import javax.persistence.FetchType;
 import javax.persistence.Query;
 import play.data.binding.As;
+import play.data.validation.Min;
 import play.db.jpa.JPA;
 
 /**
@@ -49,9 +50,14 @@ public class Competition extends Model {
 	@Column(name = "stopDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date stopDate;
-	@Basic(optional = false)
+	@Min(0)
+	@Basic(optional = true)
 	@Column(name = "timePenalization")
-	public int timePenalization; // [min]
+	public Integer timePenalization; // [min]
+	@Min(0)
+	@Basic(optional = true)
+	@Column(name = "dontUpdateStatisticsBefore")
+	public Integer dontUpdateStatisticsBefore = 20; // [min]
 	@JoinTable(name = "CompetitionGroup", joinColumns = {
 		@JoinColumn(name = "competitionId", referencedColumnName = "id")}, inverseJoinColumns = {
 		@JoinColumn(name = "groupId", referencedColumnName = "id")})

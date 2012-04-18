@@ -40,7 +40,7 @@ public class Competitions extends CRUD {
 			redirect(Router.getFullUrl("admin.Competitions.list"));
 		}
 		ContestantsStatistics cs = new ContestantsStatistics();
-		Collection<ContestantsResult> contestantsStatistics = cs.getStatistics(competition);
+		Collection<ContestantsResult> contestantsStatistics = cs.getStatistics(competition, true);
 		render(contestantsStatistics);
 	}
 }

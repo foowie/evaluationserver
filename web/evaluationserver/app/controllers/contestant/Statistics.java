@@ -47,7 +47,7 @@ public class Statistics extends Controller {
 
 		ContestantsStatistics cs = new ContestantsStatistics();
 		if(cs.hasStatistics(competition)) {
-			Collection<ContestantsResult> contestantsStatistics = cs.getStatistics(competition);
+			Collection<ContestantsResult> contestantsStatistics = cs.getStatistics(competition, false);
 			renderArgs.put("contestantsStatistics", contestantsStatistics);
 		} else {
 			renderArgs.put("contestantsStatistics", null);
