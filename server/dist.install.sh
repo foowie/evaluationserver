@@ -14,5 +14,7 @@ cp config/configuration.xml /etc/evaluationserver/server/
 cp config/service.config.properties /etc/evaluationserver/server/config.properties
 cp config/service.logging.properties /etc/evaluationserver/server/logging.properties
 ln -s /etc/evaluationserver/server /usr/share/evaluationserver/server/config
-echo "#!/bin/bash\ncd /usr/share/evaluationserver/server/\nexec ./run.sh" > /usr/sbin/evaluationserver-server
+echo "#!/bin/bash
+cd /usr/share/evaluationserver/server/
+exec ./run.sh" > /usr/sbin/evaluationserver-server
 chmod +x /usr/sbin/evaluationserver-server
