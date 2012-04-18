@@ -44,7 +44,7 @@ public class InspectorImpl implements Inspector {
 			systemCommand.exec(cmd);
 			
 			if(systemCommand.getReturnCode() != 0)
-				throw new InspectionException("Inspection process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ")");
+				throw new InspectionException("Inspection process return value: " + systemCommand.getReturnCode() + "(" + systemCommand.getOutput() + ") / (" + systemCommand.getError() + ")");
 			
 			logger.log(Level.FINEST, ("Inspection message: '" + systemCommand.getOutput() + "'"));
 			
