@@ -48,7 +48,7 @@ public class Security extends Secure.Security {
 			}
 		}
 		if (role.is(Role.Check.ADMIN)) {
-			CRUD.index();
+			redirect("admin.Competitions.list");
 		}
 		if (role.is(Role.Check.CONTESTANT)) {
 			controllers.contestant.Competitions.index();
