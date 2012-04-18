@@ -8,33 +8,30 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
+/**
+ * System reply that could be assigned to solution
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @Table(name = "SystemReply")
 public class SystemReply extends Model {
-	
-	
+
 	@Basic(optional = false)
-    @Column(name = "accepting")
+	@Column(name = "accepting")
 	public boolean accepting;
-	
 	@Required
 	@MaxSize(2)
 	@Basic(optional = false)
-    @Column(name = "keyName")
+	@Column(name = "keyName")
 	public String key;
-	
 	@Required
 	@MaxSize(100)
 	@Basic(optional = false)
-    @Column(name = "name")
+	@Column(name = "name")
 	public String name;
-	
-//	@OneToMany(mappedBy = "systemReply")
-//	public List<Solution> solutionList;
 
 	@Override
 	public String toString() {
 		return name;
 	}
-	
 }

@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class notify evaluation server to evaluate solutions
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class TCPNotificator {
 
 	private int port;

@@ -4,6 +4,10 @@ import java.util.Map;
 import models.Contestant;
 import models.Task;
 
+/**
+ * Single contestant with his results in competition
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class ContestantsResult implements Comparable<ContestantsResult> {
 
 	private Contestant contestant;

@@ -9,19 +9,30 @@ import play.mvc.After;
 import play.mvc.Before;
 import play.mvc.Controller;
 
+/**
+ * Helper class for File type CRUD controller
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class Files extends Controller {
 
+	/**
+	 * Create FileData object first
+	 * @param data
+	 * @throws Exception 
+	 */
 	@Before
 	public static void beforeCreate(java.io.File data) throws Exception {
 		String action = request.action.substring(request.action.lastIndexOf(".") + 1);
-		if(!action.equals("create"))
+		if (!action.equals("create")) {
 			return;
+		}
 		if (validation.required(data).message("crud.help.required").ok) {
 			final long size = data.length();
 			if (validation.max(size, Integer.MAX_VALUE).ok) {
-				final byte[] fileData = new byte[(int)size];
-				if(new FileInputStream(data).read(fileData) != size)
+				final byte[] fileData = new byte[(int) size];
+				if (new FileInputStream(data).read(fileData) != size) {
 					throw new Exception("Upload failed");
+				}
 				FileData fd = new FileData(fileData);
 				fd.create();
 				params.put("object.size", Long.toString(size));
@@ -31,18 +42,27 @@ public class Files extends Controller {
 		}
 	}
 
+	/**
+	 * Delete FileData object after delete
+	 * @throws Exception 
+	 */
 	@After
 	public static void afterDelete() throws Exception {
 		String action = request.action.substring(request.action.lastIndexOf(".") + 1);
-		if(!action.equals("delete"))
+		if (!action.equals("delete")) {
 			return;
+		}
 		JPA.em().createQuery("DELETE FROM FileData fd WHERE fd NOT IN (SELECT f.data FROM File f)").executeUpdate();
 	}
-	
-	
+
+	/**
+	 * Download file
+	 * @param id
+	 * @throws Exception 
+	 */
 	public static void download(Long id) throws Exception {
-        File file = File.findById(id);
-        notFoundIfNull(file);
+		File file = File.findById(id);
+		notFoundIfNull(file);
 		renderBinary(new ByteArrayInputStream(file.data.data), file.name, file.size);
 	}
 }

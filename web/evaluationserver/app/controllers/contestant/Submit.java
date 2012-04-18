@@ -15,6 +15,10 @@ import play.db.jpa.JPA;
 import play.mvc.Controller;
 import play.mvc.With;
 
+/**
+ * Submit new solution
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @controllers.Check(Role.Check.CONTESTANT)
 @With({
 	controllers.Secure.class,
@@ -24,24 +28,38 @@ import play.mvc.With;
 })
 public class Submit extends Controller {
 
+	/**
+	 * Show solutions
+	 * @param competitionId 
+	 */
 	public static void index(long competitionId) {
 		List<Language> languages = Language.findAll();
-		List<Task> tasks = ((models.Competition)renderArgs.get("competition")).tasks;
-		
+		List<Task> tasks = ((models.Competition) renderArgs.get("competition")).tasks;
+
 		render(languages, tasks);
 	}
 
+	/**
+	 * Post new solution
+	 * @param competitionId
+	 * @param solution
+	 * @param taskId
+	 * @param languageId
+	 * @throws IOException 
+	 */
 	public static void submit(long competitionId, @Required File solution, @Required long taskId, @Required long languageId) throws IOException {
 		models.Task task = models.Task.findById(taskId);
 		models.Language lang = models.Language.findById(languageId);
-		if(task == null || !task.isInCompetition(competitionId))		
+		if (task == null || !task.isInCompetition(competitionId)) {
 			validation.addError("taskId", "Invalid task");
-		if(lang == null)
+		}
+		if (lang == null) {
 			validation.addError("languageId", "Invalid language");
+		}
 		Contestant loggedUser = Contestant.getLoggedUser();
-		Long count = (Long)JPA.em().createQuery("SELECT COUNT(s) FROM Solution s WHERE s.user = :contestant AND s.evaluated IS NULL").setParameter("contestant", loggedUser).getSingleResult();
+		Long count = (Long) JPA.em().createQuery("SELECT COUNT(s) FROM Solution s WHERE s.user = :contestant AND s.evaluated IS NULL").setParameter("contestant", loggedUser).getSingleResult();
 		validation.max(count, 5).key("error").message("You have reached maximum submitted solution in queue");
-		
+
 		if (validation.hasErrors()) {
 			params.flash();
 			validation.keep();
@@ -50,14 +68,14 @@ public class Submit extends Controller {
 
 		Solution s = new Solution();
 		s.file = new SolutionFile(solution);
-		s.competition = (models.Competition)renderArgs.get("competition");
+		s.competition = (models.Competition) renderArgs.get("competition");
 		s.created = new Date();
 		s.language = lang;
 		s.task = task;
 		s.user = loggedUser;
 		s.save();
 		JPA.em().getTransaction().commit();
-		
+
 		Solutions.index(competitionId);
 	}
 }

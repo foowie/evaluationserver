@@ -2,6 +2,10 @@ package services.task;
 
 import models.Contestant;
 
+/**
+ * Statistics of single user in task
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class ContestantResult implements Comparable<ContestantResult> {
 
 	private Contestant user;

@@ -8,19 +8,22 @@ import javax.persistence.OneToMany;
 import controllers.CRUD.Exclude;
 import javax.persistence.FetchType;
 
+/**
+ * User in administration role
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @DiscriminatorValue("1")
 public class Admin extends User {
-	
+
 	@Exclude
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "creator")
 	public List<Task> tasks;
-	
 	@Exclude
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "creator")
-	public List<Competition> competitions;	
-	
+	public List<Competition> competitions;
+
 	public static Admin getLoggedUser() {
-		return (Admin)User.getLoggedUser();
+		return (Admin) User.getLoggedUser();
 	}
 }

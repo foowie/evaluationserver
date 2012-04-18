@@ -7,6 +7,10 @@ import javax.persistence.Table;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
+/**
+ * Data of file
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @Table(name = "FileData")
 public class FileData extends Model {

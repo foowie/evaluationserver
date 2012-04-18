@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
+/**
+ * File that contains data of solution
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @DiscriminatorValue("4")
 public class SolutionFile extends File {
@@ -16,10 +20,9 @@ public class SolutionFile extends File {
 
 	public SolutionFile() {
 	}
-	
+
 	public SolutionFile(java.io.File file) throws IOException {
 		super(file);
 		title = file.getName();
 	}
-
 }

@@ -12,6 +12,10 @@ import services.competition.ContestantsResult;
 import services.competition.ContestantsStatistics;
 import models.Competition;
 
+/**
+ * User's statistics
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @controllers.Check(Role.Check.CONTESTANT)
 @With({
 	controllers.Secure.class, 
@@ -20,10 +24,12 @@ import models.Competition;
 })
 public class Statistics extends Controller {
 
+	/**
+	 * Statistics by task
+	 * @param competitionId 
+	 */
 	public static void index(long competitionId) {
-		
 		Competition competition = (Competition)renderArgs.get("competition");
-		
 		
 		Query query = JPA.em().createQuery(
 			"SELECT t.id, t.name, " +

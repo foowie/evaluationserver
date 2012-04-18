@@ -1,6 +1,11 @@
 package services.task;
 
+/**
+ * Single statistics of system reply of task
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 public class SystemReplyResult {
+
 	private String name;
 	private long count;
 	private double relativeCount;
@@ -22,5 +27,4 @@ public class SystemReplyResult {
 	public double getRelativeCount() {
 		return relativeCount;
 	}
-	
 }

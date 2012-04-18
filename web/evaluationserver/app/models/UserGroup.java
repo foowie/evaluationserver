@@ -15,6 +15,10 @@ import play.db.jpa.Model;
 import controllers.CRUD.Exclude;
 import javax.persistence.FetchType;
 
+/**
+ * Team of users
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @Table(name = "UserGroup")
 public class UserGroup extends Model {
@@ -22,29 +26,24 @@ public class UserGroup extends Model {
 	@Required
 	@MaxSize(100)
 	@Basic(optional = false)
-    @Column(name = "name")
-	public String name;	
-	
+	@Column(name = "name")
+	public String name;
 	@MaxSize(65536)
 	@Basic(optional = false)
-    @Lob
-    @Column(name = "description")
-	public String description;	
-	
+	@Lob
+	@Column(name = "description")
+	public String description;
 	@Exclude
 	@ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
 	public List<Competition> competitions;
-	
 	@JoinTable(name = "UserUserGroup", joinColumns = {
-    	@JoinColumn(name = "groupId", referencedColumnName = "id")}, inverseJoinColumns = {
-    	@JoinColumn(name = "userId", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY)
+		@JoinColumn(name = "groupId", referencedColumnName = "id")}, inverseJoinColumns = {
+		@JoinColumn(name = "userId", referencedColumnName = "id")})
+	@ManyToMany(fetch = FetchType.LAZY)
 	public List<Contestant> users;
-
 
 	@Override
 	public String toString() {
 		return name;
 	}
-	
 }

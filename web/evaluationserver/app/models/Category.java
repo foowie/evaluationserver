@@ -11,23 +11,24 @@ import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
+/**
+ * Category of task
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @Table(name = "Category")
 public class Category extends Model {
-	
+
 	@Required
 	@MaxSize(200)
 	@Basic(optional = false)
-    @Column(name = "name")
+	@Column(name = "name")
 	public String name;
-	
 	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	public List<Task> tasks;
-
 
 	@Override
 	public String toString() {
 		return name;
 	}
-	
 }

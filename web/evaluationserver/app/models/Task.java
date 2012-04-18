@@ -24,87 +24,76 @@ import javax.persistence.OneToOne;
 import play.Play;
 import play.db.jpa.JPA;
 
+/**
+ * Task to solve
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Entity
 @Table(name = "Task")
 public class Task extends Model {
-	
+
 	@Required
 	@MaxSize(100)
 	@Basic(optional = false)
-    @Column(name = "name")
-	public String name;	
-
+	@Column(name = "name")
+	public String name;
 	@Required
 	@MaxSize(65536)
 	@Basic(optional = false)
-    @Lob
-    @Column(name = "description")
+	@Lob
+	@Column(name = "description")
 	public String description;
-	
 	@JoinColumn(name = "category", referencedColumnName = "id")
-    @ManyToOne
-	public Category category;	
-	
+	@ManyToOne
+	public Category category;
 	@Exclude
 	@Basic(optional = false)
-    @Column(name = "created")
-    @Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date created;
-	
 	@Required
 	@Basic(optional = false)
-    @Column(name = "timeLimit")
-	public int timeLimit;	
-
+	@Column(name = "timeLimit")
+	public int timeLimit;
 	@Required
 	@Basic(optional = false)
-    @Column(name = "sourceLimit")
+	@Column(name = "sourceLimit")
 	public int sourceLimit;
-	
 	@Required
 	@Basic(optional = false)
-    @Column(name = "memoryLimit")
+	@Column(name = "memoryLimit")
 	public int memoryLimit;
-	
 	@Required
 	@Basic(optional = false)
-    @Column(name = "outputLimit")
+	@Column(name = "outputLimit")
 	public int outputLimit;
-	
 	@MaxSize(65536)
 	@Lob
-    @Column(name = "sampleInput")
+	@Column(name = "sampleInput")
 	public String sampleInput;
-	
 	@MaxSize(65536)
 	@Lob
-    @Column(name = "sampleOutput")
+	@Column(name = "sampleOutput")
 	public String sampleOutput;
-	
 	@Exclude
 	@ManyToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
 	public List<Competition> competitions;
-	
 	@Required
 	@JoinColumn(name = "resultResolver", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public ResolverFile resultResolver;
-	
 	@Required
 	@JoinColumn(name = "inputData", referencedColumnName = "id")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	public InputFile inputData;
-	
 	@JoinColumn(name = "outputData", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	public OutputFile outputData;
-	
 	@Exclude
 	@Required
 	@JoinColumn(name = "creator", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public Admin creator;
-	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "task")
 	public List<Solution> solutions;
 
@@ -114,33 +103,41 @@ public class Task extends Model {
 		sourceLimit = Integer.parseInt(Play.configuration.getProperty("task.default.sourceLimit", "0"));
 		outputLimit = Integer.parseInt(Play.configuration.getProperty("task.default.outputLimit", "0"));
 	}
-	
+
 	@Override
 	public void _save() {
-		if(created == null)
+		if (created == null) {
 			created = new Date();
+		}
 		super._save();
-	}	
-	
+	}
+
+	/**
+	 * Remove file with output data
+	 */
 	public void deleteOutputData() {
-		if(outputData != null) {
+		if (outputData != null) {
 			File file = outputData;
 			outputData = null;
 			save();
 			file.delete();
 		}
 	}
-	
+
+	/**
+	 * Checks if this task is in given competition
+	 * @param competitionId
+	 * @return 
+	 */
 	public boolean isInCompetition(Long competitionId) {
 		Query query = JPA.em().createQuery("SELECT COUNT(c) AS count FROM Competition c JOIN c.tasks t WHERE c.id=:cId AND t.id=:tId");
 		query.setParameter("cId", competitionId);
 		query.setParameter("tId", this.getId());
-		return ((Long)query.getSingleResult()) > 0;
+		return ((Long) query.getSingleResult()) > 0;
 	}
-	
+
 	@Override
 	public String toString() {
 		return category == null ? name : (category.name + " - " + name);
 	}
-	
 }
