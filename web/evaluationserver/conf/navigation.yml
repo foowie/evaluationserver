@@ -13,6 +13,7 @@ MenuItem(contestantCompetitions):
   - Solutions
   - Submit
   - Statistics
+  - Help
   
 MenuItem(contestantCompetition):
  text: Competition
@@ -100,20 +101,18 @@ MenuItem(contestantLogout):
  action: Secure.logout
  properties:
    class: right
- labels: 
-  - Competitions
-  - Competition
-  - Tasks
-  - Task
-  - Solutions
-  - Submit
-  - Statistics
-  - Task  
   
 MenuItem(contestantChangePassword):
  text: Change password
  parent: contestant
  action: ChangePassword.index
+ properties:
+   class: right
+  
+MenuItem(contestantHelp):
+ text: Help
+ parent: contestant
+ action: contestant.Help.index
  properties:
    class: right
  labels: 
@@ -124,7 +123,8 @@ MenuItem(contestantChangePassword):
   - Solutions
   - Submit
   - Statistics
-  - Task 
+  - Task
+  - Help
   
 
 #-------------------------------------------------------------------------------

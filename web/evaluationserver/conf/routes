@@ -6,12 +6,14 @@
 GET     /                                       Application.index
 
 # Contestant
-GET		/contestant								contestant.Competitions.index
-GET		/contestant/competition					contestant.Competition.index
-GET		/contestant/competition/tasks			contestant.Tasks.index
-GET		/contestant/competition/task			contestant.Task.index
-GET		/contestant/competition/solutions		contestant.Solutions.index
-GET		/contestant/competition/statistics		contestant.Statistics.index
+GET		/contestant												contestant.Competitions.index
+GET		/contestant/help										contestant.Help.index
+GET		/contestant/competition/{competitionId}					contestant.Competition.index
+GET		/contestant/competition/{competitionId}/tasks			contestant.Tasks.index
+GET		/contestant/competition/{competitionId}/task/{taskId}	contestant.Task.index
+GET		/contestant/competition/{competitionId}/submit			contestant.Submit.index
+GET		/contestant/competition/{competitionId}/solutions		contestant.Solutions.index
+GET		/contestant/competition/{competitionId}/statistics		contestant.Statistics.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
