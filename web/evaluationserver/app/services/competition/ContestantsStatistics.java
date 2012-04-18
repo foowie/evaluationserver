@@ -36,7 +36,6 @@ public class ContestantsStatistics {
 			calendar.setTime(competition.stopDate);
 			calendar.add(Calendar.MINUTE, -competition.dontUpdateStatisticsBefore);
 			toDate = calendar.getTime();
-			System.out.println(toDate.toString());
 		}
 
 		for (UserGroup group : competition.groups) {

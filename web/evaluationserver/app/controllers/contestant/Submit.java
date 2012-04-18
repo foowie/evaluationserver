@@ -76,6 +76,6 @@ public class Submit extends Controller {
 		s.save();
 		JPA.em().getTransaction().commit();
 
-		Solutions.index(competitionId);
+		Solutions.index(competitionId, 1);
 	}
 }
