@@ -30,6 +30,8 @@ chmod +x dist/server/install-service.sh
 chmod +x dist/server/uninstall-service.sh
 chmod +x dist/server/service.sh
 
+cp database.mysql.sql dist/database.mysql.sql
+
 ant -file server/nbproject/build-impl.xml clean
 
 
