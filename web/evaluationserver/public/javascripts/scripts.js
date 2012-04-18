@@ -30,4 +30,13 @@ $(function() {
 			e.preventDefault();
 		}
 	});	
+	
+	$('#crudListTable input').keyup(function(e) {
+		if(e.keyCode == 13) {
+			$('#crudSearchSubmit').click();
+		}
+	});	
+	$('#crudListTable select').change(function(e) {
+		$('#crudSearchSubmit').click();
+	});	
 });

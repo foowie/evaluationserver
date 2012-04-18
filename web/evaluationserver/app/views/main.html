@@ -37,22 +37,19 @@
 					${error ?: flash.error}
 				</div>
 			#{/if}
-#{ifErrors 'error'}
- 
-   <h1>Oops…</h1>
-   <ul>
-   #{errors 'error'}
-       <li>${error}</li>
-   #{/errors}
-   </ul>
-#{/ifErrors}
+
 
 			<div id="content">
-<!--				<div class="flashes " style="height: auto; width: 100%;">
-					<div n:foreach="$flashes as $flash" class="flash {$flash->type} ui-corner-all" style="margin: auto; width: 700px;">{$flash->message}</div>
-				</div>-->
-
 				<div class="inner-content">
+					#{ifErrors 'error'}
+					   <h2>Error…</h2>
+					   <ul>
+						   #{errors 'error'}
+							   <li>${error}</li>
+						   #{/errors}
+					   </ul>
+					#{/ifErrors}
+				
 					<h2>#{get 'title' /}</h2>
 					#{doLayout /}
 				</div>

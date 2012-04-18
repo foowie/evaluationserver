@@ -21,6 +21,9 @@
 			#{crud.custom 'type'}
 				${object.isTraining() ? "Training" : "Competition"}
 			#{/crud.custom}			
+			#{crud.custom 'active'}
+				${object.active ? "Yes" : "No"}
+			#{/crud.custom}			
 			#{crud.custom ''}
 				<a href="@{statistics(object._key())}">Statistics</a>
 			#{/crud.custom}			
