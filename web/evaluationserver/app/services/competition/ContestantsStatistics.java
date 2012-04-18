@@ -24,7 +24,7 @@ import play.db.jpa.JPA;
 public class ContestantsStatistics {
 
 	public boolean hasStatistics(Competition competition) {
-		return competition.startDate != null && competition.stopDate != null;
+		return true; //competition.startDate != null && competition.stopDate != null;
 	}
 
 	public Collection<ContestantsResult> getStatistics(Competition competition, boolean forceActual) {
@@ -42,7 +42,7 @@ public class ContestantsStatistics {
 			for (Contestant contestant : group.users) {
 				Query query = JPA.em().createQuery(
 						"SELECT s.task.id, MIN(s.created) AS colutionCreated, "
-						+ "(SELECT COUNT(s2) FROM Solution s2 JOIN s2.systemReply sr2 WHERE s2.competition = :competition AND s2.user = :user AND sr2.accepting = false) AS invalidSubmittionCount "
+						+ "(SELECT COUNT(s2) FROM Solution s2 JOIN s2.systemReply sr2 WHERE s2.competition = :competition AND s2.user = :user AND sr2.accepting = false AND s2.task=s.task) AS invalidSubmittionCount "
 						+ "FROM Solution s "
 						+ "JOIN s.systemReply sr "
 						+ "WHERE s.competition = :competition "
@@ -54,17 +54,21 @@ public class ContestantsStatistics {
 					query.setParameter("toDate", toDate);
 				}
 				List st = query.getResultList();
-				
 				final Map<Task, Integer> solvedTasks = new TreeMap<Task, Integer>(new TaskComparator());
 				long penalization = 0;
 				for (Object solved : st) {
 					final Task task = Task.findById(((Object[]) solved)[0]);
 					final Date solutionCreated = (Date) ((Object[]) solved)[1];
 					final long invalidSubmittionCount = (Long) ((Object[]) solved)[2];
-					solvedTasks.put(task, (int) (invalidSubmittionCount + 1));
-					penalization += solutionCreated.getTime() - competition.startDate.getTime();
-					if(competition.timePenalization != null)
-						penalization += competition.timePenalization * 60000 * invalidSubmittionCount;
+					solvedTasks.put(task, (int) (invalidSubmittionCount));
+					// short competition
+					if(competition.startDate != null & competition.stopDate != null) {
+						penalization += solutionCreated.getTime() - competition.startDate.getTime();
+						if(competition.timePenalization != null)
+							penalization += competition.timePenalization * 60000 * invalidSubmittionCount;
+					} else { // long time competition
+						penalization += invalidSubmittionCount;
+					}
 				}
 				result.add(new ContestantsResult(contestant, solvedTasks, penalization));
 			}

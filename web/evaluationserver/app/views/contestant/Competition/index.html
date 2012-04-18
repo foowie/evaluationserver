@@ -8,11 +8,15 @@
 		<td>${competition.name}</td>
 	</tr>
 	<tr>
+		<th>Type:</th>
+		<td>${competition.isTraining() ? "Training" : "Competition"}</td>
+	</tr>
+	<tr>
 		<th>Start:</th>
-		<td>${competition.startDate.format()}</td>
+		<td>${competition.startDate?.format()}</td>
 	</tr>
 	<tr>
 		<th>End:</th>
-		<td>${competition.stopDate.format()}</td>
+		<td>${competition.stopDate?.format()}</td>
 	</tr>
 </table>

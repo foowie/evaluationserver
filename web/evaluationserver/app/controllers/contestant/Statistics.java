@@ -53,8 +53,8 @@ public class Statistics extends Controller {
 			renderArgs.put("contestantsStatistics", null);
 		}
 		
-		
-		render(statistics);
+		Contestant contestant = Contestant.getLoggedUser();
+		render(statistics, contestant);
 	}	
 	
 }

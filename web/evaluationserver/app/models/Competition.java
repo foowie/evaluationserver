@@ -116,6 +116,14 @@ public class Competition extends Model {
 		q.setParameter("user", User.getLoggedUser());
 		return (List<models.Competition>) q.getResultList();
 	}
+	
+	/**
+	 * Is this competition long-time competition?
+	 * @return 
+	 */
+	public boolean isTraining() {
+		return startDate == null || stopDate == null;
+	}
 
 	@Override
 	public String toString() {

@@ -41,6 +41,6 @@ public class Competitions extends CRUD {
 		}
 		ContestantsStatistics cs = new ContestantsStatistics();
 		Collection<ContestantsResult> contestantsStatistics = cs.getStatistics(competition, true);
-		render(contestantsStatistics);
+		render(contestantsStatistics, competition);
 	}
 }

@@ -11,12 +11,15 @@
 		#{crud.search /}
 	</div>
 	<div id="crudListTable">
-		#{crud.table fields:['name', 'startDate', 'stopDate', 'active', '']}
+		#{crud.table fields:['name', 'startDate', 'stopDate', 'active', 'type', '']}
 			#{crud.custom 'startDate'}
 				${object.startDate?.format('yyyy-MM-dd HH:mm')}
 			#{/crud.custom}			
 			#{crud.custom 'stopDate'}
 				${object.stopDate?.format('yyyy-MM-dd HH:mm')}
+			#{/crud.custom}			
+			#{crud.custom 'type'}
+				${object.isTraining() ? "Training" : "Competition"}
 			#{/crud.custom}			
 			#{crud.custom ''}
 				<a href="@{statistics(object._key())}">Statistics</a>

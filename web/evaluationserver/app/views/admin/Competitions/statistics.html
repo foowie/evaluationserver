@@ -4,10 +4,11 @@
 
 	#{table contestantsStatistics, as:'user', class:'datagrid'}
 		#{column 'Position'} ${user.position} #{/column}
-		#{column 'Contestant'} ${user.contestant.login} #{/column}
+		#{column 'Contestant'} <a href="@{admin.Contestants.show(user.contestant.id)}">${user.contestant.login}</a> #{/column}
 		#{column 'Solved tasks'} 
 			#{list user.solvedTasks.keySet(), as:'key'}
-				${key.name} (${user.solvedTasks[key]})${key_isLast ? '' : ', '} 
+				<a href="@{admin.Tasks.show(key.id)}">${key.name}</a> 
+				(<a title="Number of wrong submittions" href="@{admin.Solutions.list(search_user: user.contestant.id, search_task: key.id, search_competition: competition.id)}">${user.solvedTasks[key]}</a>)${key_isLast ? '' : ', '} 
 			#{/list}
 		#{/column}
 	#{/table}

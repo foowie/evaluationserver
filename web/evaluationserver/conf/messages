@@ -44,3 +44,4 @@ inputData = Input data
 outputData = Output data
 category = Category
 dontUpdateStatisticsBefore = Update contestant's statistics<br> to [min] before end
+type = Type

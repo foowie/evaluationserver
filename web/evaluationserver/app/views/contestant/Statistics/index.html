@@ -13,12 +13,23 @@
 #{if contestantsStatistics != null}
 	<h3>Contestants statistics</h3>
 	#{table contestantsStatistics, as:'user', class:'datagrid'}
-		#{column 'Position'} ${user.position} #{/column}
-		#{column 'Contestant'} ${user.contestant.login} #{/column}
+		#{column 'Position'} 
+			#{if user.contestant.id == contestant.id}<b>#{/if}
+				${user.position} 
+			#{if user.contestant.id == contestant.id}</b>#{/if}
+		#{/column}
+		#{column 'Contestant'}
+			#{if user.contestant.id == contestant.id}<b>#{/if}
+				${user.contestant.login}
+			#{if user.contestant.id == contestant.id}</b>#{/if}
+		#{/column}
 		#{column 'Solved tasks'} 
-			#{list user.solvedTasks.keySet(), as:'key'}
-				${key.name} (${user.solvedTasks[key]})${key_isLast ? '' : ', '} 
-			#{/list}
+			#{if user.contestant.id == contestant.id}<b>#{/if}
+				#{list user.solvedTasks.keySet(), as:'key'}
+					<a href="@{contestant.Task.index(competition.id, key.id)}">${key.name}</a> 
+					<span title="Number of wrong submittions">(${user.solvedTasks[key]})</span>${key_isLast ? '' : ', '} 
+				#{/list}
+			#{if user.contestant.id == contestant.id}</b>#{/if}
 		#{/column}
 	#{/table}
 #{/if}

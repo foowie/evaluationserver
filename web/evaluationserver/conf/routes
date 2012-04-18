@@ -19,6 +19,7 @@ GET     /favicon.ico                            404
 # CRUD routes
 *		/admin									admin.Competitions.list
 *		/admin/									admin.Competitions.list
+*		/admin/competitions/{id}/statistics		admin.Competitions.statistics
 GET		/admin/tasks/remove-output-data/{id}	admin.Tasks.removeOutputData
 *		/admin/files/download/{id}				admin.with.Files.download
 *		/admin									module:crud

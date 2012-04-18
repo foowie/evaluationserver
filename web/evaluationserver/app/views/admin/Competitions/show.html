@@ -12,6 +12,10 @@
 			<td><a href="@{admin.Admins.show(object.id)}">${object.creator.toString()}</a></td>
 		</tr>
 		<tr>
+			<th>Type</th>
+			<td>${object.isTraining() ? "Training" : "Competition"}</td>
+		</tr>
+		<tr>
 			<th></th>
 			<td>
 				<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />

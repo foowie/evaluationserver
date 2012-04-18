@@ -9,17 +9,23 @@
   #{column 'Memory'} #{bytes solution.memory /} #{/column}
   #{column 'Time'} #{time solution.timeLength /} #{/column}
   #{column 'Download'} <a href="@{download(competition.id, solution.file.id)}">${solution.file}</a> #{/column}
-  #{column 'Reply'} ${solution.systemReply} #{/column}
+  #{column 'Reply'}
+	#{if solution.systemReply.accepting}<b>#{/if}
+		${solution.systemReply}
+	#{if solution.systemReply.accepting}</b>#{/if}
+  #{/column}
 #{/table}
 
-<p class="crudPages">
-	#{if page > 1}
-		<a href="@{index(competition.id, page-1)}" >&laquo; Previous</a>
-		<span class="page"><a href="@{index(competition.id, page-1)}" >${page-1}</a></span>
-	#{/if}
-	<span class="page"><strong>${page}</strong></span>
-	#{if pages > page}
-		<span class="page"><a href="@{index(competition.id, page+1)}" >${page+1}</a></span>
-		<a href="@{index(competition.id, page+1)}" >Next &raquo;</a>
-	#{/if}
-</p>
+#{if pages > 1 || page != 1}
+	<p class="crudPages">
+		#{if page > 1}
+			<a href="@{index(competition.id, page-1)}" >&laquo; Previous</a>
+			<span class="page"><a href="@{index(competition.id, page-1)}" >${page-1}</a></span>
+		#{/if}
+		<span class="page"><strong>${page}</strong></span>
+		#{if pages > page}
+			<span class="page"><a href="@{index(competition.id, page+1)}" >${page+1}</a></span>
+			<a href="@{index(competition.id, page+1)}" >Next &raquo;</a>
+		#{/if}
+	</p>
+#{/if}
