@@ -21,13 +21,11 @@ cp server/config/service.logging.properties dist/server/config/service.logging.p
 cp server/config/service.config.properties dist/server/config/service.config.properties
 
 cp server/dist.run.sh dist/server/run.sh
-cp server/dist.install.sh dist/server/install-service.sh
-cp server/dist.uninstall.sh dist/server/uninstall-service.sh
+cp server/dist.install.sh dist/server/install.sh
 cp server/dist.service.sh dist/server/service.sh
 
 chmod +x dist/server/run.sh
-chmod +x dist/server/install-service.sh
-chmod +x dist/server/uninstall-service.sh
+chmod +x dist/server/install.sh
 chmod +x dist/server/service.sh
 
 cp database.mysql.sql dist/database.mysql.sql
@@ -37,7 +35,24 @@ ant -file server/nbproject/build-impl.xml clean
 
 cd tracer/
 make CONF=Release build
-cp dist/Release/GNU-Linux-x86/tracer ../dist/server/
+if [ -e "dist/Release/GNU-Linux-x86/tracer" ]; then
+	cp dist/Release/GNU-Linux-x86/tracer ../dist/server/
+fi
 chmod +x ../dist/server/tracer
 make CONF=Release clean
 cd ..
+
+
+mkdir dist/web
+cp -r web/evaluationserver/* dist/web/
+rm dist/web/conf/application.conf
+mv dist/web/conf/dist.application.conf dist/web/conf/application.conf
+cp web/dist.install.sh dist/web/install.sh
+cp web/dist.service.sh dist/web/service.sh
+
+chmod +x dist/web/install.sh
+chmod +x dist/web/service.sh
+
+
+cp dist.uninstall.sh dist/uninstall.sh
+chmod +x dist/uninstall.sh

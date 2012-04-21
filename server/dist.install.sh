@@ -1,8 +1,14 @@
-mkdir /usr/share/evaluationserver
+if [ ! -d "/usr/share/evaluationserver" ]; then
+	mkdir /usr/share/evaluationserver
+fi
 mkdir /usr/share/evaluationserver/server
-mkdir /etc/evaluationserver
+if [ ! -d "/etc/evaluationserver" ]; then
+	mkdir /etc/evaluationserver
+fi
 mkdir /etc/evaluationserver/server
-mkdir /var/log/evaluationserver
+if [ ! -d "/var/log/evaluationserver" ]; then
+	mkdir /var/log/evaluationserver
+fi
 
 cp evaluationserver-server.jar /usr/share/evaluationserver/server/
 cp tracer /usr/share/evaluationserver/server/

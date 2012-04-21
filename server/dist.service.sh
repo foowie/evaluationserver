@@ -54,7 +54,6 @@ do_start()
 	sleep 1
 	return 0
 }
-#> /home/danrob/Dokumenty/evaluationserver.log
 #
 # Function that stops the daemon/service
 #
