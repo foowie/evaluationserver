@@ -15,7 +15,7 @@ extern "C" {
 #if __WORDSIZE == 64
 #define ORIG_EAX_ADDR 8 * ORIG_RAX
 #else
-#define ORIG_EAX_ADDR * ORIG_EAX
+#define ORIG_EAX_ADDR 4 * ORIG_EAX
 #endif    
     
 
