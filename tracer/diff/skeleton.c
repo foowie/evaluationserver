@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define ACCEPTED		0
 #define PRESENTATION_ERROR	1
 #define WRONG_ANSWER		2
@@ -23,22 +22,6 @@ char * responses[] = {
  * @return ACCEPTED|PRESENTATION_ERROR|WRONG_ANSWER|INTERNAL_ERROR
  */
 int process(FILE * solution, FILE * input, FILE * output) {
-	if(output == NULL)
-		return INTERNAL_ERROR;
-	
-	long tokenA, tokenB;
-	int readedA, readedB;
-
-	do {
-		readedA = fscanf(solution, "%ld", &tokenA);
-		readedB = fscanf(output, "%ld", &tokenB);
-
-		if (readedA != readedB)
-			return WRONG_ANSWER;
-		if (tokenA != tokenB)
-			return WRONG_ANSWER;
-	} while (readedA != EOF);
-
 	return ACCEPTED;
 }
 
