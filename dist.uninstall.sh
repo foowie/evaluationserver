@@ -20,5 +20,5 @@ if [ -e "/etc/init.d/evaluationserver-web" ]; then
 	rm /etc/init.d/evaluationserver-web
 fi
 if [ -e "/var/cache/evaluationserver" ]; then
-	rm /var/cache/evaluationserver
+	rm -Rf /var/cache/evaluationserver
 fi
