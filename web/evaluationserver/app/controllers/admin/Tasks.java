@@ -92,8 +92,11 @@ public class Tasks extends CRUD {
 	public static void fixUnits() {
 		String[] convert = new String[]{"object.sourceLimit", "object.memoryLimit", "object.outputLimit"};
 		for (String key : convert) {
-			int parameter = Integer.parseInt(params.get(key)) * 1024;
-			params.put(key, Integer.toString(parameter));
+			try {
+				int parameter = Integer.parseInt(params.get(key)) * 1024;
+				params.put(key, Integer.toString(parameter));
+			} catch(NumberFormatException e) {
+			}
 		}
 	}
 

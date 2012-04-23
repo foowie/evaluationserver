@@ -27,30 +27,30 @@
 					#{navigation.default menu /}
 				#{/if}
 			</div>
-			#{if flash.success}
-				<div class="flashSuccess">
-					${flash.success}
-				</div>
-			#{/if}
-			#{if flash.error || error}
-				<div class="flashError">
-					${error ?: flash.error}
-				</div>
-			#{/if}
+
 
 
 			<div id="content">
 				<div class="inner-content">
+				<h2>#{get 'title' /}</h2>
 					#{ifErrors 'error'}
-					   <h2>Error…</h2>
 					   <ul>
 						   #{errors 'error'}
 							   <li>${error}</li>
 						   #{/errors}
 					   </ul>
 					#{/ifErrors}
-				
-					<h2>#{get 'title' /}</h2>
+					#{if flash.success}
+						<div class="flashSuccess">
+							${flash.success}
+						</div>
+					#{/if}
+					#{if flash.error || error}
+						<div class="flashError">
+							${error ?: flash.error}
+						</div>
+					#{/if}
+			
 					#{doLayout /}
 				</div>
 			</div>

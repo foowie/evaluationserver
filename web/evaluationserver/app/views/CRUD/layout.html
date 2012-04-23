@@ -4,7 +4,7 @@
 	<div id="crudBreadcrumb">
 		#{crud.navigation /}
 	</div>
-#{/if}}*
+#{/if}
 
 #{if flash.success}
 	<div class="crudFlash flashSuccess">
@@ -15,7 +15,7 @@
 	<div class="crudFlash flashError">
 		${error ?: flash.error}
 	</div>
-#{/if}
+#{/if}}*
 
 <div id="crudContent">
 	#{doLayout /}
