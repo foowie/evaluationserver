@@ -4,6 +4,15 @@
 #include <sys/user.h>
 #include <unistd.h>
 
+
+#if __WORDSIZE == 64
+#define M_ORIG_EAX orig_rax
+#define M_DATA_REG rdi
+#else
+#define M_ORIG_EAX orig_eax
+#define M_DATA_REG ebx
+#endif    
+
 /**
  * Load file with allowed libraries
  * @return 0=ok -1=error

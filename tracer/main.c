@@ -132,7 +132,7 @@ int trace(struct Limits * limit) {
 			}
 		}
 
-		orig_eax = ptrace(PTRACE_PEEKUSER, child, 4 * ORIG_EAX, NULL); // get system call type
+		orig_eax = ptrace(PTRACE_PEEKUSER, child, ORIG_EAX_ADDR, NULL); // get system call type
 
 		if (init == 1 && orig_eax == SYS_execve) { // initial program execute
 			init = 0;

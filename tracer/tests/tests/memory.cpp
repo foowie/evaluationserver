@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    #define SIZE 2000000
+    #define SIZE 1000000
     unsigned long testa[SIZE];
     for(int i = 0; i < SIZE; i++)
         testa[i] = rand();

@@ -22,7 +22,7 @@ for index in ${!tests[*]}
 do
     printf "Test [%s] with expected result %s\n" ${tests[$index]} ${results[$index]}
     #     tracer           test file                       infile outfile time memory  output log file
-    torun=$tracer" \""`pwd`"/"$testsDir${tests[$index]}"\" input  output  1000 5000000 1000 - libraries"
+    torun=$tracer" \""`pwd`"/"$testsDir${tests[$index]}"\" input  output  1000 15000000 1000 - libraries"
     output=$(eval $torun)
 
     printf "Code: %s Time: %sms Memory: %sb - " $output

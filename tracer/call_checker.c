@@ -143,11 +143,15 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 	switch (*eax) {
 		case SYS_read:
 		{
-			if (regs->ebx == STDIN_FILENO)
+			if (regs->M_DATA_REG == STDIN_FILENO)
 				break; // standard input read
-			if (regs->orig_eax == 3 && regs->edx == 0x200 && regs->eax == 0xffffffda)
+#if __WORDSIZE == 64                        
+			if (regs->M_ORIG_EAX == 0 && regs->rdx == 0x340 && regs->rax == 0xffffffffffffffda)
+#else
+			if (regs->M_ORIG_EAX == 3 && regs->edx == 0x200 && regs->eax == 0xffffffda)
+#endif
 				break; // header read of lib
-			DUMP_ERROR("SYS_read FROM %ld", regs->ebx)
+			DUMP_ERROR("SYS_read FROM %ld", regs->M_DATA_REG)
 			DUMP_REGISTRY(regs)
 			return RESTRICTED_FUNCTION; // illegal read
 		}
@@ -155,8 +159,8 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 		case SYS_write:
 		case SYS_writev:
 		{
-			if (regs->ebx != STDOUT_FILENO) {
-				DUMP_ERROR("SYS_write/SYS_writev INTO %ld", regs->ebx)
+			if (regs->M_DATA_REG != STDOUT_FILENO) {
+				DUMP_ERROR("SYS_write/SYS_writev INTO %ld", regs->M_DATA_REG)
 				DUMP_REGISTRY(regs)
 				return RESTRICTED_FUNCTION; // write not to std out
 			}
@@ -166,11 +170,11 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 		case SYS_open:
 		case SYS_openat:
 		{
-			char* lib = get_ptrace_text(*child, regs->ebx, -1);
+			char* lib = get_ptrace_text(*child, regs->M_DATA_REG, -1);
 			if (check_library(lib) != 0) {
 				DUMP_ERROR("RESTRICTED FILE OPEN")
 #ifdef DEBUG_ERRORS
-						print_ptrace_text(*child, regs->ebx, -1);
+						print_ptrace_text(*child, regs->M_DATA_REG, -1);
 #endif
 				free(lib);
 				return RESTRICTED_FUNCTION;
@@ -187,13 +191,21 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 		case SYS_mmap: //90
 		case SYS_munmap: //91
 		case SYS_mprotect: //125
-		case SYS_mmap2: //192
 		case SYS_set_thread_area: //243
 		case SYS_exit_group: //252
-			break;
-
+                    
+#if __WORDSIZE == 64
+		case SYS_fstat: //5 --
+		case SYS_stat: //4 -- 
+                case SYS_arch_prctl: // 158
+#else
+		case SYS_mmap2: //192
 		case SYS_fstat64: //197 --
 		case SYS_stat64: //195 -- 
+#endif                  
+                    
+			break;
+
 			break;
 
 		case -1:
@@ -202,7 +214,7 @@ int check_call(long int *eax, struct user_regs_struct *regs, pid_t *child) {
 			return RUNTIME_ERROR;
 
 		default:
-			DUMP_ERROR("RESTRICTED SYSTEM CALL %ld", regs->orig_eax)
+			DUMP_ERROR("RESTRICTED SYSTEM CALL %ld", regs->M_ORIG_EAX)
 			DUMP_REGISTRY(regs)
 			return RESTRICTED_FUNCTION;
 	}

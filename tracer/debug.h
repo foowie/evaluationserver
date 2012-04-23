@@ -8,7 +8,11 @@ extern "C" {
 #include "main.h"
 
 #ifdef DEBUG_REGISTRY
+#if __WORDSIZE == 64
+#define DUMP_REGISTRY(regs) log_message("System call", "SYS CALL ORIG_RAX=%ld  RAX=%lx RBX=%lx RCX=%lx RDX=%lx RDI=%lx\n", regs->orig_rax, regs->rax, regs->rbx, regs->rcx, regs->rdx, regs->rdi);
+#else
 #define DUMP_REGISTRY(regs) log_message("System call", "SYS CALL ORIG_EAX=%ld  EAX=%lx EBX=%lx ECX=%lx EDX=%lx\n", regs->orig_eax, regs->eax, regs->ebx, regs->ecx, regs->edx);
+#endif
 #endif
 #ifndef DEBUG_REGISTRY
 #define DUMP_REGISTRY(regs) ;

@@ -12,6 +12,12 @@ extern "C" {
 	// Log program errors
 #define DEBUG_ERRORS
 
+#if __WORDSIZE == 64
+#define ORIG_EAX_ADDR 8 * ORIG_RAX
+#else
+#define ORIG_EAX_ADDR * ORIG_EAX
+#endif    
+    
 
 #ifdef	__cplusplus
 }
