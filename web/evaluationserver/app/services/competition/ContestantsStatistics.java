@@ -31,7 +31,7 @@ public class ContestantsStatistics {
 		final List<ContestantsResult> result = new ArrayList<ContestantsResult>();
 
 		Date toDate = null;
-		if (!forceActual && competition.stopDate != null && competition.dontUpdateStatisticsBefore != null) {
+		if (!forceActual && competition.stopDate != null && competition.startDate != null && competition.dontUpdateStatisticsBefore != null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(competition.stopDate);
 			calendar.add(Calendar.MINUTE, -competition.dontUpdateStatisticsBefore);
@@ -62,7 +62,7 @@ public class ContestantsStatistics {
 					final long invalidSubmittionCount = (Long) ((Object[]) solved)[2];
 					solvedTasks.put(task, (int) (invalidSubmittionCount));
 					// short competition
-					if(competition.startDate != null & competition.stopDate != null) {
+					if(competition.startDate != null && competition.stopDate != null) {
 						penalization += solutionCreated.getTime() - competition.startDate.getTime();
 						if(competition.timePenalization != null)
 							penalization += competition.timePenalization * 60000 * invalidSubmittionCount;
