@@ -17,13 +17,15 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Evaluation server - web"
 NAME=evaluationserver-web
-DAEMON=/usr/sbin/$NAME
-DAEMON_ARGS=""
+EVALUATIONSERVER_PATH=/usr/share/evaluationserver/web
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
+if [ ! -d $EVALUATIONSERVER_PATH ]; then
+	echo "Destination direcory $EVALUATIONSERVER_PATH doesn't exists"
+	exit 0
+fi
+
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -41,16 +43,16 @@ SCRIPTNAME=/etc/init.d/$NAME
 case "$1" in
   start)
 	log_daemon_msg "Starting $DESC" "$NAME", this takes about 30s
-	cd /usr/share/evaluationserver/web
+	cd $EVALUATIONSERVER_PATH
 	play start
 	;;
   stop)
 	log_daemon_msg "Stopping $DESC" "$NAME"
-	cd /usr/share/evaluationserver/web
+	cd $EVALUATIONSERVER_PATH
 	play stop
 	;;
   status)
-	cd /usr/share/evaluationserver/web
+	cd $EVALUATIONSERVER_PATH
 	play status
     ;;
   restart|force-reload)

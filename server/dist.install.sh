@@ -1,26 +1,42 @@
-if [ ! -d "/usr/share/evaluationserver" ]; then
-	mkdir /usr/share/evaluationserver
+# Destination directories
+# After installation change directory also in /etc/init.d/evaluationserver-web
+INSTALL_DIR=/usr/share/evaluationserver/server
+CONFIG_DIR=/etc/evaluationserver/server
+LOG_DIR=/var/log/evaluationserver/server
+
+# Create directories if not exists
+if [ ! -d $INSTALL_DIR ]; then
+	mkdir -p $INSTALL_DIR
 fi
-mkdir /usr/share/evaluationserver/server
-if [ ! -d "/etc/evaluationserver" ]; then
-	mkdir /etc/evaluationserver
+if [ ! -d $CONFIG_DIR ]; then
+	mkdir -p $CONFIG_DIR
 fi
-mkdir /etc/evaluationserver/server
-if [ ! -d "/var/log/evaluationserver" ]; then
-	mkdir /var/log/evaluationserver
+if [ ! -d $LOG_DIR ]; then
+	mkdir -p $LOG_DIR
 fi
 
-cp evaluationserver-server.jar /usr/share/evaluationserver/server/
-cp tracer /usr/share/evaluationserver/server/
-cp run.sh /usr/share/evaluationserver/server/
+# Copy files to destination directory
+cp evaluationserver-server.jar $INSTALL_DIR/
+cp tracer $INSTALL_DIR/
+cp run.sh $INSTALL_DIR/
+
+# Copy init.d script
 cp service.sh /etc/init.d/evaluationserver-server
 chmod +x /etc/init.d/evaluationserver-server
-cp -R lib /usr/share/evaluationserver/server/
-cp config/configuration.xml /etc/evaluationserver/server/
-cp config/service.config.properties /etc/evaluationserver/server/config.properties
-cp config/service.logging.properties /etc/evaluationserver/server/logging.properties
-ln -s /etc/evaluationserver/server /usr/share/evaluationserver/server/config
+
+# Copy libraries to destination directory
+cp -R lib $INSTALL_DIR/
+
+# Copy configuration files
+cp config/configuration.xml $CONFIG_DIR/
+cp config/service.config.properties $CONFIG_DIR/config.properties
+cp config/service.logging.properties $CONFIG_DIR/logging.properties
+echo "java.util.logging.FileHandler.pattern = $LOG_DIR/server.log" >> $CONFIG_DIR/logging.properties
+ln -s $CONFIG_DIR $INSTALL_DIR/config
+chmod 600 -R $CONFIG_DIR/*
+
+# Create run script
 echo "#!/bin/bash
-cd /usr/share/evaluationserver/server/
+cd $INSTALL_DIR/
 exec ./run.sh" > /usr/sbin/evaluationserver-server
 chmod +x /usr/sbin/evaluationserver-server
