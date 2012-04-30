@@ -10,9 +10,9 @@
   #{column 'Time'} #{time solution.timeLength /} #{/column}
   #{column 'Download'} <a href="@{download(competition.id, solution.file.id)}">${solution.file}</a> #{/column}
   #{column 'Reply'}
-	#{if solution.systemReply.accepting}<b>#{/if}
+	#{if solution.systemReply?.accepting}<b>#{/if}
 		${solution.systemReply}
-	#{if solution.systemReply.accepting}</b>#{/if}
+	#{if solution.systemReply?.accepting}</b>#{/if}
   #{/column}
 #{/table}
 
