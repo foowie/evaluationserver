@@ -7,6 +7,11 @@ import models.UserGroup;
 import play.mvc.Before;
 import play.mvc.With;
 
+/**
+ * CRUD controller for model UserGroup
+ * REQ-6.1, REQ-6.2, REQ-6.3
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Check(Role.Check.ADMIN)
 @With({
 	controllers.Secure.class,

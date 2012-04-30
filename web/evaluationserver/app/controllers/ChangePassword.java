@@ -8,6 +8,7 @@ import play.mvc.With;
 
 /**
  * Change users / admins password
+ * REQ-4.5
  * @author Daniel Robenek <danrob@seznam.cz>
  */
 @Check(Role.Check.ADMIN_OR_CONTESTANT)

@@ -9,6 +9,7 @@ import play.mvc.With;
 
 /**
  * CRUD controller for model Contestant
+ * REQ-4.1, REQ-4.2, REQ-4.3
  * @author Daniel Robenek <danrob@seznam.cz>
  */
 @Check(Role.Check.ADMIN)

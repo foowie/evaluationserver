@@ -14,6 +14,7 @@ import services.competition.ContestantsStatistics;
 
 /**
  * CRUD controller for model Competition
+ * REQ-3.1, REQ-3.2, REQ-3.3
  * @author Daniel Robenek <danrob@seznam.cz>
  */
 @Check(Role.Check.ADMIN)

@@ -17,6 +17,7 @@ import play.mvc.With;
 
 /**
  * Submit new solution
+ * REQ-5
  * @author Daniel Robenek <danrob@seznam.cz>
  */
 @controllers.Check(Role.Check.CONTESTANT)

@@ -23,6 +23,11 @@ import services.task.ContestantResult;
 import services.task.SystemReplyStatistics;
 import services.task.SystemReplyResult;
 
+/**
+ * CRUD controller for model Task
+ * REQ-1.1, REQ-1.2, REQ-1.3, REQ-1.4
+ * @author Daniel Robenek <danrob@seznam.cz>
+ */
 @Check(Role.Check.ADMIN)
 @With({
 	controllers.Secure.class,
@@ -135,6 +140,7 @@ public class Tasks extends CRUD {
 
 	/**
 	 * Show statistics
+	 * REQ-7.1, REQ-7.2
 	 * @param id 
 	 */
 	public static void statistics(Long id) {
