@@ -24,6 +24,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import play.db.jpa.JPA;
 
@@ -105,7 +106,20 @@ abstract public class User extends Model {
 	public static User findActiveByLogin(String login) {
 		Query q = JPA.em().createQuery("SELECT u FROM User u WHERE u.login=:login AND u.active=true");
 		q.setParameter("login", login);
-		return (User) q.getSingleResult();
+		try {
+			return (User) q.getSingleResult();
+		} catch(NonUniqueResultException e) {
+			return (User) q.getResultList().get(0);
+		}
+	}
+	
+	public static boolean loginExists(String login, Long id) {
+		Query q = JPA.em().createQuery("SELECT COUNT(u) FROM User u WHERE u.login=:login" + (id == null ? "" : " AND u.id!=:id"));
+		q.setParameter("login", login);
+		if(id != null)
+			q.setParameter("id", id);
+		Long count = (Long)q.getSingleResult();
+		return count > 0;
 	}
 
 	/**

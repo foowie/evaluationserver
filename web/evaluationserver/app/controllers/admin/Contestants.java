@@ -4,6 +4,7 @@ import controllers.CRUD;
 import controllers.Check;
 import models.Contestant;
 import models.Role;
+import models.User;
 import play.mvc.Before;
 import play.mvc.With;
 
@@ -20,6 +21,20 @@ import play.mvc.With;
 })
 public class Contestants extends CRUD {
 
+	/**
+	 * Detect duplicite login
+	 * @param object
+	 * @param id 
+	 */
+	@Before(only = {"create", "save"})
+	public static void beforeCreate(Contestant object, Long id) {
+		boolean exists = User.loginExists(object.login, id);
+		if(exists) {
+			renderArgs.put("customerror", "This login allready exists!");
+		}
+		validation.equals(exists, false);
+	}
+	
 	/**
 	 * Check for delete constraints
 	 * @param id 

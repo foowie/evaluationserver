@@ -45,9 +45,9 @@
 							${flash.success}
 						</div>
 					#{/if}
-					#{if flash.error || error}
+					#{if flash.error || error || customerror}
 						<div class="flashError">
-							${error ?: flash.error}
+							${customerror ?: (error ?: flash.error)}
 						</div>
 					#{/if}
 			

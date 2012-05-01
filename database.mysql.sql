@@ -250,14 +250,13 @@ INSERT INTO `User` (`id`, `active`, `created`, `email`, `firstName`, `login`, `p
 DROP TABLE IF EXISTS `UserGroup`;
 CREATE TABLE `UserGroup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `active` bit(1) NOT NULL,
   `description` text,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `UserGroup` (`id`, `active`, `description`, `name`) VALUES
-(1,	1,	'',	'Sample team');
+INSERT INTO `UserGroup` (`id`, `description`, `name`) VALUES
+(1,	'',	'Sample team');
 
 DROP TABLE IF EXISTS `UserUserGroup`;
 CREATE TABLE `UserUserGroup` (
@@ -272,4 +271,4 @@ CREATE TABLE `UserUserGroup` (
 INSERT INTO `UserUserGroup` (`userId`, `groupId`) VALUES
 (2,	1);
 
--- 2012-04-23 10:39:42
+-- 2012-05-01 22:17:09
