@@ -1,7 +1,7 @@
 # Destination directories
-INSTALL_DIR=/usr/share/evaluationserver/webA
-CONFIG_DIR=/etc/evaluationserver/webA
-LOG_DIR=/var/log/evaluationserver/webA
+INSTALL_DIR=/usr/share/evaluationserver/web
+CONFIG_DIR=/etc/evaluationserver/web
+LOG_DIR=/var/log/evaluationserver/web
 
 # Create directories
 if [ ! -d $INSTALL_DIR ]; then
