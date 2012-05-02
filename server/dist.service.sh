@@ -36,86 +36,48 @@ SCRIPTNAME=/etc/init.d/$NAME
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
-#
-# Function that starts the daemon/service
-#
-do_start()
-{
-	# Return
-	#   0 if daemon has been started
-	#   1 if daemon was already running
-	#   2 if daemon could not be started
-	[ -r $PIDFILE ] && return 1
-	start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
-		|| return 1
-	start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --exec $DAEMON -- \
-		$DAEMON_ARGS \
-		|| return 2
-	sleep 1
-	return 0
-}
-#
-# Function that stops the daemon/service
-#
-do_stop()
-{
-	# Return
-	#   0 if daemon has been stopped
-	#   1 if daemon was already stopped
-	#   2 if daemon could not be stopped
-	#   other if a failure occurred
-	[ ! -r $PIDFILE ] && return 1
-	start-stop-daemon --stop --oknodo --pidfile $PIDFILE
-	[ "$?" = 2 ] && return 2
-	sleep 1
-	rm -f $PIDFILE
-	return 0
-}
-
 case "$1" in
   start)
-	log_daemon_msg "Starting $DESC" "$NAME"
-	do_start
-	case "$?" in
-		0|1) log_end_msg 0 ;;
-		2) log_end_msg 1 ;;
-	esac
+	echo -n "Starting $DESC: "
+	start-stop-daemon --start --background --make-pidfile --pidfile $PIDFILE \
+		--exec $DAEMON -- $DAEMON_ARGS
+	echo "$NAME."
 	;;
   stop)
-	log_daemon_msg "Stopping $DESC" "$NAME"
-	do_stop
-	case "$?" in
-		0|1) log_end_msg 0 ;;
-		2) log_end_msg 1 ;;
-	esac
+	echo -n "Stopping $DESC: "
+	start-stop-daemon --stop --oknodo --pidfile $PIDFILE
+	rm -f $PIDFILE
+	echo "$NAME."
 	;;
   status)
-       status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
-       ;;
+	if [ -s $PIDFILE ]; then
+            RUNNING=$(cat $PIDFILE)
+            if [ -d /proc/$RUNNING ]; then
+                echo "$NAME is running."
+                exit 0
+            fi
+
+            # No such PID, or executables don't match
+            echo "$NAME is not running, but pidfile existed."
+            rm $PIDFILE
+            exit 1
+        else
+            rm -f $PIDFILE
+            echo "$NAME not running."
+            exit 1
+        fi
+	;;
   restart|force-reload)
-	#
-	# If the "reload" option is implemented then remove the
-	# 'force-reload' alias
-	#
-	log_daemon_msg "Restarting $DESC" "$NAME"
-	do_stop
-	case "$?" in
-	  0|1)
-		do_start
-		case "$?" in
-			0) log_end_msg 0 ;;
-			1) log_end_msg 1 ;; # Old process is still running
-			*) log_end_msg 1 ;; # Failed to start
-		esac
-		;;
-	  *)
-	  	# Failed to stop
-		log_end_msg 1
-		;;
-	esac
+	echo -n "Restarting $DESC: "
+	start-stop-daemon --stop --oknodo --pidfile $PIDFILE
+	rm -f $PIDFILE
+	sleep 1
+	start-stop-daemon --start --background --make-pidfile --pidfile $PIDFILE \
+		--exec $DAEMON -- $DAEMON_ARGS
+	echo "$NAME."
 	;;
   *)
-	echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart}" >&2
 	exit 3
 	;;
 esac
